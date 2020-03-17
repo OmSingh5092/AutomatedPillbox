@@ -1,0 +1,51 @@
+<resources>
+    <string name="app_name">AutomatedPillBox</string>
+    <string name="title_activity_login">Login</string>
+    <string name="title_activity_signup">Signup</string>
+
+    <string-array name="bloodgroup">
+        <item>Blood Group </item>
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+        <item>O+</item>
+        <item>O-</item>
+    </string-array>
+
+    <string-array name="bloodgroup1">
+        <item>A+</item>
+        <item>A-</item>
+        <item>B+</item>
+        <item>B-</item>
+        <item>AB+</item>
+        <item>AB-</item>
+        <item>O+</item>
+        <item>O-</item>
+    </string-array>
+
+    <string-array name="days">
+        <item>Monday</item>
+        <item>Tuesday</item>
+        <item>Wednesday</item>
+        <item>Thursday</item>
+        <item>Friday</item>
+        <item>Saturday</item>
+        <item>Sunday</item>
+    </string-array>
+
+    <string-array name="boxes">
+        <item>Box 1</item>
+        <item>Box 2</item>
+        <item>Box 3</item>
+        <item>Box 4</item>
+        <item>Box 5</item>
+        <item>Box 6</item>
+        <item>Box 7</item>
+        <item>Box 8</item>
+    </string-array>
+
+
+</resources>

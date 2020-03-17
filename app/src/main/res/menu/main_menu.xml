@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:title="Profile"
+        android:id="@+id/menu_profile"/>
+    <item
+        android:id="@+id/menu_prescription"
+        android:title="Prescription">
+    </item>
+    <item
+        android:id="@+id/menu_logout"
+        android:title="Logout">
+    </item>
+    <item
+        android:id="@+id/menu_phone"
+        android:title="Change PhoneNo.">
+    </item>
+
+</menu>
