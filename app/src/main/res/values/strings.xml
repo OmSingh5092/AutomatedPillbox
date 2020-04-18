@@ -47,5 +47,8 @@
         <item>Box 8</item>
     </string-array>
 
+    <string name="channel_name">FirebaseNotificationChannel</string>
+    <string name="channel_description">NoDescription</string>
+
 
 </resources>

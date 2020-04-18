@@ -1,12 +1,9 @@
-package com.example.automatedpillworks.Firebase;
-
-import android.widget.Toast;
+package com.example.automatedpillworks.CloudMessaging;
 
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 
 public class Refrences {
     public static FirebaseDatabase database = FirebaseDatabase.getInstance();

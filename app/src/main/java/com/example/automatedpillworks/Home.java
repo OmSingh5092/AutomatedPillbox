@@ -9,27 +9,21 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.content.Intent;
 import android.os.Bundle;
-import android.provider.ContactsContract;
-import android.provider.Settings;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.automatedpillworks.Firebase.Refrences;
+import com.example.automatedpillworks.BasicFunctions.Startup;
+import com.example.automatedpillworks.CloudMessaging.Refrences;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.ArrayList;
 
 public class Home extends AppCompatActivity {
 
@@ -132,6 +126,8 @@ public class Home extends AppCompatActivity {
 
         cl.removeView(rv);
 
+        Startup.firebase_init(this);
+
 
         DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
         myRef.orderByChild("phonenumber").equalTo(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -183,7 +179,6 @@ public class Home extends AppCompatActivity {
                     i.putExtra("status","2");
                     i.putExtra("boxid",boxname);
                     startActivity(i);
-                    finish();
                 }else if(item.getItemId() == R.id.menu_missed){
                     i = new Intent(Home.this,Reminder.class);
                     startActivity(i);

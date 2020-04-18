@@ -14,7 +14,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.BasicFunctions.DragToRemove;
-import com.example.automatedpillworks.Firebase.Refrences;
+import com.example.automatedpillworks.CloudMessaging.Refrences;
 import com.example.automatedpillworks.RecyclerViewAdapter.ReminderRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
@@ -23,9 +23,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.lang.ref.Reference;
-import java.sql.Ref;
 
 
 public class Reminder extends AppCompatActivity implements DragToRemove.RecyclerItemDragListener {
