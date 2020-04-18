@@ -13,14 +13,15 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme">
-        <activity android:name=".PhoneChange"></activity>
-        <activity android:name=".Box"
-            android:windowSoftInputMode="adjustPan"
-            />
+        android:theme="@style/AppTheme.NoActionBar">
+        <activity android:name=".Reminder"></activity>
+        <activity android:name=".PhoneChange" />
+        <activity
+            android:name=".Box"
+            android:windowSoftInputMode="adjustPan" />
         <activity android:name=".Prescription" />
         <activity android:name=".Profile" />
-        <activity android:name=".Home"></activity>
+        <activity android:name=".Home" />
         <activity android:name=".Phone_Auth" />
         <activity android:name=".Signup" />
         <activity android:name=".Signup1" />

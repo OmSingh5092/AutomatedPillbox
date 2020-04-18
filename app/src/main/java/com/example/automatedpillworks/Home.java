@@ -20,6 +20,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.Firebase.Refrences;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -139,6 +140,7 @@ public class Home extends AppCompatActivity {
 
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     GlobalVar.boxname = snap.getKey();
+                    Refrences.initialiseRefrences(GlobalVar.boxname);
                 }
 
             }
@@ -182,6 +184,9 @@ public class Home extends AppCompatActivity {
                     i.putExtra("boxid",boxname);
                     startActivity(i);
                     finish();
+                }else if(item.getItemId() == R.id.menu_missed){
+                    i = new Intent(Home.this,Reminder.class);
+                    startActivity(i);
                 }
                 return false;
             }
@@ -224,6 +229,8 @@ public class Home extends AppCompatActivity {
 
             }
         });
+
+
 
 
 

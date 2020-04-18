@@ -16,5 +16,8 @@
         android:id="@+id/menu_phone"
         android:title="Change PhoneNo.">
     </item>
+    <item
+        android:id = "@+id/menu_missed"
+        android:title="Missed Meds"/>
 
 </menu>
