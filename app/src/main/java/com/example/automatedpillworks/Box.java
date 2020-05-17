@@ -32,8 +32,12 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Collections;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class Box extends AppCompatActivity {
@@ -243,7 +247,8 @@ public class Box extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
 
-
+                    Date date = new Date(System.currentTimeMillis());
+                    Calendar calendar= Calendar.getInstance();
                 TimePickerDialog dialog = new TimePickerDialog(Box.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
                     public void onTimeSet(TimePicker view, int hourOfDay, int minute) {
@@ -294,7 +299,7 @@ public class Box extends AppCompatActivity {
 
 
                     }
-                },0,0,false);
+                },calendar.get(Calendar.HOUR_OF_DAY),calendar.get(Calendar.MINUTE),false);
                 dialog.show();
 
 
