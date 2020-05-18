@@ -1,5 +1,7 @@
 package com.example.automatedpillworks;
 
+import java.io.File;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class MedData {
@@ -7,4 +9,5 @@ public class MedData {
     Long status;
     Long doses;
     ArrayList<Long> times = new ArrayList<>();
+
 }

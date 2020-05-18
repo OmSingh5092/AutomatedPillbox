@@ -66,7 +66,7 @@ public class Notifications extends FirebaseMessagingService {
         super.onMessageReceived(remoteMessage);
 
         if (remoteMessage.getNotification() != null) {
-            ReminderNotification(remoteMessage.getNotification().getBody());
+            ReminderNotification(remoteMessage.getNotification());
         }
     }
 
@@ -81,15 +81,15 @@ public class Notifications extends FirebaseMessagingService {
     }
 
 
-    public static void ReminderNotification(String body){
+    public static void ReminderNotification(RemoteMessage.Notification notif){
         Intent intent = new Intent(appContext, Reminder.class);
         intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
         PendingIntent pendingIntent = PendingIntent.getActivity(appContext, 0, intent, 0);
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)
-                .setContentTitle("Reminder")
-                .setContentText(body)
+                .setContentTitle(notif.getTitle())
+                .setContentText(notif.getBody())
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
                 // Set the intent that will fire when the user taps the notification
                 .setContentIntent(pendingIntent)
