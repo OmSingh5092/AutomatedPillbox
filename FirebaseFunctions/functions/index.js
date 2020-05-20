@@ -1,26 +1,12 @@
 const functions = require('firebase-functions');
-
+const express = require('express');
+const bodyParser = require('body-parser');
+const reminder = require('./routes/Reminder.js');
 const admin = require('firebase-admin');
+const cors = require('cors');
+const app = express();
+app.use(cors({ origin: true }));
+app.use('/reminder',reminder);
 
 admin.initializeApp();
-
-
-
-exports.notifyReminder = functions.https.onRequest((req,res)=> {
-    var date = new Date(req.body.time);
-    var timeString = date.getDay()+"/"+date.getMonth()+" " + date.getHours()+":"+date.getMinutes();
-    var message = {
-        notification:{
-            title : "Missed " + req.body.name,
-            body : "You have Missed your medication at " + timeString
-        }
-    };
-
-    return admin.messaging().sendToTopic('reminder',message).then(function(res){
-        console.log("Notification Sent successfully",res);
-        return null;
-    }).catch(function(error){
-        console.log(error)
-    })
-
-})
+exports.notifyReminder = functions.https.onRequest(app);
