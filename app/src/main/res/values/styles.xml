@@ -16,6 +16,33 @@
         <item name="colorPrimary">@color/ThemePrimary</item>
     </style>
 
+    <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">
+        <item name="android:textSize">20dp</item>
+        <item name="android:textStyle">bold</item>
+    </style>
+    <style name="SubTitleAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="GeneralRoundButton" parent ="Widget.AppCompat.Button">
+        <item name="android:backgroundTint">@color/primary_dark</item>
+        <item name="android:background">@drawable/round_corners_ripple</item>
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:padding">10dp</item>
+    </style>
+
+
+    <style name="ProgressBarStyle" parent="Widget.AppCompat.ProgressBar">
+        <item name="android:backgroundTint">@color/colorAccent</item>
+    </style>
+
+    <style name="GeneralInfomationText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="android:textSize">20dp</item>
+    </style>
+
+
 
 
 </resources>

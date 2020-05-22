@@ -9,43 +9,23 @@
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
         android:layout_width="match_parent"
-        android:layout_height="70dp"
-        android:background="#007a99"
+        android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:theme="?attr/actionBarTheme"
+        android:background="@color/primary"
+        app:title="Signup 1"
+        app:titleTextColor="#ffffff"
+        app:titleTextAppearance="@style/TitleTextAppearnce"
         app:layout_constraintTop_toTopOf="parent"
-        tools:layout_editor_absoluteX="8dp">
-
-        <androidx.constraintlayout.widget.ConstraintLayout
-            android:id="@+id/relativeLayout2"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            tools:layout_editor_absoluteX="16dp">>
-
-            <TextView
-                android:id="@+id/textView3"
-                android:layout_width="124dp"
-                android:layout_height="44dp"
-                android:text="Signup"
-                android:textColor="#ffffff"
-                android:textSize="35dp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.5"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
-
-
-    </androidx.appcompat.widget.Toolbar>
+        tools:layout_editor_absoluteX="0dp"/>
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginTop="54dp"
+        android:layout_marginHorizontal="50dp"
+        android:layout_marginTop="72dp"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintHorizontal_bias="0.505"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/signup_imagebutton">
 
@@ -58,8 +38,9 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout2"
-        android:layout_width="300dp"
+        android:layout_width="0dp"
         android:layout_height="60dp"
+        android:layout_marginHorizontal="50dp"
         android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.495"
@@ -78,10 +59,8 @@
         android:layout_width="120dp"
         android:layout_height="120dp"
         android:layout_marginStart="40dp"
-        android:layout_marginLeft="40dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/upload_icon"
-        android:backgroundTint="#f7e111"
+        android:background="@drawable/icon_user"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
@@ -89,12 +68,13 @@
         android:id="@+id/textView4"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_marginTop="12dp"
+        android:fontFamily="@font/baloo"
         android:text="Upload Profile Photo"
+        android:textAppearance="@style/SubTitleAppearance"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+        app:layout_constraintStart_toEndOf="@+id/signup_imagebutton"
+        app:layout_constraintTop_toTopOf="@+id/signup_imagebutton" />
 
     <Button
         android:id="@+id/signup_next"
@@ -104,8 +84,7 @@
         android:layout_marginEnd="40dp"
         android:layout_marginRight="40dp"
         android:layout_marginBottom="36dp"
-        android:background="@drawable/round_corners_ripple"
-        android:backgroundTint="#e09243"
+        style="@style/GeneralRoundButton"
         android:text="Next"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -113,61 +92,47 @@
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout5" />
 
 
-    <ProgressBar
-        android:id="@+id/signup_progessbar"
-        style="?android:attr/progressBarStyle"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginStart="13dp"
-        android:layout_marginLeft="13dp"
-        android:layout_marginTop="79dp"
-        android:layout_marginEnd="15dp"
-        android:layout_marginRight="15dp"
-        app:layout_constraintEnd_toStartOf="@+id/signup_gallery"
-        app:layout_constraintHorizontal_bias="0.666"
-        app:layout_constraintStart_toEndOf="@+id/signup_imagebutton"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
-
     <Button
         android:id="@+id/signup_gallery"
-        android:layout_width="138dp"
-        android:layout_height="44dp"
+        style="@style/GeneralRoundButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         android:layout_marginTop="28dp"
         android:layout_marginEnd="25dp"
-        android:layout_marginRight="25dp"
-        android:background="@drawable/round_corners_ripple"
-        android:backgroundTint="#e68355"
         android:text="Select From Gallery"
         android:textAppearance="@style/TextAppearance.AppCompat.Body1"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/textView4"
+        app:layout_constraintStart_toStartOf="@+id/textView4"
         app:layout_constraintTop_toBottomOf="@+id/textView4" />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/textInputLayout5"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="24dp"
-        android:layout_marginLeft="24dp"
-        android:layout_marginTop="37dp"
-        android:layout_marginEnd="24dp"
-        android:layout_marginRight="24dp"
+        android:layout_margin="50dp"
+        android:layout_marginTop="20dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textInputLayout2">
 
-        <ScrollView
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/signup_address"
             android:layout_width="match_parent"
-            android:layout_height="120dp">
-
-            <com.google.android.material.textfield.TextInputEditText
-                android:id="@+id/signup_address"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:hint="Address" />
-        </ScrollView>
+            android:layout_height="wrap_content"
+            android:hint="Address" />
 
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <ProgressBar
+        android:id="@+id/singup_progress"
+        style="?android:attr/progressBarStyleHorizontal"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="@+id/signup_imagebutton"
+        app:layout_constraintStart_toStartOf="@+id/signup_imagebutton"
+        app:layout_constraintTop_toBottomOf="@+id/signup_imagebutton" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

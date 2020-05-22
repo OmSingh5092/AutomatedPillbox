@@ -1,15 +1,19 @@
 package com.example.automatedpillworks;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.recyclerview.widget.GridLayoutManager;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.DatePicker;
+import android.widget.GridLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
@@ -19,39 +23,50 @@ import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
+
 public class Signup1 extends AppCompatActivity implements AdapterView.OnItemSelectedListener {
-    Spinner bloodgroup;
-    RadioGroup rg;
+    RadioGroup rg,bloodgroup;
+    RadioButton bloodselected;
     Button dob,next;
     TextInputEditText weight;
     TextView dob_display;
     String boxname;
     String gender,blood="Blood Group";
-    Boolean gender_flag = false;
-    Boolean bloodgroup_flag = false;
+    Calendar calendar ;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup1);
 
-        bloodgroup = findViewById(R.id.signup1_spinner);
         rg = findViewById(R.id.signup1_radiogroup);
+        bloodgroup = findViewById(R.id.signup1_bloodgroup);
         dob = findViewById(R.id.signup1_dob);
         dob_display = findViewById(R.id.profile_blooddisplay);
         next = findViewById(R.id.signup1_next);
         weight = findViewById(R.id.signup1_weight);
         boxname = getIntent().getStringExtra("boxname");
+        calendar = Calendar.getInstance();
 
-        ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(this,R.array.bloodgroup,R.layout.support_simple_spinner_dropdown_item);
-        adapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item);
-        bloodgroup.setAdapter(adapter);
+        initialiseRadioGroup();
+
+
 
 
         final DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
 
 
-        bloodgroup.setOnItemSelectedListener(this);
+        bloodgroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                bloodselected = group.findViewById(checkedId);
+            }
+        });
+
 
 
 
@@ -61,17 +76,18 @@ public class Signup1 extends AppCompatActivity implements AdapterView.OnItemSele
                 DatePickerDialog datePickerDialog = new DatePickerDialog(Signup1.this, new DatePickerDialog.OnDateSetListener() {
                     @Override
                     public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar cal = Calendar.getInstance();
+                        cal.set(year,month,dayOfMonth);
+                        Date date = new Date(cal.getTimeInMillis());
+                        SimpleDateFormat sdf = new SimpleDateFormat("EEE, d MMM yyyy");
+                        myRef.child(boxname).child("info").child("dob").setValue(cal.getTimeInMillis());
 
-
-                        String dob =String.valueOf(dayOfMonth)+"/"+String.valueOf(month)+"/"+String.valueOf(year);
-                        myRef.child(boxname).child("info").child("dob").setValue(dob);
-
-                        dob_display.setText(dob);
+                        dob_display.setText(sdf.format(date));
 
 
 
                     }
-                },2000,1,1);
+                },Calendar.YEAR-20, Calendar.MONTH, Calendar.DAY_OF_MONTH);
                 datePickerDialog.show();
             }
         });
@@ -99,6 +115,7 @@ public class Signup1 extends AppCompatActivity implements AdapterView.OnItemSele
         next.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                blood = bloodselected.getText().toString();
                 if(!weight.getText().toString().equals(null)&&!dob_display.getText().toString().equals(null)&& !gender.equals(null) && !blood.equals("Blood Group")){
                     myRef.child(boxname).child("info").child("gender").setValue(gender);
                     myRef.child(boxname).child("info").child("weight").setValue(weight.getText().toString());
@@ -116,6 +133,16 @@ public class Signup1 extends AppCompatActivity implements AdapterView.OnItemSele
 
 
 
+    }
+
+    void initialiseRadioGroup(){
+
+        String blood[] = this.getResources().getStringArray(R.array.bloodgroup);
+        for(int i =0 ;i<blood.length; i++){
+            RadioButton radioButton = new RadioButton(this);
+            radioButton.setText(blood[i]);
+            bloodgroup.addView(radioButton,i);
+        }
     }
 
     @Override

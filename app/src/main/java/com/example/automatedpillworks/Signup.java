@@ -11,6 +11,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -29,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
+import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
@@ -105,9 +107,10 @@ public class Signup extends AppCompatActivity {
             try {
                 InputStream inputStream = new FileInputStream(file);
                 Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                imageButton.setImageBitmap(bitmap);
+                BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
+                imageButton.setBackground(ob);
 
-                spinner.setVisibility(View.VISIBLE);
+
                 Toast.makeText(getApplicationContext(),"Uploading Photo....",Toast.LENGTH_SHORT).show();
 
 
@@ -117,16 +120,20 @@ public class Signup extends AppCompatActivity {
                     @Override
                     public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
 
-                        spinner.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"Profile Photo Successfully Uploaded",Toast.LENGTH_SHORT).show();
 
                     }
                 }).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
-                        spinner.setVisibility(View.GONE);
                         Toast.makeText(getApplicationContext(),"Upload Unsuccessful",Toast.LENGTH_SHORT).show();
 
+                    }
+                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+                    @Override
+                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                        double prog = (taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount())*(100.0);
+                        spinner.setProgress((int)prog);
                     }
                 });
 
@@ -150,15 +157,12 @@ public class Signup extends AppCompatActivity {
         next = findViewById(R.id.signup_next);
         imageButton = findViewById(R.id.signup_imagebutton);
         gallery = findViewById(R.id.signup_gallery);
-        spinner = findViewById(R.id.signup_progessbar);
+        spinner = findViewById(R.id.singup_progress);
         firstname = findViewById(R.id.signup_firstname);
         lastname = findViewById(R.id.signup_lastname);
         address = findViewById(R.id.signup_address);
 
         boxname = getIntent().getStringExtra("boxname");
-
-
-        spinner.setVisibility(View.GONE);
 
         if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
                 == PackageManager.PERMISSION_DENIED){
