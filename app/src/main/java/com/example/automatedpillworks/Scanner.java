@@ -105,8 +105,9 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         if(auth.getCurrentUser()!= null){
             loadUserData();
         }else{
-            toggleView();
+
         }
+        toggleView();
 
 
 
@@ -116,7 +117,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         signup.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Intent i = new Intent(Scanner.this,Signup.class);
+                Intent i = new Intent(Scanner.this,RegisterActivity.class);
                 startActivity(i);
             }
         });
@@ -174,6 +175,7 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
     protected void onStart() {
         super.onStart();
         scannerView = new ZXingScannerView(this);
+
     }
 
     @Override

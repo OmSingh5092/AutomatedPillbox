@@ -13,8 +13,9 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name=".LogInActivity"></activity>
+        android:theme="@style/AppMaterialTheme">
+        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".LogInActivity" />
         <activity android:name=".SplashScreenActivity" />
         <activity android:name=".Reminder" />
         <activity android:name=".PhoneChange" />

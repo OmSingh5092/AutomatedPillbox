@@ -379,7 +379,7 @@ public class Profile extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                blood_list = getResources().getStringArray(R.array.bloodgroup1);
+                blood_list = getResources().getStringArray(R.array.bloodgroup);
                 AlertDialog.Builder builder = new AlertDialog.Builder(Profile.this);
                 builder.setTitle("Select BloodGroup").setAdapter(new ArrayAdapter(Profile.this, android.R.layout.simple_list_item_1, blood_list),
                         new DialogInterface.OnClickListener() {

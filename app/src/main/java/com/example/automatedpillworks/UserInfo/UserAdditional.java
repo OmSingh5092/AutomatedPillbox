@@ -10,4 +10,8 @@ public class UserAdditional {
         this.profileImage = image;
     }
 
+    public UserAdditional(){
+
+    }
+
 }

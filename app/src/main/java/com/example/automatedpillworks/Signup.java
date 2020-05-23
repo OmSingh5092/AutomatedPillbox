@@ -38,6 +38,7 @@ import com.google.firebase.storage.StorageReference;
 import com.google.firebase.storage.UploadTask;
 import com.yalantis.ucrop.UCrop;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -46,10 +47,17 @@ import java.io.InputStream;
 public class Signup extends AppCompatActivity {
     ImageButton imageButton;
     Button next,gallery;
-    ProgressBar spinner;
+    ProgressBar pb;
     TextInputEditText firstname,lastname,address;
     String boxname;
     Bitmap profileImage;
+
+
+    //Firebase Objects
+    StorageReference storage;
+    FirebaseAuth auth;
+
+    Boolean isPhotoUploaded = false;
 
     Uri imageUri;
 
@@ -83,13 +91,9 @@ public class Signup extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
 
         if(requestCode==PICK_IMAGE){
-
-
             Uri sourceUri = data.getData(); // 1
             File file = null; // 2
-
             try {
-
                 file = getImageFile();
                 Uri destinationUri = Uri.fromFile(file);  // 3
                 openCropActivity(sourceUri, destinationUri);  // 4
@@ -101,7 +105,6 @@ public class Signup extends AppCompatActivity {
 
 
         }
-
         else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             imageUri = UCrop.getOutput(data);
             File file = new File(imageUri.getPath());
@@ -109,6 +112,7 @@ public class Signup extends AppCompatActivity {
                 InputStream inputStream = new FileInputStream(file);
                 profileImage = BitmapFactory.decodeStream(inputStream);
                 BitmapDrawable ob = new BitmapDrawable(getResources(), profileImage);
+                uploadImage();
                 imageButton.setBackground(ob);
             }catch (Exception e) {
                 e.printStackTrace();
@@ -137,16 +141,24 @@ public class Signup extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_signup);
 
-
+        //Refrencing Views
         next = findViewById(R.id.signup_next);
         imageButton = findViewById(R.id.signup_imagebutton);
         gallery = findViewById(R.id.signup_gallery);
-        spinner = findViewById(R.id.singup_progress);
+        pb = findViewById(R.id.singup_progress);
         firstname = findViewById(R.id.signup_firstname);
         lastname = findViewById(R.id.signup_lastname);
         address = findViewById(R.id.signup_address);
 
-        boxname = getIntent().getStringExtra("boxname");
+        //Firebase Instantation
+        storage = FirebaseStorage.getInstance().getReference();
+        auth = FirebaseAuth.getInstance();
+
+        //Asking Storage Permission
+        askStoragePermissoin();
+
+        //Refrencing the tempSignup
+
 
 
 
@@ -157,9 +169,7 @@ public class Signup extends AppCompatActivity {
 
                 Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 pictureIntent.setType("image/*");  // 1
-                pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);  // 2
-                String[] mimeTypes = new String[]{"image/jpeg", "image/png"};  // 3
-                pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
+                pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
                 startActivityForResult(Intent.createChooser(pictureIntent,"Select Picture"), PICK_IMAGE);  // 4
             }
         });
@@ -177,6 +187,7 @@ public class Signup extends AppCompatActivity {
                     //Saving the profile photo
 
                     GlobalVar.signUpTemp.userAdditional.profileImage = profileImage;
+                    swithActivity();
                 }
 
 
@@ -184,15 +195,58 @@ public class Signup extends AppCompatActivity {
         });
     }
 
+    void swithActivity(){
+        Intent i = new Intent(this,Signup1.class);
+        startActivity(i);
+    }
+
+    void uploadImage(){
+        ByteArrayOutputStream baos = new ByteArrayOutputStream();
+        profileImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
+        byte[] data = baos.toByteArray();
+        final UploadTask uploadTask = storage
+                .child(getResources().getString(R.string.firebase_storage_user_dir))
+                .child(auth.getCurrentUser().getUid())
+                .child(getResources().getString(R.string.firebase_storage_user_profile_image_name))
+                .putBytes(data);
+        uploadTask.addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception exception) {
+                // Handle unsuccessful uploads
+            }
+        }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
+                isPhotoUploaded= true;
+                // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
+                // ...
+            }
+        }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
+            @Override
+            public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
+                long d = (taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount())*100;
+                pb.setProgress((int)d);
+            }
+        });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        auth.signOut();
+    }
+
 
     @Override
     protected void onStart() {
         super.onStart();
-        GlobalVar.signUpTemp = new UserData();
+        GlobalVar.signUpTemp = new UserData(new UserInfoModal(),new UserAdditional());
     }
 
     Boolean isFilled(){
         if(firstname.getText().toString().length()==0){
+            return false;
+        }else if(!isPhotoUploaded){
             return false;
         }
 
