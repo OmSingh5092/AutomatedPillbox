@@ -44,7 +44,7 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
 
         fetchData();
 
-        Log.d("Boxname",GlobalVar.boxname);
+        Log.d("Boxname", GlobalVar.currentBox);
 
 
 
@@ -70,7 +70,7 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
     }
 
     void fetchData(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GlobalVar.boxname);
+        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GlobalVar.currentBox);
         ref.child("reminder").addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

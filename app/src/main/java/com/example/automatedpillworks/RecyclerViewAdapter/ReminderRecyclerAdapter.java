@@ -1,16 +1,12 @@
 package com.example.automatedpillworks.RecyclerViewAdapter;
 
-import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
-import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
 
-import java.lang.reflect.Array;
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;

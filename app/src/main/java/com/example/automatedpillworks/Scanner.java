@@ -7,21 +7,23 @@ import android.content.pm.PackageManager;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.view.animation.TranslateAnimation;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.UserInfo.UserInfoModal;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-import com.google.firebase.storage.FirebaseStorage;
-import com.google.firebase.storage.StorageReference;
 import com.google.zxing.Result;
 
-import java.util.HashMap;
-import java.util.Map;
-
+import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 import me.dm7.barcodescanner.zxing.ZXingScannerView;
@@ -31,36 +33,111 @@ import static android.Manifest.permission.CAMERA;
 public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler{
 
     ZXingScannerView scannerView;
+    FirebaseDatabase database;
+    UserInfoModal userData;
+    FirebaseAuth auth;
+    ProgressBar pb;
+    Button signup,login;
+
+
+    void requestCameraPermissoin(){
+        int MY_CAMERA_REQUEST_CODE = 100;
+
+        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(Scanner.this, new String[] {Manifest.permission.CAMERA},MY_CAMERA_REQUEST_CODE);
+        }
+
+    }
+
+    ImageButton scanner;
+    ConstraintLayout view;
+
+
+    void toggleView(){
+        //Removing Progressbar
+        pb.setVisibility(View.GONE);
+        //Making the view Visible with animation
+        if(view.getVisibility() != View.VISIBLE){
+            view.setVisibility(View.VISIBLE);
+            TranslateAnimation animate = new TranslateAnimation(
+                    0,
+                    0,
+                    view.getHeight(),
+                    0);
+            animate.setDuration(5000);
+            animate.setFillAfter(true);
+            view.startAnimation(animate);
+        } else {
+            view.setVisibility(View.INVISIBLE);
+            TranslateAnimation animate = new TranslateAnimation(
+                    0,
+                    0,
+                    0,
+                    view.getHeight());
+            animate.setDuration(5000);
+            animate.setFillAfter(true);
+            view.startAnimation(animate);
+        }
+    }
+
+    void loadUserData(){
+
+    }
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
+        //Refrencing
+        scanner = findViewById(R.id.scanner_qr);
+        view = findViewById(R.id.scanner_view);
+        pb = findViewById(R.id.scanner_pb);
+        signup = findViewById(R.id.scanner_signup);
+        login = findViewById(R.id.scanner_login);
+        //Instancing Auth
+        auth = FirebaseAuth.getInstance();
 
-        if(FirebaseAuth.getInstance().getCurrentUser()!= null){
-            final Intent i = new Intent(Scanner.this,Home.class);
 
 
-            startActivity(i);
-            finish();
+        //Checking the existence of Firebase Users
+        if(auth.getCurrentUser()!= null){
+            loadUserData();
+        }else{
+            toggleView();
         }
 
-        else{
 
-            scannerView = new ZXingScannerView(this);
-            setContentView(scannerView);
 
-            int MY_CAMERA_REQUEST_CODE = 100;
 
-            if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                    == PackageManager.PERMISSION_DENIED){
-                ActivityCompat.requestPermissions(Scanner.this, new String[] {Manifest.permission.CAMERA},MY_CAMERA_REQUEST_CODE);
+
+
+        signup.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Scanner.this,Signup.class);
+                startActivity(i);
             }
-
-        }
-
+        });
 
 
+        login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Scanner.this,LogInActivity.class);
+                startActivity(i);
+            }
+        });
+
+
+        scanner.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                setContentView(scannerView);
+
+            }
+        });
 
     }
 
@@ -91,9 +168,12 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         }
     }
 
+
+
     @Override
     protected void onStart() {
         super.onStart();
+        scannerView = new ZXingScannerView(this);
     }
 
     @Override

@@ -3,6 +3,7 @@
     <string name="title_activity_login">Login</string>
     <string name="title_activity_signup">Signup</string>
 
+    <string name="restore_state_userInfo">userInfo</string>
     <string-array name="bloodgroup">
         <item>Blood Group </item>
         <item>A+</item>
@@ -46,6 +47,12 @@
         <item>Box 7</item>
         <item>Box 8</item>
     </string-array>
+
+
+    <string name = "login_up_message">Username/Password</string>
+    <string name = "login_successfull">Login Successfull</string>
+    <string name = "signup_button_message">Generate User</string>
+    <string name = "login_button_message">Login</string>
 
     <string name="channel_name">FirebaseNotificationChannel</string>
     <string name="channel_description">NoDescription</string>

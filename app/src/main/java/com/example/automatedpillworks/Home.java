@@ -16,8 +16,6 @@ import android.view.ViewGroup;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
-import com.example.automatedpillworks.BasicFunctions.Startup;
-import com.example.automatedpillworks.CloudMessaging.Refrences;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -26,6 +24,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class Home extends AppCompatActivity {
+    DatabaseReference myRef;
 
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
@@ -124,31 +123,15 @@ public class Home extends AppCompatActivity {
         cl = findViewById(R.id.home_constraintlayout);
         spinner = findViewById(R.id.home_spinner);
 
+        //Refrencing FirebaseDatabase
+        myRef = FirebaseDatabase.getInstance().getReference();
+
+
+
+
+
         cl.removeView(rv);
-
-        Startup.firebase_init(this);
-
-
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.orderByChild("phonenumber").equalTo(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
-                for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    GlobalVar.boxname = snap.getKey();
-                    Refrences.initialiseRefrences(GlobalVar.boxname);
-                }
-
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
-
         toolbar.inflateMenu(R.menu.main_menu);
-
         toolbar.setOnMenuItemClickListener(new Toolbar.OnMenuItemClickListener() {
             @Override
             public boolean onMenuItemClick(MenuItem item) {
@@ -170,7 +153,7 @@ public class Home extends AppCompatActivity {
                     i = new Intent(Home.this, Scanner.class);
                     FirebaseAuth.getInstance().signOut();
                     startActivity(i);
-                    finish();
+                    i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK| Intent.FLAG_ACTIVITY_CLEAR_TOP);
                     return true;
 
                 }
@@ -187,11 +170,17 @@ public class Home extends AppCompatActivity {
             }
         });
 
+
+
+
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
         rv.setLayoutManager(gridLayoutManager);
 
         rv.setHasFixedSize(true);
-        myRef.orderByChild("phonenumber").equalTo(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber()).addListenerForSingleValueEvent(new ValueEventListener() {
+
+
+
+        myRef.child(GlobalVar.currentBox).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
 

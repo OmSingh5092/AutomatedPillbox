@@ -23,6 +23,9 @@ import android.widget.ProgressBar;
 import android.widget.SpinnerAdapter;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.UserInfo.UserAdditional;
+import com.example.automatedpillworks.UserInfo.UserData;
+import com.example.automatedpillworks.UserInfo.UserInfoModal;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
@@ -46,6 +49,7 @@ public class Signup extends AppCompatActivity {
     ProgressBar spinner;
     TextInputEditText firstname,lastname,address;
     String boxname;
+    Bitmap profileImage;
 
     Uri imageUri;
 
@@ -100,51 +104,31 @@ public class Signup extends AppCompatActivity {
 
         else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             imageUri = UCrop.getOutput(data);
-
             File file = new File(imageUri.getPath());
-
-
             try {
                 InputStream inputStream = new FileInputStream(file);
-                Bitmap bitmap = BitmapFactory.decodeStream(inputStream);
-                BitmapDrawable ob = new BitmapDrawable(getResources(), bitmap);
+                profileImage = BitmapFactory.decodeStream(inputStream);
+                BitmapDrawable ob = new BitmapDrawable(getResources(), profileImage);
                 imageButton.setBackground(ob);
-
-
-                Toast.makeText(getApplicationContext(),"Uploading Photo....",Toast.LENGTH_SHORT).show();
-
-
-                StorageReference storage = FirebaseStorage.getInstance().getReference();
-
-                storage.child("users/"+boxname+"/profilephoto.jpg").putFile(imageUri).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
-
-                        Toast.makeText(getApplicationContext(),"Profile Photo Successfully Uploaded",Toast.LENGTH_SHORT).show();
-
-                    }
-                }).addOnFailureListener(new OnFailureListener() {
-                    @Override
-                    public void onFailure(@NonNull Exception e) {
-                        Toast.makeText(getApplicationContext(),"Upload Unsuccessful",Toast.LENGTH_SHORT).show();
-
-                    }
-                }).addOnProgressListener(new OnProgressListener<UploadTask.TaskSnapshot>() {
-                    @Override
-                    public void onProgress(UploadTask.TaskSnapshot taskSnapshot) {
-                        double prog = (taskSnapshot.getBytesTransferred()/taskSnapshot.getTotalByteCount())*(100.0);
-                        spinner.setProgress((int)prog);
-                    }
-                });
-
-
-
-
             }catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
+
+    }
+
+
+    void askStoragePermissoin(){
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_WRITE_REQUEST_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_READ_REQUET_CODE);
+        }
 
     }
 
@@ -164,14 +148,7 @@ public class Signup extends AppCompatActivity {
 
         boxname = getIntent().getStringExtra("boxname");
 
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_WRITE_REQUEST_CODE);
-        }
-        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
-                == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(Signup.this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_READ_REQUET_CODE);
-        }
+
 
 
         gallery.setOnClickListener(new View.OnClickListener() {
@@ -181,10 +158,8 @@ public class Signup extends AppCompatActivity {
                 Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 pictureIntent.setType("image/*");  // 1
                 pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);  // 2
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                    String[] mimeTypes = new String[]{"image/jpeg", "image/png"};  // 3
-                    pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
-                }
+                String[] mimeTypes = new String[]{"image/jpeg", "image/png"};  // 3
+                pictureIntent.putExtra(Intent.EXTRA_MIME_TYPES, mimeTypes);
                 startActivityForResult(Intent.createChooser(pictureIntent,"Select Picture"), PICK_IMAGE);  // 4
             }
         });
@@ -194,29 +169,33 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(!firstname.getText().toString().equals(null) && !lastname.getText().toString().equals(null) &&!address.getText().toString().equals(null)){
+                if(isFilled()){
+                    GlobalVar.signUpTemp.userInfo.firstname= firstname.getText().toString();
+                    GlobalVar.signUpTemp.userInfo.lastname = lastname.getText().toString();
+                    GlobalVar.signUpTemp.userInfo.address = address.getText().toString();
 
+                    //Saving the profile photo
 
-                    FirebaseDatabase database = FirebaseDatabase.getInstance();
-                    DatabaseReference myRef = database.getReference();
-
-                    myRef.child(boxname).child("info").child("firstname").setValue(firstname.getText().toString());
-                    myRef.child(boxname).child("info").child("lastname").setValue(lastname.getText().toString());
-                    myRef.child(boxname).child("info").child("address").setValue(address.getText().toString());
-
-                    Intent i = new Intent(Signup.this, Signup1.class);
-                    i.putExtra("boxname",boxname);
-                    startActivity(i);
+                    GlobalVar.signUpTemp.userAdditional.profileImage = profileImage;
                 }
-                else{
-                    Toast.makeText(getApplicationContext(),"Please fill all the entries",Toast.LENGTH_SHORT).show();
-                }
+
 
             }
         });
+    }
 
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference();
-        myRef.child(boxname).child("phonenumber").setValue(FirebaseAuth.getInstance().getCurrentUser().getPhoneNumber());
+    @Override
+    protected void onStart() {
+        super.onStart();
+        GlobalVar.signUpTemp = new UserData();
+    }
+
+    Boolean isFilled(){
+        if(firstname.getText().toString().length()==0){
+            return false;
+        }
+
+        return true;
     }
 }

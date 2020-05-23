@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:minHeight="?attr/actionBarSize"
-        android:background="@color/primary"
+        android:background="@color/colorPrimary"
         app:title="Signup 1"
         app:titleTextColor="#ffffff"
         app:titleTextAppearance="@style/TitleTextAppearnce"

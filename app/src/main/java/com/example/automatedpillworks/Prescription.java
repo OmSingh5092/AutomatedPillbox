@@ -11,7 +11,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
@@ -21,9 +20,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 //import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 
-import java.lang.reflect.Array;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 public class Prescription extends AppCompatActivity {
     ImageButton back;
@@ -159,7 +156,7 @@ public class Prescription extends AppCompatActivity {
 
         final Course course[] = new Course[8];
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.boxname);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.currentBox);
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override

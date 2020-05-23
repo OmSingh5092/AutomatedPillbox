@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
-import android.view.inputmethod.InputMethodManager;
 import android.widget.CompoundButton;
 import android.widget.EditText;
 import android.widget.ImageButton;
@@ -32,12 +31,10 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
-import java.util.GregorianCalendar;
 import java.util.HashMap;
 
 public class Box extends AppCompatActivity {
@@ -421,7 +418,7 @@ public class Box extends AppCompatActivity {
         // Setting up the name of the box
         title.setText(box);
 
-        myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.boxname).child(box);
+        myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.currentBox).child(box);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
