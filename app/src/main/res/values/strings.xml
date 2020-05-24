@@ -41,8 +41,8 @@
 
     //String for FirebaseStorage
 
-    <string name = "firebase_storage_user_dir">users</string>
-    <string name = "firebase_storage_user_profile_image_name">profile.jpeg</string>
+    <string name="firebase_storage_user_dir">users</string>
+    <string name="firebase_storage_user_profile_image_name">profile.jpeg</string>
 
 
     <string name="login_up_message">Username/Password</string>

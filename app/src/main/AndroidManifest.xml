@@ -14,7 +14,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
-        <activity android:name=".RegisterActivity"></activity>
+        <activity android:name=".AddBoxActivity"></activity>
+        <activity android:name=".RegisterActivity" />
         <activity android:name=".LogInActivity" />
         <activity android:name=".SplashScreenActivity" />
         <activity android:name=".Reminder" />

@@ -2,14 +2,8 @@
 
     <!-- Base application theme. -->
     <style name="AppMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <item name="actionBarTheme">@style/ActionBarTheme</item>
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
-    </style>
-
-    <style name="ActionBarTheme" parent="Widget.AppCompat.ActionBar">
-        <item name="titleTextColor">#ffffff</item>
-        <item name="colorPrimary">@color/colorPrimary</item>
     </style>
 
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">

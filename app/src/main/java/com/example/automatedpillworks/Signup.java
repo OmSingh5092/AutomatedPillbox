@@ -230,11 +230,6 @@ public class Signup extends AppCompatActivity {
         });
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        auth.signOut();
-    }
 
 
     @Override

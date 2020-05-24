@@ -45,7 +45,7 @@ public class Signup1 extends AppCompatActivity  {
     TextView dobDisplay;
     Integer gender,blood;
     Long dob;
-    Double weight;
+    Long weight;
     Calendar calendar ;
     FirebaseAuth auth;
     FirebaseFirestore firestore;
@@ -128,7 +128,7 @@ public class Signup1 extends AppCompatActivity  {
                 if(isFilled()){
                     GlobalVar.signUpTemp.userInfo.gender = gender;
                     GlobalVar.signUpTemp.userInfo.blood = blood;
-                    GlobalVar.signUpTemp.userInfo.weight = weight;
+                    GlobalVar.signUpTemp.userInfo.weight = Long.valueOf(weightInput.getText().toString());
                     GlobalVar.signUpTemp.userInfo.dob = dob;
                 }
                 uploadData();
@@ -136,6 +136,13 @@ public class Signup1 extends AppCompatActivity  {
         });
 
 
+    }
+
+
+    void swithActivity(){
+        Intent i = new Intent(Signup1.this,Scanner.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        startActivity(i);
     }
 
     void uploadData(){
@@ -150,6 +157,12 @@ public class Signup1 extends AppCompatActivity  {
             @Override
             public void onFailure(@NonNull Exception e) {
                 Log.w("firestore","Error uploading document",e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                GlobalVar.signUpTemp = GlobalVar.userData;
+                swithActivity();
             }
         });
     }
@@ -172,11 +185,6 @@ public class Signup1 extends AppCompatActivity  {
         }
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        auth.signOut();
-    }
 
     @Override
     public boolean onSupportNavigateUp() {

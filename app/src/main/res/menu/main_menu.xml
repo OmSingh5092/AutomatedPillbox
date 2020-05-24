@@ -1,23 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<menu xmlns:android="http://schemas.android.com/apk/res/android">
-
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
     <item
-        android:title="Profile"
-        android:id="@+id/menu_profile"/>
+        android:title="AddBox"
+        android:id= "@+id/menu_add_box"
+        android:icon="@drawable/icon_add"
+        app:showAsAction="ifRoom"
+        />
     <item
-        android:id="@+id/menu_prescription"
-        android:title="Prescription">
-    </item>
+        android:title="Notificatoins"
+        android:id = "@+id/menu_notification"
+        android:icon="@drawable/icon_notif"
+        app:showAsAction="ifRoom"/>
     <item
-        android:id="@+id/menu_logout"
-        android:title="Logout">
-    </item>
-    <item
-        android:id="@+id/menu_phone"
-        android:title="Change PhoneNo.">
-    </item>
-    <item
-        android:id = "@+id/menu_missed"
-        android:title="Missed Meds"/>
+        android:title="Boxes"
+        android:id = "@+id/menu_boxes"
+        android:icon="@drawable/icon_box"
+        app:showAsAction="ifRoom"/>
 
 </menu>

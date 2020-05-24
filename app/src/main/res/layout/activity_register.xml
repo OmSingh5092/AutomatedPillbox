@@ -83,7 +83,7 @@
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>
 
-    <androidx.appcompat.widget.Toolbar
+    <com.google.android.material.appbar.MaterialToolbar
         android:id="@+id/registration_toolbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

@@ -21,6 +21,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
@@ -33,16 +34,17 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class LogInActivity extends AppCompatActivity {
 
     TextInputEditText username,password;
-    ImageButton close,google,phone;
+    ImageButton google,phone;
     Button submit;
     FirebaseAuth auth;
     GoogleSignInClient mGoogleSignInClient;
+    GoogleSignInAccount account;
     int RC_SIGN_IN = 100;
     String TAG = "GoogleSignin";
 
     void switchActivity(){
-        Intent i =new Intent(LogInActivity.this,Home.class);
-        i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        Intent i =new Intent(LogInActivity.this,Scanner.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
@@ -58,7 +60,7 @@ public class LogInActivity extends AppCompatActivity {
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                Toast.makeText(LogInActivity.this, "Failure", Toast.LENGTH_SHORT).show();
+                Toast.makeText(LogInActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }
@@ -67,10 +69,12 @@ public class LogInActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_log_in);
+        //Setting Toolbar
+        MaterialToolbar toolbar = findViewById(R.id.login_toolbar);
+        setSupportActionBar(toolbar);
         //Refrencing
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
-        close = findViewById(R.id.login_close);
         google = findViewById(R.id.login_google);
         phone = findViewById(R.id.login_phone);
         submit =findViewById(R.id.login_submit);
@@ -92,13 +96,6 @@ public class LogInActivity extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 getGoogleClient();
-            }
-        });
-
-        close.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                finish();
             }
         });
 
@@ -132,7 +129,7 @@ public class LogInActivity extends AppCompatActivity {
 
     private void handleSignInResult(Task<GoogleSignInAccount> completedTask) {
         try {
-            GoogleSignInAccount account = completedTask.getResult(ApiException.class);
+            account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account.getIdToken());
 
         } catch (ApiException e) {
@@ -149,6 +146,8 @@ public class LogInActivity extends AppCompatActivity {
                     @Override
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
+                            //Signing out of google account
+                            mGoogleSignInClient.signOut();
                             // Sign in success, update UI with the signed-in user's information
                             if(task.getResult().getAdditionalUserInfo().isNewUser()){
                                 isNewuser();
@@ -168,6 +167,12 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     void isNewuser(){
+        if(mGoogleSignInClient !=null){
+            mGoogleSignInClient.signOut();
+        }
+        if(auth.getCurrentUser() !=null){
+            auth.signOut();
+        }
         Intent i = new Intent(this,RegisterActivity.class);
         startActivity(i);
     }
@@ -184,5 +189,11 @@ public class LogInActivity extends AppCompatActivity {
 
         return true;
 
+    }
+
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 }
