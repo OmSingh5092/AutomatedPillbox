@@ -124,6 +124,7 @@ public class RegisterActivity extends AppCompatActivity {
         try {
             GoogleSignInAccount account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account.getIdToken());
+            mGoogleSignInClient.signOut();
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.

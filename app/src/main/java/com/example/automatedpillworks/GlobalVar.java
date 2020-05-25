@@ -14,5 +14,11 @@ public class GlobalVar {
     public static UserData userData;
     public static List<String> Boxes;
 
-    public static UserData signUpTemp;
+    public static UserData signUpTemp = new UserData();
+
+    public static void resetValues(){
+        currentBox = null;
+        reminderRecyclerdata = null;
+        userData = null;
+    }
 }

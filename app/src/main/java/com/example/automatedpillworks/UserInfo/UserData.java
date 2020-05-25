@@ -1,8 +1,8 @@
 package com.example.automatedpillworks.UserInfo;
 
 public class UserData {
-    public UserInfoModal userInfo;
-    public UserAdditional userAdditional;
+    public UserInfoModal userInfo = new UserInfoModal();
+    public UserAdditional userAdditional = new UserAdditional();
 
     public UserData(UserInfoModal userInfo, UserAdditional userAdditional) {
         this.userInfo = userInfo;

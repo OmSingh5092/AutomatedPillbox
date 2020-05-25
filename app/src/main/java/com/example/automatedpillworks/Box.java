@@ -25,6 +25,7 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -391,7 +392,7 @@ public class Box extends AppCompatActivity {
     DatabaseReference myRef;
     TextView title;
     EditText medname;
-
+    MaterialToolbar toolbar;
     RecyclerViewAdapter ada ;
     ProgressBar pb;
 
@@ -402,21 +403,21 @@ public class Box extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_box);
+        //Setting Toolbar
+        toolbar = findViewById(R.id.box_toolbar);
+        setSupportActionBar(toolbar);
 
         back = findViewById(R.id.prescription_back);
         rv = findViewById(R.id.box_rv);
-        title = findViewById(R.id.box_title);
         medname = findViewById(R.id.box_medname);
         check = findViewById(R.id.box_check);
         pb = findViewById(R.id.box_progressbar);
 
-
-
         final RecyclerViewAdapter[] Adapter = {new RecyclerViewAdapter(info)};
         String box = getIntent().getStringExtra("box");
-
+        Toast.makeText(this, box, Toast.LENGTH_SHORT).show();
         // Setting up the name of the box
-        title.setText(box);
+        toolbar.setTitle(box);
 
         myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.currentBox).child(box);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -500,26 +501,12 @@ public class Box extends AppCompatActivity {
         });
 
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Box.this,Home.class);
-                startActivity(i);
-            }
-        });
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
     }
 }

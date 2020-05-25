@@ -235,7 +235,7 @@ public class Signup extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        GlobalVar.signUpTemp = new UserData(new UserInfoModal(),new UserAdditional());
+
     }
 
     Boolean isFilled(){

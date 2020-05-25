@@ -5,6 +5,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
@@ -38,6 +39,8 @@ import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
 import com.google.zxing.Result;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.IOException;
@@ -50,10 +53,8 @@ import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
-public class Scanner extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+public class Scanner extends AppCompatActivity{
 
-    ZXingScannerView scannerView;
-    FirebaseDatabase database;
     //Firebase Objects
     FirebaseAuth auth;
     FirebaseFirestore firestore;
@@ -215,7 +216,10 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         scanner.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                setContentView(scannerView);
+                new IntentIntegrator(Scanner.this)
+                        .setOrientationLocked(false)
+                        .setPrompt(getResources().getString(R.string.qr_scanner_prompt))
+                        .initiateScan();
 
             }
         });
@@ -228,82 +232,29 @@ public class Scanner extends AppCompatActivity implements ZXingScannerView.Resul
         return ( ContextCompat.checkSelfPermission(getApplicationContext(), CAMERA ) == PackageManager.PERMISSION_GRANTED);
 
     }
-    private void requestPermission() {
-        ActivityCompat.requestPermissions(this, new String[]{CAMERA}, REQUEST_CAMERA);
+
+    void switchActivity(){
+        Intent i = new Intent(this,RegisterActivity.class);
+        startActivity(i);
     }
 
-    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
-        switch (requestCode) {
-            case REQUEST_CAMERA:
-                if (grantResults.length > 0) {
 
-                    boolean cameraAccepted = grantResults[0] == PackageManager.PERMISSION_GRANTED;
-                    if (cameraAccepted){
-                        Toast.makeText(getApplicationContext(), "Permission Granted, Now you can access camera", Toast.LENGTH_LONG).show();
-                    }else {
-                        Toast.makeText(getApplicationContext(), "Permission Denied, You cannot access and camera", Toast.LENGTH_LONG).show();
-
-                    }
-                }
-                break;
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                //Setting boxid
+                GlobalVar.signUpTemp.userInfo.boxes.add(result.getContents());
+                GlobalVar.signUpTemp.userInfo.boxnames.put(result.getContents(),getResources().getString(R.string.default_box_name));
+                Toast.makeText(this, "Scanned:"+result.getContents(), Toast.LENGTH_LONG).show();
+                switchActivity();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
         }
-    }
-
-
-
-    @Override
-    protected void onStart() {
-        super.onStart();
-        scannerView = new ZXingScannerView(this);
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        scannerView.setResultHandler(this);
-        scannerView.startCamera();
-    }
-
-    @Override
-    public void handleResult(Result result) {
-
-        final String code = result.getText();
-
-        Toast.makeText(getApplicationContext(),code,Toast.LENGTH_LONG).show();
-
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference();
-
-        myRef.child(code).addListenerForSingleValueEvent(new ValueEventListener() {
-            @Override
-            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                if(dataSnapshot.exists()){
-
-                    Intent i = new Intent(Scanner.this,Phone_Auth.class);
-                    i.putExtra("boxname",code);
-                    i.putExtra("status","1");
-                    startActivity(i);
-
-                }
-                else{
-                    Intent i = new Intent(Scanner.this,Phone_Auth.class);
-                    i.putExtra("boxname",code);
-                    i.putExtra("status","0");
-                    startActivity(i);
-
-                }
-            }
-
-            @Override
-            public void onCancelled(@NonNull DatabaseError databaseError) {
-
-            }
-        });
     }
 }

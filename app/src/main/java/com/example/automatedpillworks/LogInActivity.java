@@ -131,6 +131,7 @@ public class LogInActivity extends AppCompatActivity {
         try {
             account = completedTask.getResult(ApiException.class);
             firebaseAuthWithGoogle(account.getIdToken());
+            mGoogleSignInClient.signOut();
 
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
@@ -147,7 +148,6 @@ public class LogInActivity extends AppCompatActivity {
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             //Signing out of google account
-                            mGoogleSignInClient.signOut();
                             // Sign in success, update UI with the signed-in user's information
                             if(task.getResult().getAdditionalUserInfo().isNewUser()){
                                 isNewuser();
@@ -167,9 +167,6 @@ public class LogInActivity extends AppCompatActivity {
     }
 
     void isNewuser(){
-        if(mGoogleSignInClient !=null){
-            mGoogleSignInClient.signOut();
-        }
         if(auth.getCurrentUser() !=null){
             auth.signOut();
         }

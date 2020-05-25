@@ -5,7 +5,9 @@ import android.content.Intent;
 import java.io.Serializable;
 import java.io.StringReader;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class UserInfoModal implements Serializable {
     public String firstname;
@@ -15,10 +17,10 @@ public class UserInfoModal implements Serializable {
     public Long dob;
     public String address;
     public Long weight;
-    public List<String> boxes;
+    public Map<String,String> boxnames = new HashMap<>();
+    public List<String> boxes = new ArrayList<>();
 
     public UserInfoModal(){
-        this.boxes = new ArrayList<>();
     }
 
     public UserInfoModal(String firstname, String lastname, Integer blood, Long dob, String address, Long weight,Integer gender) {
@@ -29,6 +31,5 @@ public class UserInfoModal implements Serializable {
         this.address = address;
         this.weight = weight;
         this.gender = gender;
-        this.boxes =new ArrayList<>();
     }
 }

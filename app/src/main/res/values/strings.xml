@@ -46,7 +46,7 @@
 
     <string name= "qr_scanner_prompt">Scan The QR Code On The Box</string>
 
-
+    <string name= "default_box_name">New Box</string>
     <string name="login_up_message">Username/Password</string>
     <string name="login_successfull">Login Successfull</string>
     <string name="signup_button_message">Generate User</string>

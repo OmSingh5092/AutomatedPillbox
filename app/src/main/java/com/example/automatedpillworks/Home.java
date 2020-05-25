@@ -21,6 +21,8 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -118,6 +120,7 @@ public class Home extends AppCompatActivity{
     DrawerLayout homeLayout;
     ImageView profileImage;
     String[] titles;
+    MaterialToolbar toolbar;
 
 
 
@@ -136,7 +139,7 @@ public class Home extends AppCompatActivity{
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_home);
         //Setting Toolbar
-        Toolbar toolbar = findViewById(R.id.home_toolbar);
+        toolbar = findViewById(R.id.home_toolbar);
         setSupportActionBar(toolbar);
 
         //Refrencing Views
@@ -160,7 +163,7 @@ public class Home extends AppCompatActivity{
 
 
         //Populating RecyclerView
-        populateRecyclerView();
+        setupRecyclerViewAndTitle();
 
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
@@ -175,7 +178,7 @@ public class Home extends AppCompatActivity{
 
     void navigationItemSelectoin(MenuItem item){
         if (item.getItemId() == R.id.nav_home_logout){
-            auth.signOut();
+            signOut();
 
             Intent i = new Intent(this,Scanner.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -185,12 +188,21 @@ public class Home extends AppCompatActivity{
 
     }
 
-    void populateRecyclerView(){
+    private void signOut(){
+        GlobalVar.resetValues();
+        auth.signOut();
+        if(GoogleSignIn.getLastSignedInAccount(this) == null){
+
+        }
+    }
+
+    void setupRecyclerViewAndTitle(){
         if(GlobalVar.currentBox == null){
             spinner.setVisibility(View.GONE);
             return;
         }
 
+        toolbar.setTitle(GlobalVar.userData.userInfo.boxnames.get(GlobalVar.currentBox));
 
         GridLayoutManager gridLayoutManager = new GridLayoutManager(getApplicationContext(),2);
         rv.setLayoutManager(gridLayoutManager);
@@ -223,11 +235,15 @@ public class Home extends AppCompatActivity{
         });
     }
 
+    private void setUpBoxesMenu(){
+
+    }
+
     @Override
     protected void onResume() {
         super.onResume();
         setCurrentBox();
-        populateRecyclerView();
+        setupRecyclerViewAndTitle();
 
     }
 

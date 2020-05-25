@@ -33,7 +33,7 @@ import com.google.zxing.integration.android.IntentResult;
 
 public class AddBoxActivity extends AppCompatActivity{
     ImageButton qr;
-    TextInputEditText boxidInput;
+    TextInputEditText boxinput,boxname;
     MaterialButton submit;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
@@ -41,10 +41,13 @@ public class AddBoxActivity extends AppCompatActivity{
 
 
 
-    void addBox(String id){
+    void addBox(String id,String name){
         GlobalVar.userData.userInfo.boxes.add(id);
+        GlobalVar.userData.userInfo.boxnames.put(id,name);
         firestore.collection(getResources().getString(R.string.firestor_base_user_collection))
-                .document(auth.getUid()).update("boxes", FieldValue.arrayUnion(id));
+                .document(auth.getUid()).update("boxnames",GlobalVar.userData.userInfo.boxnames);
+        firestore.collection("users")
+                .document(auth.getUid()).update("boxes",FieldValue.arrayUnion(id));
     }
 
     @Override
@@ -57,9 +60,9 @@ public class AddBoxActivity extends AppCompatActivity{
         //Refrencing Objects
 
         qr = findViewById(R.id.add_box_qr);
-        boxidInput = findViewById(R.id.add_box_boxid);
+        boxinput = findViewById(R.id.add_box_boxid);
         submit = findViewById(R.id.add_box_submit);
-        cl = findViewById(R.id.add_box_camera);
+        boxname = findViewById(R.id.add_box_boxname);
 
         //Initialising Firebase Instances
         firestore = FirebaseFirestore.getInstance();
@@ -73,8 +76,7 @@ public class AddBoxActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(isFilled()){
-
-                    addBox(boxidInput.getText().toString());
+                    addBox(boxinput.getText().toString(),boxname.getText().toString());
                 }
             }
         });
@@ -92,7 +94,7 @@ public class AddBoxActivity extends AppCompatActivity{
     }
 
     Boolean isFilled(){
-        if(boxidInput.getText().toString().length() ==0){
+        if(boxinput.getText().toString().length() ==0){
             return false;
         }
 
@@ -124,7 +126,7 @@ public class AddBoxActivity extends AppCompatActivity{
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 //Setting boxid in the edit text
-                boxidInput.setText(result.getContents());
+                boxinput.setText(result.getContents());
                 Toast.makeText(this, "Scanned: ", Toast.LENGTH_LONG).show();
             }
         } else {
