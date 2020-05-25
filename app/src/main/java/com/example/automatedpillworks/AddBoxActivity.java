@@ -1,6 +1,7 @@
 package com.example.automatedpillworks;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
@@ -27,15 +28,19 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.zxing.Result;
+import com.google.zxing.integration.android.IntentIntegrator;
+import com.google.zxing.integration.android.IntentResult;
 
-public class AddBoxActivity extends AppCompatActivity implements ZXingScannerView.ResultHandler{
+public class AddBoxActivity extends AppCompatActivity{
     ImageButton qr;
     TextInputEditText boxidInput;
     MaterialButton submit;
     FirebaseFirestore firestore;
     FirebaseAuth auth;
-    ZXingScannerView scannerView;
     ConstraintLayout cl;
+
+
+
     void addBox(String id){
         GlobalVar.userData.userInfo.boxes.add(id);
         firestore.collection(getResources().getString(R.string.firestor_base_user_collection))
@@ -60,12 +65,15 @@ public class AddBoxActivity extends AppCompatActivity implements ZXingScannerVie
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
 
+        //Checking Permission
+        checkPermission();
+
 
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if(isFilled()){
-                    scannerView = new ZXingScannerView(AddBoxActivity.this);
+
                     addBox(boxidInput.getText().toString());
                 }
             }
@@ -74,7 +82,10 @@ public class AddBoxActivity extends AppCompatActivity implements ZXingScannerVie
         qr.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                checkPermission();
+
+                new IntentIntegrator(AddBoxActivity.this)
+                        .setOrientationLocked(false)
+                        .setPrompt(getResources().getString(R.string.qr_scanner_prompt)).initiateScan();
 
             }
         });
@@ -105,31 +116,20 @@ public class AddBoxActivity extends AppCompatActivity implements ZXingScannerVie
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
-        scannerView = new ZXingScannerView(this);
-
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        scannerView.stopCamera();
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        scannerView.setResultHandler(this);
-        scannerView.startCamera();
-    }
-
-    @Override
-    public void handleResult(Result result) {
-        final String code = result.getText();
-        //Fixing this code in TextInputEditText
-        boxidInput.setText(code);
-        setContentView(R.layout.activity_add_box);
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        IntentResult result = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(result != null) {
+            if(result.getContents() == null) {
+                Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
+            } else {
+                //Setting boxid in the edit text
+                boxidInput.setText(result.getContents());
+                Toast.makeText(this, "Scanned: ", Toast.LENGTH_LONG).show();
+            }
+        } else {
+            super.onActivityResult(requestCode, resultCode, data);
+        }
     }
 }
 

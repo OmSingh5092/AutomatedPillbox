@@ -44,6 +44,8 @@
     <string name="firebase_storage_user_dir">users</string>
     <string name="firebase_storage_user_profile_image_name">profile.jpeg</string>
 
+    <string name= "qr_scanner_prompt">Scan The QR Code On The Box</string>
+
 
     <string name="login_up_message">Username/Password</string>
     <string name="login_successfull">Login Successfull</string>
