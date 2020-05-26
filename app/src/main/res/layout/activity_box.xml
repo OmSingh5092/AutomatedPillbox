@@ -12,6 +12,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="?attr/colorPrimary"
+        android:minHeight="?attr/actionBarSize"
         app:title="Box"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/back_icon" />

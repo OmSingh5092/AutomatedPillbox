@@ -4,6 +4,20 @@
     <style name="AppMaterialTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="toolbarStyle">@style/AppToolbarStyle</item>
+        <item name = "textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
+        <item name = "cardBackgroundColor">#ffffff</item>
+    </style>
+
+
+    <style name="AppToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
+        <item name="titleTextAppearance">@style/AppTitleTextStyle</item>
+        <item name="android:minHeight">?attr/actionBarSize</item>
+    </style>
+
+    <style name="AppTitleTextStyle" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">20dp</item>
     </style>
 
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">

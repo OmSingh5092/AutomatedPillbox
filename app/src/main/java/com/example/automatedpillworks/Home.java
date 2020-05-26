@@ -17,6 +17,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
+import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
@@ -30,6 +31,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.List;
+import java.util.Map;
+import java.util.Vector;
 
 public class Home extends AppCompatActivity{
 
@@ -121,6 +126,7 @@ public class Home extends AppCompatActivity{
     ImageView profileImage;
     String[] titles;
     MaterialToolbar toolbar;
+    TextView hellomessage;
 
 
 
@@ -130,7 +136,7 @@ public class Home extends AppCompatActivity{
 
     void setCurrentBox(){
         if(GlobalVar.userData.userInfo.boxes.size() !=0){
-            GlobalVar.currentBox = GlobalVar.userData.userInfo.boxes.get(0);
+            GlobalVar.currentBox = GlobalVar.userData.userInfo.boxes.get(GlobalVar.currentBoxIndex);
         }
     }
 
@@ -148,6 +154,7 @@ public class Home extends AppCompatActivity{
         spinner = findViewById(R.id.home_spinner);
         profileImage = findViewById(R.id.home_nav_image);
         navigationView = findViewById(R.id.home_nav_view);
+        hellomessage = findViewById(R.id.home_nav_name);
 
         //Refrencing FirebaseDatabase
         myRef = FirebaseDatabase.getInstance().getReference();
@@ -156,10 +163,11 @@ public class Home extends AppCompatActivity{
         //Setting Current Box
         setCurrentBox();
 
+        //Setting NavBar
+        setUpNavbar();
+
 
         titles = getResources().getStringArray(R.array.boxes);
-
-        //Setting Image in navigation Bar
 
 
         //Populating RecyclerView
@@ -174,6 +182,10 @@ public class Home extends AppCompatActivity{
             }
         });
 
+    }
+
+    void setUpNavbar(){
+        //hellomessage.setText("Hello "+ GlobalVar.userData.userInfo.firstname +"!");
     }
 
     void navigationItemSelectoin(MenuItem item){
@@ -235,9 +247,6 @@ public class Home extends AppCompatActivity{
         });
     }
 
-    private void setUpBoxesMenu(){
-
-    }
 
     @Override
     protected void onResume() {
@@ -267,13 +276,38 @@ public class Home extends AppCompatActivity{
             i = new Intent(this,AddBoxActivity.class);
             startActivity(i);
         }else if(item.getItemId() == R.id.menu_boxes){
-
+            startBoxPop(item.getActionView());
         }else if(item.getItemId() == R.id.menu_notification){
             i = new Intent(this,Reminder.class);
             startActivity(i);
         }
 
         return super.onOptionsItemSelected(item);
+    }
+
+    void startBoxPop(View view){
+
+        PopupMenu popupMenu = new PopupMenu(this,toolbar);
+        popupMenu.setGravity(Gravity.RIGHT);
+
+        int newId = 0;
+
+        for(String string: GlobalVar.userData.userInfo.boxes){
+            popupMenu.getMenu().add(100,newId,newId,GlobalVar.userData.userInfo.boxnames.get(string));
+            newId++;
+        }
+
+        popupMenu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                GlobalVar.currentBoxIndex = item.getItemId();
+                setCurrentBox();
+                setupRecyclerViewAndTitle();
+                return false;
+            }
+        });
+
+        popupMenu.show();
     }
 
 
