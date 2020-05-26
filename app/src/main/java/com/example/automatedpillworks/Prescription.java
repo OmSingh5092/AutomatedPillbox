@@ -163,7 +163,7 @@ public class Prescription extends AppCompatActivity {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int i=0;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    if(!snap.getKey().equals("info")){
+                    if(!snap.getKey().equals("uid")){
                         course[i] = new Course();
                         course[i].medname = snap.child("medicine").getValue(String.class);
                         course[i].day = new ArrayList<Days>();

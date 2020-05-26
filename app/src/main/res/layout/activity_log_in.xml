@@ -24,7 +24,6 @@
         android:layout_marginStart="24dp"
         android:layout_marginTop="24dp"
         android:layout_marginEnd="24dp"
-        android:theme="@style/Theme.MaterialComponents.DayNight.Dialog"
         app:cardBackgroundColor="#ffffff"
         app:cardCornerRadius="10dp"
         app:cardElevation="5dp"
@@ -119,6 +118,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/login_google"
         app:layout_constraintTop_toTopOf="@+id/login_google"
-        app:srcCompat="@drawable/common_full_open_on_phone" />
+        android:background="?attr/selectableItemBackground"
+        app:srcCompat="@drawable/icon_otp" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -6,7 +6,7 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="toolbarStyle">@style/AppToolbarStyle</item>
         <item name = "textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
-        <item name = "cardBackgroundColor">#ffffff</item>
+        <item name = "materialButtonStyle">@style/AppMaterialButtonStyle</item>
     </style>
 
 
@@ -18,6 +18,10 @@
     <style name="AppTitleTextStyle" parent="TextAppearance.AppCompat">
         <item name="android:textColor">#ffffff</item>
         <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="AppMaterialButtonStyle" parent="Widget.MaterialComponents.Button">
+        <item name="backgroundTint">@color/colorPrimaryDark</item>
     </style>
 
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">

@@ -23,8 +23,10 @@ import android.widget.TextView;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -167,6 +169,7 @@ public class Home extends AppCompatActivity{
         setUpNavbar();
 
 
+
         titles = getResources().getStringArray(R.array.boxes);
 
 
@@ -194,6 +197,9 @@ public class Home extends AppCompatActivity{
 
             Intent i = new Intent(this,Scanner.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
+            startActivity(i);
+        }else if(item.getItemId() == R.id.nav_home_prescription){
+            Intent i = new Intent(this,Prescription.class);
             startActivity(i);
         }
 
@@ -238,11 +244,33 @@ public class Home extends AppCompatActivity{
                 rv.setVisibility(View.VISIBLE);
                 spinner.setVisibility(View.GONE);
 
+                //Checking if this user is the first user?
+                if(!dataSnapshot.child("uid").exists()){
+                    setUserAsFirstUser();
+                }
             }
 
             @Override
             public void onCancelled(@NonNull DatabaseError databaseError) {
+                Snackbar.make(findViewById(R.id.home_layout),databaseError.getMessage(),Snackbar.LENGTH_INDEFINITE).setAction("Retry", new View.OnClickListener() {
+                    @Override
+                    public void onClick(View v) {
+                        setupRecyclerViewAndTitle();
+                    }
+                }).show();
+                spinner.setVisibility(View.GONE);
+            }
+        });
+    }
 
+
+
+    void setUserAsFirstUser(){
+        //Setting the user as the box admin
+        myRef.child(GlobalVar.currentBox).child("uid").child(auth.getUid()).setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Snackbar.make(findViewById(R.id.home_layout),R.string.first_user_done,Snackbar.LENGTH_LONG).show();
             }
         });
     }

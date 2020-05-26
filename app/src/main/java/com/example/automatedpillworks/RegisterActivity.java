@@ -67,7 +67,10 @@ public class RegisterActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                signInWithUserPass(username.getText().toString(), password.getText().toString());
+                if(isFilled()){
+                    signInWithUserPass(username.getText().toString(), password.getText().toString());
+                }
+
             }
         });
 
@@ -80,6 +83,8 @@ public class RegisterActivity extends AppCompatActivity {
 
     Boolean isFilled(){
         if(username.getText().length()==0){
+            return false;
+        }else if(password.getText().length()==0){
             return false;
         }
         return true;

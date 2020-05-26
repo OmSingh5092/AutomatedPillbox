@@ -18,6 +18,7 @@ import android.widget.Toast;
 
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -36,6 +37,7 @@ public class AddBoxActivity extends AppCompatActivity{
     TextInputEditText boxinput,boxname;
     MaterialButton submit;
     FirebaseFirestore firestore;
+    FirebaseDatabase database;
     FirebaseAuth auth;
     ConstraintLayout cl;
 
@@ -67,6 +69,7 @@ public class AddBoxActivity extends AppCompatActivity{
         //Initialising Firebase Instances
         firestore = FirebaseFirestore.getInstance();
         auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
 
         //Checking Permission
         checkPermission();
@@ -76,7 +79,31 @@ public class AddBoxActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(isFilled()){
-                    addBox(boxinput.getText().toString(),boxname.getText().toString());
+                    final String id = boxinput.getText().toString();
+                    //Checking if box is previously added
+                    if(GlobalVar.userData.userInfo.boxes.contains(id)){
+                        Snackbar.make(findViewById(R.id.add_box_layout),"Box already added!",Snackbar.LENGTH_SHORT).show();
+                        return;
+                    }
+                    //Checking the permission
+                    database.getReference().child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                            if(dataSnapshot.exists()){
+                                addBox(id,boxname.getText().toString());
+                            }else{
+                                Snackbar.make(findViewById(R.id.add_box_layout),"Box Not Found!", Snackbar.LENGTH_SHORT).show();
+                            }
+
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError databaseError) {
+                            Snackbar.make(findViewById(R.id.add_box_layout),databaseError.getMessage(),Snackbar.LENGTH_LONG).show();
+                        }
+                    });
+
+
                 }
             }
         });
@@ -101,6 +128,7 @@ public class AddBoxActivity extends AppCompatActivity{
         return true;
 
     }
+
 
     @Override
     public boolean onSupportNavigateUp() {
