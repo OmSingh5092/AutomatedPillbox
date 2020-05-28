@@ -126,10 +126,10 @@ public class Signup1 extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if(isFilled()){
-                    GlobalVar.signUpTemp.userInfo.gender = gender;
-                    GlobalVar.signUpTemp.userInfo.blood = blood;
-                    GlobalVar.signUpTemp.userInfo.weight = Long.valueOf(weightInput.getText().toString());
-                    GlobalVar.signUpTemp.userInfo.dob = dob;
+                    GlobalVar.signUpTemp.userInfo.userprofile.gender = gender;
+                    GlobalVar.signUpTemp.userInfo.userprofile.blood = blood;
+                    GlobalVar.signUpTemp.userInfo.userprofile.weight = Long.valueOf(weightInput.getText().toString());
+                    GlobalVar.signUpTemp.userInfo.userprofile.dob = dob;
                 }
                 uploadData();
             }

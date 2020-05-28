@@ -10,26 +10,21 @@ import java.util.List;
 import java.util.Map;
 
 public class UserInfoModal implements Serializable {
-    public String firstname;
-    public String lastname;
-    public Integer gender;
-    public Integer blood;
-    public Long dob;
-    public String address;
-    public Long weight;
+    public UserProfileModal userprofile = new UserProfileModal();
     public Map<String,String> boxnames = new HashMap<>();
     public List<String> boxes = new ArrayList<>();
+    public Map<String,String>registrationtoken = new HashMap<>();
 
     public UserInfoModal(){
     }
 
     public UserInfoModal(String firstname, String lastname, Integer blood, Long dob, String address, Long weight,Integer gender) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.blood = blood;
-        this.dob = dob;
-        this.address = address;
-        this.weight = weight;
-        this.gender = gender;
+        this.userprofile.firstname = firstname;
+        this.userprofile.lastname = lastname;
+        this.userprofile.blood = blood;
+        this.userprofile.dob = dob;
+        this.userprofile.address = address;
+        this.userprofile.weight = weight;
+        this.userprofile.gender = gender;
     }
 }

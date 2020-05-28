@@ -11,6 +11,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
+import android.os.AsyncTask;
 import android.os.Bundle;
 import android.provider.MediaStore;
 import android.view.View;
@@ -21,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 import android.widget.Toolbar;
 
+import com.example.automatedpillworks.CloudMessaging.AsyncTaskSubscribeToTopics;
 import com.example.automatedpillworks.UserInfo.UserAdditional;
 import com.example.automatedpillworks.UserInfo.UserData;
 import com.example.automatedpillworks.UserInfo.UserInfoModal;
@@ -107,6 +109,10 @@ public class Scanner extends AppCompatActivity{
             view.startAnimation(animate);
         }
     }
+    void executeFCMTasks(){
+        AsyncTaskSubscribeToTopics task = new AsyncTaskSubscribeToTopics(this);
+        task.execute();
+    }
 
     void switchToSignup(){
         Intent i = new Intent(Scanner.this,Signup.class);
@@ -152,6 +158,7 @@ public class Scanner extends AppCompatActivity{
                     infoModal= documentSnapshot.toObject(UserInfoModal.class);
                     GlobalVar.userData = new UserData(infoModal);
                     loadAdditionalData();
+                    executeFCMTasks();
                 }else{
                     switchToSignup();
                 }
@@ -172,7 +179,7 @@ public class Scanner extends AppCompatActivity{
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_scanner);
-        //Refrencing
+        //Referencing
         scanner = findViewById(R.id.scanner_qr);
         view = findViewById(R.id.scanner_view);
         pb = findViewById(R.id.scanner_pb);

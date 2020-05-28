@@ -180,9 +180,9 @@ public class Signup extends AppCompatActivity {
             public void onClick(View v) {
 
                 if(isFilled()){
-                    GlobalVar.signUpTemp.userInfo.firstname= firstname.getText().toString();
-                    GlobalVar.signUpTemp.userInfo.lastname = lastname.getText().toString();
-                    GlobalVar.signUpTemp.userInfo.address = address.getText().toString();
+                    GlobalVar.signUpTemp.userInfo.userprofile.firstname= firstname.getText().toString();
+                    GlobalVar.signUpTemp.userInfo.userprofile.lastname = lastname.getText().toString();
+                    GlobalVar.signUpTemp.userInfo.userprofile.address = address.getText().toString();
 
                     //Saving the profile photo
 
