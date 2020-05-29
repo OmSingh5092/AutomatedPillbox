@@ -1,7 +1,9 @@
-package com.example.automatedpillworks;
+package com.example.automatedpillworks.activities;
 
 import android.Manifest;
+import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 
 import androidx.annotation.NonNull;
@@ -10,48 +12,43 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
-import android.net.Uri;
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.provider.MediaStore;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ProgressBar;
 import android.widget.Toast;
-import android.widget.Toolbar;
 
+import com.example.automatedpillworks.CloudMessaging.AsyncTaskForNotificationChannel;
 import com.example.automatedpillworks.CloudMessaging.AsyncTaskSubscribeToTopics;
-import com.example.automatedpillworks.UserInfo.UserAdditional;
-import com.example.automatedpillworks.UserInfo.UserData;
-import com.example.automatedpillworks.UserInfo.UserInfoModal;
+import com.example.automatedpillworks.CloudMessaging.NotificationService;
+import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.Model.UserAdditional;
+import com.example.automatedpillworks.Model.UserData;
+import com.example.automatedpillworks.Model.UserInfoModel;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DataSnapshot;
-import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
-import com.google.firebase.firestore.auth.User;
 import com.google.firebase.storage.FileDownloadTask;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
-import com.google.zxing.Result;
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
+import java.util.Map;
 
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
-import me.dm7.barcodescanner.zxing.ZXingScannerView;
 
 import static android.Manifest.permission.CAMERA;
 
@@ -65,19 +62,8 @@ public class Scanner extends AppCompatActivity{
     ProgressBar pb;
     Button signup,login;
 
-    UserInfoModal infoModal;
+    UserInfoModel infoModal;
     UserAdditional additional;
-
-
-    void requestCameraPermissoin(){
-        int MY_CAMERA_REQUEST_CODE = 100;
-
-        if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
-                == PackageManager.PERMISSION_DENIED){
-            ActivityCompat.requestPermissions(Scanner.this, new String[] {Manifest.permission.CAMERA},MY_CAMERA_REQUEST_CODE);
-        }
-
-    }
 
     ImageButton scanner;
     ConstraintLayout view;
@@ -109,15 +95,28 @@ public class Scanner extends AppCompatActivity{
             view.startAnimation(animate);
         }
     }
+
+    //Should be called when user Data has been loaded
     void executeFCMTasks(){
-        AsyncTaskSubscribeToTopics task = new AsyncTaskSubscribeToTopics(this);
+
+        //Setting the retrieved boxes names in shared preferences to be used by messaging service
+        SharedPreferences sharedPreferences = getSharedPreferences("BOX_NAMES", Context.MODE_PRIVATE);
+        for(Map.Entry<String,String> entry: GlobalVar.userData.userInfo.boxnames.entrySet()){
+            sharedPreferences.edit().putString(entry.getKey(),entry.getValue());
+        }
+
+        //Starting the Async Tasks
+        AsyncTaskForNotificationChannel channelTask = new AsyncTaskForNotificationChannel(getApplicationContext());
+        AsyncTaskSubscribeToTopics task = new AsyncTaskSubscribeToTopics(GlobalVar.userData.userInfo.boxes);
         task.execute();
+        channelTask.execute();
     }
 
     void switchToSignup(){
         Intent i = new Intent(Scanner.this,Signup.class);
         startActivity(i);
     }
+
     void switchToHome(){
         Intent i = new Intent(Scanner.this,Home.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
@@ -147,7 +146,6 @@ public class Scanner extends AppCompatActivity{
 
     }
 
-
     void loadUserData(){
         firestore.collection(getResources().getString(R.string.firestor_base_user_collection))
                 .document(auth.getUid())
@@ -155,7 +153,7 @@ public class Scanner extends AppCompatActivity{
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
-                    infoModal= documentSnapshot.toObject(UserInfoModal.class);
+                    infoModal= documentSnapshot.toObject(UserInfoModel.class);
                     GlobalVar.userData = new UserData(infoModal);
                     loadAdditionalData();
                     executeFCMTasks();
@@ -168,8 +166,7 @@ public class Scanner extends AppCompatActivity{
         }).addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception e) {
-                //User Have not filled the Signup Form completely
-
+                Toast.makeText(Scanner.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
     }

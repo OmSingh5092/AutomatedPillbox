@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:id="@+id/add_box_layout"
-    tools:context=".AddBoxActivity">
+    tools:context=".activities.AddBoxActivity">
 
 
     <com.google.android.material.appbar.MaterialToolbar

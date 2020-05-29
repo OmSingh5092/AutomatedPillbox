@@ -1,4 +1,4 @@
-package com.example.automatedpillworks;
+package com.example.automatedpillworks.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -15,7 +15,9 @@ import android.widget.Toast;
 
 import com.example.automatedpillworks.BasicFunctions.DragToRemove;
 import com.example.automatedpillworks.CloudMessaging.Refrences;
-import com.example.automatedpillworks.RecyclerViewAdapter.ReminderRecyclerAdapter;
+import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.adapters.ReminderRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.database.DataSnapshot;

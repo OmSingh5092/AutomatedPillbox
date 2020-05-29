@@ -1,8 +1,7 @@
-package com.example.automatedpillworks;
+package com.example.automatedpillworks.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
 import androidx.recyclerview.widget.GridLayoutManager;
@@ -21,8 +20,9 @@ import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 
+import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.R;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.navigation.NavigationView;
@@ -33,10 +33,6 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
-
-import java.util.List;
-import java.util.Map;
-import java.util.Vector;
 
 public class Home extends AppCompatActivity{
 
@@ -228,7 +224,7 @@ public class Home extends AppCompatActivity{
 
 
 
-        myRef.child(GlobalVar.currentBox).addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.child("boxes").child(GlobalVar.currentBox).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 String medname[] = new String[8];
@@ -267,7 +263,7 @@ public class Home extends AppCompatActivity{
 
     void setUserAsFirstUser(){
         //Setting the user as the box admin
-        myRef.child(GlobalVar.currentBox).child("uid").child(auth.getUid()).setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
+        myRef.child("boxes").child(GlobalVar.currentBox).child("uid").child(auth.getUid()).setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Snackbar.make(findViewById(R.id.home_layout),R.string.first_user_done,Snackbar.LENGTH_LONG).show();
@@ -301,7 +297,7 @@ public class Home extends AppCompatActivity{
     public boolean onOptionsItemSelected(MenuItem item) {
         Intent i;
         if(item.getItemId()== R.id.menu_add_box){
-            i = new Intent(this,AddBoxActivity.class);
+            i = new Intent(this, AddBoxActivity.class);
             startActivity(i);
         }else if(item.getItemId() == R.id.menu_boxes){
             startBoxPop(item.getActionView());

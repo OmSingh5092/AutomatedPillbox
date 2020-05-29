@@ -1,14 +1,14 @@
-package com.example.automatedpillworks.UserInfo;
+package com.example.automatedpillworks.Model;
 
 public class UserData {
-    public UserInfoModal userInfo = new UserInfoModal();
+    public UserInfoModel userInfo = new UserInfoModel();
     public UserAdditional userAdditional = new UserAdditional();
 
-    public UserData(UserInfoModal userInfo, UserAdditional userAdditional) {
+    public UserData(UserInfoModel userInfo, UserAdditional userAdditional) {
         this.userInfo = userInfo;
         this.userAdditional = userAdditional;
     }
-    public UserData(UserInfoModal userInfo){
+    public UserData(UserInfoModel userInfo){
         this.userInfo = userInfo;
     }
 

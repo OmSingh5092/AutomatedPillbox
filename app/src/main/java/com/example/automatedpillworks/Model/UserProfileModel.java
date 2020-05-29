@@ -1,8 +1,8 @@
-package com.example.automatedpillworks.UserInfo;
+package com.example.automatedpillworks.Model;
 
 import java.io.Serializable;
 
-public class UserProfileModal implements Serializable {
+public class UserProfileModel implements Serializable {
     public String firstname;
     public String lastname;
     public Integer gender;
@@ -11,7 +11,7 @@ public class UserProfileModal implements Serializable {
     public String address;
     public Long weight;
 
-    public UserProfileModal(){
+    public UserProfileModel(){
 
     }
 }

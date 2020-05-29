@@ -5,7 +5,7 @@
     android:id="@+id/phone_auth_mainview"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Phone_Auth">
+    tools:context=".activities.Phone_Auth">
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/signup1_toolbar"

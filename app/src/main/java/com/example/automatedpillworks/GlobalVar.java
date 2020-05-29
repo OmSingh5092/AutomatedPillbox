@@ -1,9 +1,9 @@
 package com.example.automatedpillworks;
 
-import com.example.automatedpillworks.RecyclerViewAdapter.ReminderRecyclerAdapter;
-import com.example.automatedpillworks.UserInfo.UserAdditional;
-import com.example.automatedpillworks.UserInfo.UserData;
-import com.example.automatedpillworks.UserInfo.UserInfoModal;
+import android.content.Intent;
+
+import com.example.automatedpillworks.adapters.ReminderRecyclerAdapter;
+import com.example.automatedpillworks.Model.UserData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,4 +22,8 @@ public class GlobalVar {
         reminderRecyclerdata = null;
         userData = null;
     }
+
+    //SomeNecessaryConstants
+    //Notification Channel ID
+    public static String CHANNEL_ID = "#8795";
 }

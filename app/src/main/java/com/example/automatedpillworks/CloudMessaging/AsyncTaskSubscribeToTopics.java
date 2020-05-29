@@ -10,6 +10,7 @@ import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -23,13 +24,9 @@ import androidx.annotation.NonNull;
 
 public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> {
     String TAG = "fcmErrorMessage:";
-
-
-    private List<String> topics = GlobalVar.userData.userInfo.boxes;
-    private Context context;
-
-    public AsyncTaskSubscribeToTopics(Context context){
-        this.context = context;
+    private List<String> topics;
+    public AsyncTaskSubscribeToTopics(List<String> topics){
+        this.topics = topics;
     }
 
     @Override
@@ -40,7 +37,6 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
             for (String topic : topics) {
                 messaging.subscribeToTopic(topic);
             }
-
             FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                 @Override
                 public void onComplete(@NonNull Task<InstanceIdResult> task) {
@@ -49,8 +45,6 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
                         return;
                     }
                     String token = task.getResult().getToken();
-                    String initialtoken = GlobalVar.userData.userInfo.registrationtoken.get("android");
-                    updateTokenToFirestore(token);
                     Log.d("RegistrationToken",token);
                 }
             });
@@ -62,13 +56,5 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
         }
 
         return null;
-    }
-
-    void updateTokenToFirestore(String token){
-        FirebaseAuth auth = FirebaseAuth.getInstance();
-        Map<String,String> updates = new HashMap<>();
-        updates.put("android",token);
-        FirebaseFirestore.getInstance().collection("users").document(auth.getUid()).update("registrationtoken",updates);
-
     }
 }

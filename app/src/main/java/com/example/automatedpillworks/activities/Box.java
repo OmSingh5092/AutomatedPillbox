@@ -1,4 +1,4 @@
-package com.example.automatedpillworks;
+package com.example.automatedpillworks.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -7,7 +7,6 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.app.TimePickerDialog;
-import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
@@ -25,6 +24,8 @@ import android.widget.TextView;
 import android.widget.TimePicker;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.R;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -419,7 +420,7 @@ public class Box extends AppCompatActivity {
         // Setting up the name of the box
         toolbar.setTitle(box);
 
-        myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.currentBox).child(box);
+        myRef = FirebaseDatabase.getInstance().getReference().child("boxes").child(GlobalVar.currentBox).child(box);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

@@ -1,4 +1,4 @@
-package com.example.automatedpillworks.RecyclerViewAdapter;
+package com.example.automatedpillworks.adapters;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -28,8 +28,6 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
             this.name = name;
             this.time = time;
         }
-
-
 
     }
     public ArrayList<Data> data ;

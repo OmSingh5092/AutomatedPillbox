@@ -1,12 +1,38 @@
 const functions = require('firebase-functions');
-const express = require('express');
-const bodyParser = require('body-parser');
-const reminder = require('./routes/Reminder.js');
 const admin = require('firebase-admin');
-const cors = require('cors');
-const app = express();
-app.use(cors({ origin: true }));
-app.use('/reminder',reminder);
-
 admin.initializeApp();
-exports.notifyReminder = functions.https.onRequest(app);
+
+
+exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}')
+    .onCreate((snapshot,context)=>{
+
+        var data = snapshot.val();
+        console.log("Data:",data);
+
+        console.log("BoxId", context.params.boxid);
+
+
+        //Generating Title
+
+        var message = {
+            data:{
+                boxname:context.params.boxid,
+                name:data.name,
+                time:data.time
+            },
+            topic : context.params.boxid
+        }
+
+        console.log("Payload:",message);
+
+        admin.messaging().send(message).then((res)=>{
+            console.log("Message sent successfully",res);
+            return null;
+        }).catch((err)=>{
+            console.log("Error:", err);
+        })
+
+        return null;
+
+
+    })

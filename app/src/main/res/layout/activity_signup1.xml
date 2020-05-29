@@ -4,11 +4,11 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Signup1">
+    tools:context=".activities.Signup1">
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".Signup1">
+        tools:context=".activities.Signup1">
 
         <com.google.android.material.appbar.MaterialToolbar
             android:id="@+id/signup1_toolbar"

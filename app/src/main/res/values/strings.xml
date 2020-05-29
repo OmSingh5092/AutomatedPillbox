@@ -44,9 +44,9 @@
     <string name="firebase_storage_user_dir">users</string>
     <string name="firebase_storage_user_profile_image_name">profile.jpeg</string>
 
-    <string name= "qr_scanner_prompt">Scan The QR Code On The Box</string>
+    <string name="qr_scanner_prompt">Scan The QR Code On The Box</string>
 
-    <string name= "default_box_name">New Box</string>
+    <string name="default_box_name">New Box</string>
     <string name="login_up_message">Username/Password</string>
     <string name="login_successfull">Login Successfull</string>
     <string name="signup_button_message">Generate User</string>
@@ -62,8 +62,13 @@
     <string name="first_user_done">You are set as the owner of this box!</string>
 
 
-    //Instructoins
-    <string name= "instructions">Scan the QR, add the box and proceed to Registraion</string>
+    //Instructions
+    <string name="instructions">Scan the QR, add the box and proceed to Registraion</string>
+
+    //Notification
+    <string name = "channel_id">#8795</string>
+
+    //Shared Preferences keys
 
 
 </resources>

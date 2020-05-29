@@ -1,7 +1,6 @@
-package com.example.automatedpillworks.UserInfo;
+package com.example.automatedpillworks.Model;
 
 import android.graphics.Bitmap;
-import android.media.Image;
 
 public class UserAdditional {
     public Bitmap profileImage;
