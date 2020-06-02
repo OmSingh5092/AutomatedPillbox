@@ -53,15 +53,15 @@
             android:hint="Lastname" />
     </com.google.android.material.textfield.TextInputLayout>
 
-    <ImageButton
+    <ImageView
         android:id="@+id/signup_imagebutton"
-        android:layout_width="120dp"
-        android:layout_height="120dp"
+        android:layout_width="100dp"
+        android:layout_height="100dp"
         android:layout_marginStart="40dp"
         android:layout_marginTop="20dp"
-        android:background="@drawable/icon_user"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/signup1_toolbar" />
+        app:layout_constraintTop_toBottomOf="@+id/signup1_toolbar"
+        app:srcCompat="@drawable/icon_user" />
 
     <TextView
         android:id="@+id/textView4"

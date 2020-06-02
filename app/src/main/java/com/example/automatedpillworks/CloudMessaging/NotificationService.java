@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.activities.Reminder;
+import com.example.automatedpillworks.utils.DateFormats;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.messaging.FirebaseMessagingService;
@@ -54,10 +55,7 @@ public class NotificationService extends FirebaseMessagingService {
         String title = data.get(sharedPreferences.getString(data.get("boxname"),"No Title"));
 
         //Generating date
-
-        Date date = new Date(Long.valueOf(data.get("time")));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-YYYY hh:mm aa");
-        String dateString = sdf.format(date);
+        String dateString = DateFormats.dayWithTime(Long.valueOf(data.get("time")));
 
         //Setting body as formatted date
         String  body = "You have missed "+ data.get("name")+ "on "+dateString;

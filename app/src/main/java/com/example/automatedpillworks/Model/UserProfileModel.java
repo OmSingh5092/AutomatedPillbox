@@ -14,4 +14,14 @@ public class UserProfileModel implements Serializable {
     public UserProfileModel(){
 
     }
+
+    public UserProfileModel(String firstname, String lastname, Integer gender, Integer blood, Long dob, String address, Long weight) {
+        this.firstname = firstname;
+        this.lastname = lastname;
+        this.gender = gender;
+        this.blood = blood;
+        this.dob = dob;
+        this.address = address;
+        this.weight = weight;
+    }
 }

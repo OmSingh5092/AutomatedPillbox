@@ -18,6 +18,7 @@ import android.os.Environment;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 
 import com.example.automatedpillworks.GlobalVar;
@@ -39,7 +40,7 @@ import java.io.IOException;
 import java.io.InputStream;
 
 public class Signup extends AppCompatActivity {
-    ImageButton imageButton;
+    ImageView imageButton;
     Button next,gallery;
     ProgressBar pb;
     TextInputEditText firstname,lastname,address;
@@ -64,9 +65,10 @@ public class Signup extends AppCompatActivity {
                 .start(this);
     }
 
-    String currentPhotoPath = "";
+
 
     private File getImageFile() throws IOException {
+        String currentPhotoPath = "";
         String imageFileName = "JPEG_" + System.currentTimeMillis() + "_";
         File storageDir = new File(
                 Environment.getExternalStoragePublicDirectory(
