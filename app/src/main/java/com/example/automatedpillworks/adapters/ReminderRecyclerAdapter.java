@@ -1,38 +1,38 @@
 package com.example.automatedpillworks.adapters;
 
+import android.graphics.ColorSpace;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.example.automatedpillworks.Model.ReminderModel;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.activities.Reminder;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecyclerAdapter.ViewHolder> {
 
-    public static class Data{
-        public String name;
-        public Long time;
-
-        public Data(){
-
+    public static class Model{
+        public ReminderModel data;
+        public String key;
+        public Model(ReminderModel data, String key){
+            this.data = data;
+            this.key = key;
         }
-
-        public Data(String name, Long time){
-            this.name = name;
-            this.time = time;
-        }
-
     }
-    public ArrayList<Data> data ;
 
-    public ReminderRecyclerAdapter(ArrayList<Data> data){
+    public List<Model> data = new ArrayList<>();
+
+    public ReminderRecyclerAdapter(List<Model> data){
         this.data = data;
     }
 
@@ -50,11 +50,11 @@ public class ReminderRecyclerAdapter extends RecyclerView.Adapter<ReminderRecycl
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        holder.head.setText(data.get(position).name);
+        holder.head.setText(data.get(position).data.name);
         String time;
         Date date = new Date();
-        date.setTime(data.get(position).time);
-        SimpleDateFormat dateFormat = new SimpleDateFormat("hh : mm :ss EE");
+        date.setTime(Long.valueOf(data.get(position).data.time));
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd-MMM-YYYY hh:mm aa");
         time = dateFormat.format(date);
         holder.time.setText(time);
     }

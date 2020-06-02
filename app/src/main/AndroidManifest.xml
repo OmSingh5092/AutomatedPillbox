@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
-        <activity android:name=".activities.ManageBoxActivity"></activity>
+        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.ManageBoxActivity" />
         <activity android:name=".activities.AddBoxActivity" />
         <activity android:name=".activities.RegisterActivity" />
         <activity android:name=".activities.LogInActivity" />
@@ -29,7 +30,6 @@
             android:name=".activities.Box"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.Prescription" />
-        <activity android:name=".activities.Profile" />
         <activity android:name=".activities.Home" />
         <activity android:name=".activities.Phone_Auth" />
         <activity android:name=".activities.Signup" />

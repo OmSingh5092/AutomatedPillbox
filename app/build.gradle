@@ -17,6 +17,9 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
     }
+    viewBinding{
+        enabled = "true"
+    }
 }
 
 dependencies {
@@ -47,6 +50,9 @@ dependencies {
 
     implementation 'com.google.android.gms:play-services-auth:18.0.0'
     implementation 'com.google.firebase:firebase-firestore:21.4.3'
+
+    //Folding Cell Layout
+    implementation 'com.ramotion.foldingcell:folding-cell:1.2.3'
 
     //Dependency of Lyout to PDF Converter
     //implementation 'com.github.HendrixString:Android-PdfMyXml:v1.0.1'

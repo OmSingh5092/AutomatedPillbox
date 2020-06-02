@@ -56,7 +56,7 @@ public class NotificationService extends FirebaseMessagingService {
         //Generating date
 
         Date date = new Date(Long.valueOf(data.get("time")));
-        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM hh:mm");
+        SimpleDateFormat sdf = new SimpleDateFormat("dd-MMM-YYYY hh:mm aa");
         String dateString = sdf.format(date);
 
         //Setting body as formatted date

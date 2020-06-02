@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.ramotion.foldingcell.FoldingCell xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/recycler_manage_box_folding"
+    android:layout_width="match_parent"
+    android:layout_margin="10dp"
+    app:backSideColor="@color/colorAccent"
+    android:layout_height="wrap_content"
+    tools:context=".activities.ManageBoxActivity">
+
+    <LinearLayout
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:visibility="gone"
+        android:orientation="vertical">
+
+        <com.google.android.material.card.MaterialCardView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:cardCornerRadius="10dp"
+            app:cardElevation="5dp"
+            app:cardBackgroundColor="@color/colorPrimaryDark">
+            <androidx.constraintlayout.widget.ConstraintLayout
+                android:layout_height="wrap_content"
+                android:layout_width="match_parent">
+
+
+                <TextView
+                    android:id="@+id/textView13"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="16dp"
+                    android:layout_marginBottom="16dp"
+                    android:text="TextView"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="@+id/appCompatEditText"
+                    app:layout_constraintStart_toStartOf="@+id/appCompatEditText"
+                    app:layout_constraintTop_toBottomOf="@+id/appCompatEditText" />
+
+                <androidx.appcompat.widget.AppCompatEditText
+                    android:id="@+id/appCompatEditText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="16dp"
+                    android:layout_marginTop="16dp"
+                    android:text="Sample"
+                    android:textColor="#FFFFFF"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent" />
+            </androidx.constraintlayout.widget.ConstraintLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recycler_manage_box_rv"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            tools:layout_editor_absoluteX="0dp"
+            tools:layout_editor_absoluteY="68dp" />
+
+    </LinearLayout>
+
+    <com.google.android.material.card.MaterialCardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:clipChildren="false"
+        android:clipToPadding="false"
+        app:cardCornerRadius="5dp"
+        app:cardElevation="5dp"
+        app:cardBackgroundColor="@color/colorPrimaryDark"
+        app:contentPadding="10dp">
+
+        <TextView
+            android:id="@+id/recycler_manage_box_title"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="sample"
+            android:textAppearance="@style/TitleTextAppearnce"
+            android:textColor="#ffffff"
+            android:textSize="24sp" />
+
+    </com.google.android.material.card.MaterialCardView>
+</com.ramotion.foldingcell.FoldingCell>

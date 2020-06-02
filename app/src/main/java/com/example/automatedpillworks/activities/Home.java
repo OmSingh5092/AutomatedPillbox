@@ -190,12 +190,17 @@ public class Home extends AppCompatActivity{
     void navigationItemSelectoin(MenuItem item){
         if (item.getItemId() == R.id.nav_home_logout){
             signOut();
-
             Intent i = new Intent(this,Scanner.class);
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }else if(item.getItemId() == R.id.nav_home_prescription){
             Intent i = new Intent(this,Prescription.class);
+            startActivity(i);
+        }else if(item.getItemId() == R.id.nav_home_boxes){
+            Intent i = new Intent(this,ManageBoxActivity.class);
+            startActivity(i);
+        }else if(item.getItemId() == R.id.nav_home_profile){
+            Intent i = new Intent(this,ProfileActivity.class);
             startActivity(i);
         }
 

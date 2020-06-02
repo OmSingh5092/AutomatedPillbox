@@ -11,7 +11,6 @@ import java.util.List;
 public class GlobalVar {
     public static String currentBox;
     public static Integer currentBoxIndex=0;
-    public static ArrayList<ReminderRecyclerAdapter.Data> reminderRecyclerdata = new ArrayList<>();
     public static UserData userData;
     public static List<String> Boxes;
 
@@ -19,7 +18,6 @@ public class GlobalVar {
 
     public static void resetValues(){
         currentBox = null;
-        reminderRecyclerdata = null;
         userData = null;
     }
 

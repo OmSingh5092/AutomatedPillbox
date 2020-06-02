@@ -7,6 +7,8 @@
         <item name="toolbarStyle">@style/AppToolbarStyle</item>
         <item name = "textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name = "materialButtonStyle">@style/AppMaterialButtonStyle</item>
+        <item name="materialCardViewStyle">@style/AppMaterialCardViewStyle</item>
+        <item name = "imageButtonStyle">@style/AppImageButtonStyle</item>
     </style>
 
 
@@ -22,6 +24,15 @@
 
     <style name="AppMaterialButtonStyle" parent="Widget.MaterialComponents.Button">
         <item name="backgroundTint">@color/colorPrimaryDark</item>
+    </style>
+
+    <style name="AppMaterialCardViewStyle" parent="Widget.MaterialComponents.CardView">
+        <item name="cardCornerRadius">5dp</item>
+        <item name="cardElevation">10dp</item>
+    </style>
+
+    <style name="AppImageButtonStyle" parent="Widget.AppCompat.ImageButton">
+        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">

@@ -14,8 +14,8 @@ import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.BasicFunctions.DragToRemove;
-import com.example.automatedpillworks.CloudMessaging.Refrences;
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.ReminderModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.adapters.ReminderRecyclerAdapter;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -24,7 +24,13 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.GenericTypeIndicator;
 import com.google.firebase.database.ValueEventListener;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 
 public class Reminder extends AppCompatActivity implements DragToRemove.RecyclerItemDragListener {
@@ -32,6 +38,7 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
     RecyclerView rv;
     ProgressBar pb;
     ReminderRecyclerAdapter adapter;
+    FirebaseDatabase database;
 
 
     @Override
@@ -43,6 +50,9 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
 
         rv = findViewById(R.id.reminder_rv);
         pb = findViewById(R.id.reminder_pb);
+
+        //Instantiating Firebase objects
+        database = FirebaseDatabase.getInstance();
 
         fetchData();
 
@@ -56,9 +66,9 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
 
 
 
-    void recycler_view_init(){
+    void recycler_view_init(List<ReminderRecyclerAdapter.Model> list){
         pb.setVisibility(View.GONE);
-        adapter = new ReminderRecyclerAdapter(GlobalVar.reminderRecyclerdata);
+        adapter = new ReminderRecyclerAdapter(list);
         rv.setLayoutManager(new LinearLayoutManager(this));
         rv.setAdapter(adapter);
         DragToRemove dragToRemove = new DragToRemove(0,ItemTouchHelper.RIGHT,this);
@@ -72,18 +82,24 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
     }
 
     void fetchData(){
-        DatabaseReference ref = FirebaseDatabase.getInstance().getReference(GlobalVar.currentBox);
-        ref.child("reminder").addListenerForSingleValueEvent(new ValueEventListener() {
+        DatabaseReference ref = database.getReference("boxes/"+GlobalVar.currentBox);
+        ref.child("reminders").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 if(!dataSnapshot.exists()){
                     no_reminder();
                     return;
                 }
-                for(DataSnapshot snap : dataSnapshot.getChildren()){
-                    GlobalVar.reminderRecyclerdata.add(snap.getValue(ReminderRecyclerAdapter.Data.class));
+                Map<String,ReminderModel> data = new HashMap<>() ;
+
+                //Using Firebase GenericTypeIndicators
+                GenericTypeIndicator<Map<String,ReminderModel>> t = new GenericTypeIndicator<Map<String, ReminderModel>>(){};
+                data = dataSnapshot.getValue(t);
+                List<ReminderRecyclerAdapter.Model> list = new ArrayList<>();
+                for(Map.Entry<String, ReminderModel> entry: data.entrySet()){
+                    list.add(new ReminderRecyclerAdapter.Model(entry.getValue(),entry.getKey()));
                 }
-                recycler_view_init();
+                recycler_view_init(list);
             }
 
             @Override
@@ -93,8 +109,9 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
         });
     }
 
-    void removeReminderData(Long time){
-        Refrences.StorageRefrences.reminder.child(time.toString()).removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
+    void removeReminderData(String key){
+        database.getReference().child("boxes/"+GlobalVar.currentBox).child("reminders").child(key)
+                .removeValue().addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
                 if(task.isSuccessful()){
@@ -114,7 +131,7 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
     @Override
     public void onSwipe(RecyclerView.ViewHolder viewHolder, int direction, int position) {
         adapter.notifyDataSetChanged();
-        removeReminderData(adapter.data.get(position).time);
+        removeReminderData(adapter.data.get(position).key);
         adapter.data.remove(position);
     }
 }

@@ -66,7 +66,7 @@
     <string name="instructions">Scan the QR, add the box and proceed to Registraion</string>
 
     //Notification
-    <string name = "channel_id">#8795</string>
+    <string name="channel_id">#8795</string>
 
     //Shared Preferences keys
 
