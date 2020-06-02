@@ -16,12 +16,13 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
 
         var message = {
             data:{
+                type: "reminder",
                 boxname:context.params.boxid,
                 name:data.name,
                 time:data.time
             },
             topic : context.params.boxid
-        }
+        };
 
         console.log("Payload:",message);
 
@@ -32,8 +33,6 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
             console.log("Error:", err);
         })
 
-        return null;
-
 
     })
 
@@ -41,13 +40,49 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
         .onCreate((snap,context)=>{
             var data = snap.data().userprofile;
             var metadata = {
-                name: data.firstname+data.lastname,
+                name: data.firstname+" "+data.lastname,
                 email:"sample@gmail.com"
             }
             return admin.firestore().collection("usersMetadata").doc(context.params.doc).set(metadata).then((res)=>{
                 console.log("Users Metadata:" ,metadata);
-                return null;
+                return null
             }).catch((err)=>{
-                console.log("Error:",err);
+                console.log(err);
             })
+        })
+
+
+    exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
+        .onCreate((snapshot,context)=>{
+            return admin.firestore().collection("registrationToken").doc(context.params.newuid).get()
+                .then((doc)=>{
+                    var tokens = doc.data().tokens;
+                    console.log("Tokens",tokens);
+                    return admin.messaging().subscribeToTopic(tokens,context.params.boxid);
+                    
+                }).then((response)=>{
+                    console.log("Subscibed to the topics!");
+
+                    var message = {
+                        data:{
+                            type:"newbox",
+                            boxid:context.params.boxid
+                        },
+                        topic: context.params.boxid
+                    }
+                    return admin.messaging().send(message);
+
+                }).then((res)=>{
+                    console.log("Message Sent Successfully:",res);
+
+                    return admin.firestore().collection("users").doc(context.params.newuid).update({
+                        newboxes: admin.firestore.FieldValue.arrayUnion(context.params.boxid)
+                    });
+                }).then(()=>{
+                    console.log("NewBox Request updated");
+                    return null;
+
+                }).catch((err)=>{
+                    console.log(err);
+                })
         })

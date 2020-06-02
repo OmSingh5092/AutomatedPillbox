@@ -18,7 +18,8 @@
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
         android:theme="@style/AppMaterialTheme">
-        <activity android:name=".activities.ProfileActivity"></activity>
+        <activity android:name=".activities.NewBoxActivity"></activity>
+        <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.ManageBoxActivity" />
         <activity android:name=".activities.AddBoxActivity" />
         <activity android:name=".activities.RegisterActivity" />

@@ -10,7 +10,7 @@ public class UserInfoModel implements Serializable {
     public UserProfileModel userprofile = new UserProfileModel();
     public Map<String,String> boxnames = new HashMap<>();
     public List<String> boxes = new ArrayList<>();
-    public Map<String,String>registrationtoken = new HashMap<>();
+    public List<String> newboxes = new ArrayList<>();
 
     public UserInfoModel(){
     }

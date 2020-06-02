@@ -7,10 +7,12 @@ import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.firestore.FieldValue;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.iid.FirebaseInstanceId;
 import com.google.firebase.iid.InstanceIdResult;
@@ -28,10 +30,14 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
     public AsyncTaskSubscribeToTopics(List<String> topics){
         this.topics = topics;
     }
+    FirebaseFirestore firestore;
+    FirebaseAuth auth;
 
     @Override
     protected String doInBackground(String... strings) {
-
+        //Initialising Firebase instances
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
         try {
             FirebaseMessaging messaging = FirebaseMessaging.getInstance();
             for (String topic : topics) {
@@ -46,6 +52,7 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
                     }
                     String token = task.getResult().getToken();
                     Log.d("RegistrationToken",token);
+                    uploadToken(token);
                 }
             });
 
@@ -56,5 +63,20 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
         }
 
         return null;
+    }
+
+    void uploadToken(final String s){
+        firestore.collection("registrationToken").document(auth.getUid())
+                .update("tokens", FieldValue.arrayUnion(s)).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.i("New Token",s);
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.i("Failure:",e.getMessage());
+            }
+        });
     }
 }

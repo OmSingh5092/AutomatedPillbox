@@ -115,12 +115,14 @@ public class Scanner extends AppCompatActivity{
     void switchToSignup(){
         Intent i = new Intent(Scanner.this,Signup.class);
         startActivity(i);
+        finish();
     }
 
     void switchToHome(){
         Intent i = new Intent(Scanner.this,Home.class);
         i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
+        finish();
     }
 
     void loadAdditionalData(){
