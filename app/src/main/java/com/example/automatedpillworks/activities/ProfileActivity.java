@@ -22,6 +22,7 @@ import android.widget.Toast;
 import android.widget.Toolbar;
 
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.UserMetaDataModel;
 import com.example.automatedpillworks.Model.UserProfileModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.adapters.ManageBoxUsers;
@@ -159,6 +160,8 @@ public class ProfileActivity extends AppCompatActivity {
                     public void onSuccess(Void aVoid) {
                         snackbar.dismiss();
                         Snackbar.make(binding.getRoot(),"Profile Updated Successfully",Snackbar.LENGTH_SHORT).show();
+                        //Updating Metadata
+                        changeMetaData();
                     }
                 }).addOnFailureListener(new OnFailureListener() {
             @Override
@@ -166,6 +169,14 @@ public class ProfileActivity extends AppCompatActivity {
                 Snackbar.make(binding.getRoot(),e.getMessage(),Snackbar.LENGTH_SHORT).show();
             }
         });
+    }
+
+    void changeMetaData(){
+        UserMetaDataModel metaData = new UserMetaDataModel(
+                model.email,
+                model.firstname + " " + model.lastname
+        );
+        firestore.collection("usersMetadata").document(auth.getUid()).set(metaData);
     }
 
 

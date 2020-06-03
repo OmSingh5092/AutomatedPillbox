@@ -8,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.Model.UserMetaDataModel;
 import com.example.automatedpillworks.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -27,17 +28,7 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
     FirebaseFirestore firestore;
     RecyclerManageBoxUsersBinding binding;
 
-    public static class  Model{
-        public String name,email;
 
-        public Model(String name, String email) {
-            this.name = name;
-            this.email = email;
-        }
-        public Model(){
-
-        }
-    }
     private List<String> uids;
     private Context context;
     public ManageBoxUsers(List<String> uids,Context context){
@@ -47,7 +38,7 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
         firestore = FirebaseFirestore.getInstance();
     }
     //List of User data (Could be accessed by other classes later on)
-    public static List<Model> usersMetadata = new ArrayList<>();
+    public static List<UserMetaDataModel> usersMetadata = new ArrayList<>();
 
 
     @NonNull
@@ -92,7 +83,7 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
                 .get().addOnSuccessListener(new OnSuccessListener<DocumentSnapshot>() {
             @Override
             public void onSuccess(DocumentSnapshot documentSnapshot) {
-                    Model temp = documentSnapshot.toObject(Model.class);
+                    UserMetaDataModel temp = documentSnapshot.toObject(UserMetaDataModel.class);
                     //Adding data to List
                     usersMetadata.add(temp);
                     //Setting up View

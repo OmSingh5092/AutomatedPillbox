@@ -15,7 +15,7 @@ public class UserInfoModel implements Serializable {
     public UserInfoModel(){
     }
 
-    public UserInfoModel(String firstname, String lastname, Integer blood, Long dob, String address, Long weight, Integer gender) {
+    public UserInfoModel(String firstname, String lastname, Integer blood, Long dob, String address, Long weight, Integer gender,String email) {
         this.userprofile.firstname = firstname;
         this.userprofile.lastname = lastname;
         this.userprofile.blood = blood;
@@ -23,5 +23,6 @@ public class UserInfoModel implements Serializable {
         this.userprofile.address = address;
         this.userprofile.weight = weight;
         this.userprofile.gender = gender;
+        this.userprofile.email = email;
     }
 }

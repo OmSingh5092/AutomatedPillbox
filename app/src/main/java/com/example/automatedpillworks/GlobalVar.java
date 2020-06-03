@@ -11,14 +11,14 @@ import java.util.List;
 public class GlobalVar {
     public static String currentBox;
     public static Integer currentBoxIndex=0;
-    public static UserData userData;
+    public static UserData userData = new UserData();
     public static List<String> Boxes;
 
     public static UserData signUpTemp = new UserData();
 
     public static void resetValues(){
         currentBox = null;
-        userData = null;
+        userData = new UserData();
     }
 
     //SomeNecessaryConstants

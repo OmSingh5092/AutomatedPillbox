@@ -56,8 +56,6 @@ public class Reminder extends AppCompatActivity implements DragToRemove.Recycler
 
         fetchData();
 
-        Log.d("Boxname", GlobalVar.currentBox);
-
 
 
 

@@ -10,12 +10,13 @@ public class UserProfileModel implements Serializable {
     public Long dob;
     public String address;
     public Long weight;
+    public String email;
 
     public UserProfileModel(){
 
     }
 
-    public UserProfileModel(String firstname, String lastname, Integer gender, Integer blood, Long dob, String address, Long weight) {
+    public UserProfileModel(String firstname, String lastname, Integer gender, Integer blood, Long dob, String address, Long weight,String email) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.gender = gender;
@@ -23,5 +24,6 @@ public class UserProfileModel implements Serializable {
         this.dob = dob;
         this.address = address;
         this.weight = weight;
+        this.email = email;
     }
 }

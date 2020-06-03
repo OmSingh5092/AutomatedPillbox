@@ -24,6 +24,7 @@ import com.example.automatedpillworks.CloudMessaging.AsyncTaskForNotificationCha
 import com.example.automatedpillworks.CloudMessaging.AsyncTaskSubscribeToTopics;
 import com.example.automatedpillworks.CloudMessaging.NotificationService;
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.UserMetaDataModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.Model.UserAdditional;
 import com.example.automatedpillworks.Model.UserData;
@@ -64,6 +65,7 @@ public class Scanner extends AppCompatActivity{
 
     UserInfoModel infoModal;
     UserAdditional additional;
+    UserMetaDataModel metadata;
 
     ImageButton scanner;
     ConstraintLayout view;
@@ -156,9 +158,9 @@ public class Scanner extends AppCompatActivity{
             public void onSuccess(DocumentSnapshot documentSnapshot) {
                 if(documentSnapshot.exists()){
                     infoModal= documentSnapshot.toObject(UserInfoModel.class);
-                    GlobalVar.userData = new UserData(infoModal);
-                    loadAdditionalData();
+                    GlobalVar.userData.userInfo = infoModal;
                     executeFCMTasks();
+                    loadAdditionalData();
                 }else{
                     switchToSignup();
                 }

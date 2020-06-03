@@ -129,6 +129,7 @@ public class Signup1 extends AppCompatActivity  {
                     GlobalVar.signUpTemp.userInfo.userprofile.blood = blood;
                     GlobalVar.signUpTemp.userInfo.userprofile.weight = Long.valueOf(weightInput.getText().toString());
                     GlobalVar.signUpTemp.userInfo.userprofile.dob = dob;
+                    GlobalVar.signUpTemp.userInfo.userprofile.email = auth.getCurrentUser().getEmail();
                 }
                 uploadData();
             }

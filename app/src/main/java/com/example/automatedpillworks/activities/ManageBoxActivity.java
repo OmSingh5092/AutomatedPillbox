@@ -6,11 +6,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
+import android.renderscript.ScriptGroup;
 import android.widget.LinearLayout;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.adapters.ManageBoxRecyclerAdapter;
+import com.example.automatedpillworks.databinding.ActivityManageBoxBinding;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -21,11 +23,13 @@ public class ManageBoxActivity extends AppCompatActivity {
 
     RecyclerView rv;
     Toolbar toolbar;
+    ActivityManageBoxBinding binding;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_manage_box);
+        binding = ActivityManageBoxBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //Setting Tollbar
         toolbar = findViewById(R.id.manage_box_toolbar);
         setSupportActionBar(toolbar);
@@ -34,7 +38,6 @@ public class ManageBoxActivity extends AppCompatActivity {
         rv = findViewById(R.id.manage_box_recycler);
 
         setupRecyclerView();
-
 
     }
 
