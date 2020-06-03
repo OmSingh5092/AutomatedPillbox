@@ -71,7 +71,7 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                         type:"newbox",
                         boxid:context.params.boxid
                     },
-                    token: 
+                    token: context.params.boxid
                 }
                 return admin.messaging().send(message)
 
@@ -92,8 +92,12 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
 
 exports.unsubscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
     .onDelete((snapshot,context)=>{
+        var boxnamesField = "boxnames"+context.params.boxid;
         return admin.firestore().collection("users").doc(context.params.newuid).update({
-            boxes: admin.firestore.FieldValue.arrayRemove(context.params.boxid)
+            "boxes": admin.firestore.FieldValue.arrayRemove(context.params.boxid),
+            boxnamesField: admin.firestore.FieldValue.delete(),
+            "newboxes": admin.firestore.FieldValue.arrayRemove(context.params.boxid)
+
         }).then((response)=>{
             console.log("Box deleted!");
             var message = {

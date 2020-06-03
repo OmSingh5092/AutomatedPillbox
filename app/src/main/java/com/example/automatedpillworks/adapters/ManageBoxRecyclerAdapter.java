@@ -1,16 +1,25 @@
 package com.example.automatedpillworks.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
+import android.text.Editable;
+import android.text.TextWatcher;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.ImageButton;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.UserMetaDataModel;
+import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.databinding.RecyclerManageBoxBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.button.MaterialButton;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
@@ -23,8 +32,10 @@ import com.ramotion.foldingcell.FoldingCell;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Vector;
 
 import androidx.annotation.NonNull;
+import androidx.databinding.DataBindingUtil;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -35,7 +46,6 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
     //Binding
     RecyclerManageBoxBinding binding;
     //List of MetaData for Reycler Views
-    List<List<String>> uidList = new ArrayList<List<String>>();
 
     public static class Model{
         public String boxtitle,boxname;
@@ -60,15 +70,15 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
     @NonNull
     @Override
     public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        binding = RecyclerManageBoxBinding.inflate(LayoutInflater.from(context));
-        View v = binding.getRoot();
-        return new ViewHolder(v);
+        binding = RecyclerManageBoxBinding.inflate(LayoutInflater.from(context),parent,false);
+        return new ViewHolder(binding.getRoot());
     }
 
     @Override
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         //Setting Title
         holder.title.setText(data.get(position).boxtitle);
+        holder.editTitle.setText(data.get(position).boxtitle);
 
         //Inflating the Child Recycler View;
         loadData(holder,position);
@@ -76,7 +86,10 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
         holder.foldingCell.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                holder.foldingCell.toggle(false);
+                //Checking if Data is loaded or not
+                if(holder.isLoaded){
+                    holder.foldingCell.toggle(false);
+                }
             }
         });
 
@@ -92,6 +105,31 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
 
             }
         });
+
+        //Making save visible on text change
+        holder.editTitle.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+                holder.save.setVisibility(View.VISIBLE);
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+
+            }
+        });
+
+        holder.save.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                changeName(holder.editTitle.getText().toString(),holder);
+            }
+        });
     }
 
     @Override
@@ -103,17 +141,31 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
         FoldingCell foldingCell;
         TextView title;
         RecyclerView rv;
+        EditText editTitle;
         TextInputEditText email;
         ImageButton send;
+        ProgressBar progressBar;
+        MaterialButton save;
+
+        Boolean isLoaded = false;
+        List<String> uids = new ArrayList<>();
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             foldingCell = binding.recyclerManageBoxFolding;
             title = binding.recyclerManageBoxTitle;
             rv = binding.recyclerManageBoxRv;
+            editTitle =binding.editTitle;
             email = binding.email;
             send = binding.send;
+            progressBar = binding.progressBar;
+            save = binding.save;
         }
+    }
+
+    void dataIsLoaded(ViewHolder holder){
+        holder.isLoaded = true;
+        holder.progressBar.setVisibility(View.GONE);
     }
 
     void loadData(final ViewHolder holder, final int position){
@@ -125,9 +177,12 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
                         for(DataSnapshot snap: dataSnapshot.getChildren()){
                             uids.add(snap.getKey());
                         }
+                        //Making changes
+                        dataIsLoaded(holder);
+
                         //Setting up the adapter
-                        uidList.add(uids);
-                        inflateChildRecyclerView(holder,position);
+                        holder.uids = uids;
+                        inflateChildRecyclerView(holder);
                     }
                     @Override
                     public void onCancelled(@NonNull DatabaseError databaseError) {
@@ -137,10 +192,13 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
     }
 
 
-    void inflateChildRecyclerView(final ViewHolder holder,Integer position){
+    void inflateChildRecyclerView(ViewHolder holder){
+        //Setting the size of counts in Folding cell
+        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+2);
+
         holder.rv.setLayoutManager(new LinearLayoutManager(context));
         //Making Data
-        ManageBoxUsers adapter = new ManageBoxUsers(uidList.get(position),context);
+        ManageBoxUsers adapter = new ManageBoxUsers(holder.uids,context,data.get(holder.getAdapterPosition()).boxname);
         holder.rv.setAdapter(adapter);
     }
 
@@ -163,15 +221,21 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
         });
     }
 
-    void addToRealtimeDatabase(String uid, final ViewHolder holder,final int position){
+    void addToRealtimeDatabase(String uid, final ViewHolder holder,Integer position){
+        //Checking if uid is already present
+        if(holder.uids.contains(uid)){
+            Toast.makeText(context, "User already added", Toast.LENGTH_SHORT).show();
+            return;
+        }
         //Adding uid
-        uidList.get(position).add(uid);
+        holder.uids.add(uid);
+
         //Updating value on Firebase
         database.getReference("boxes").child(data.get(position).boxname).child("uid").child(uid).setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "User added Successfully", Toast.LENGTH_SHORT).show();
-                inflateChildRecyclerView(holder,position);
+                inflateChildRecyclerView(holder);
             }
         });
     }
@@ -183,6 +247,37 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
             return false;
         }
         return true;
+    }
+
+    void changeName(String newName,ViewHolder holder){
+        int position = holder.getAdapterPosition();
+        if(newName.length() ==0){
+            Toast.makeText(context, "Please Enter Box Name", Toast.LENGTH_SHORT).show();
+        }
+        else if(newName == data.get(position).boxname){
+            Toast.makeText(context, "Please Enter A New Name", Toast.LENGTH_SHORT).show();
+        }else{
+            updateName(newName,holder);
+        }
+    }
+
+    void updateName(final String newname, final ViewHolder holder){
+        final int position = holder.getAdapterPosition();
+
+        firebaseFirestore.collection("users").document(auth.getUid()).update("boxnames."+data.get(position).boxname,newname)
+                .addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(context, "Name Updated Successfully", Toast.LENGTH_SHORT).show();
+                //Updating local Data
+                holder.title.setText(newname);
+                GlobalVar.userData.userInfo.boxnames.put(data.get(position).boxname,newname);
+
+                //Removing save visibility
+                holder.save.setVisibility(View.GONE);
+                holder.editTitle.setFocusable(false);
+            }
+        });
     }
 
 

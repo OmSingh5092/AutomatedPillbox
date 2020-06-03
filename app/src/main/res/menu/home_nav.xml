@@ -14,12 +14,13 @@
         android:title="Manage Boxes"
         />
     <item
+        android:id = "@+id/nav_home_newbox"
+        android:title="New Boxes"/>
+    <item
         android:id = "@+id/nav_home_logout"
         android:title="Logout"/>
 
-    <item
-        android:id = "@+id/nav_home_newbox"
-        android:title="New Boxes"/>
+
 
 
 
