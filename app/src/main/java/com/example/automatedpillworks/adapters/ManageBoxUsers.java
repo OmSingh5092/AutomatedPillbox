@@ -2,6 +2,7 @@ package com.example.automatedpillworks.adapters;
 
 import android.content.Context;
 import android.text.Layout;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -112,7 +113,7 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
         });
     }
 
-    private void removeUser(final ViewHolder viewHolder, final Integer position){
+    private void removeUser(final ViewHolder viewHolder, final int position){
         //Removing user from data
         database.getReference("boxes").child(boxname).child("uid").child(uids.get(position))
                 .removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -125,9 +126,9 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
         });
     }
 
-    void updateRecyclerView(Integer position){
+    void updateRecyclerView(int position){
         uids.remove(position);
         data.remove(position);
-        notifyDataSetChanged();
+        this.notifyDataSetChanged();
     }
 }

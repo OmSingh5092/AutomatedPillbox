@@ -71,7 +71,7 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                         type:"newbox",
                         boxid:context.params.boxid
                     },
-                    token: context.params.newuid
+                    topic: context.params.newuid
                 }
                 return admin.messaging().send(message)
 
@@ -79,7 +79,7 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                 console.log("Message Sent Successfully:",res);
 
                 return admin.firestore().collection("users").doc(context.params.newuid).update({
-                    newboxes: admin.firestore.FieldValue.arrayUnion(context.params.boxid)
+                    "newboxes": admin.firestore.FieldValue.arrayUnion(context.params.boxid)
                 });
             }).then(()=>{
                 console.log("NewBox Request updated");

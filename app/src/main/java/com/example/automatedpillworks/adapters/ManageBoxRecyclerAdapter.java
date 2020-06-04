@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Color;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -149,6 +150,7 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
 
         Boolean isLoaded = false;
         List<String> uids = new ArrayList<>();
+        ManageBoxUsers adapter;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -198,8 +200,14 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
 
         holder.rv.setLayoutManager(new LinearLayoutManager(context));
         //Making Data
-        ManageBoxUsers adapter = new ManageBoxUsers(holder.uids,context,data.get(holder.getAdapterPosition()).boxname);
-        holder.rv.setAdapter(adapter);
+        Log.i("UID",holder.uids.toString());
+        holder.adapter = new ManageBoxUsers(holder.uids,context,data.get(holder.getAdapterPosition()).boxname);
+        holder.rv.setAdapter(holder.adapter);
+    }
+
+    void updateChildRecyclerView(ViewHolder holder){
+        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+2);
+        holder.adapter.notifyItemInserted(holder.uids.size()-1);
     }
 
     void sendRequest(final String email, final ViewHolder holder,final int position){
@@ -221,7 +229,7 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
         });
     }
 
-    void addToRealtimeDatabase(String uid, final ViewHolder holder,Integer position){
+    void addToRealtimeDatabase(String uid, final ViewHolder holder,int position){
         //Checking if uid is already present
         if(holder.uids.contains(uid)){
             Toast.makeText(context, "User already added", Toast.LENGTH_SHORT).show();
@@ -235,7 +243,7 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
             @Override
             public void onSuccess(Void aVoid) {
                 Toast.makeText(context, "User added Successfully", Toast.LENGTH_SHORT).show();
-                inflateChildRecyclerView(holder);
+                updateChildRecyclerView(holder);
             }
         });
     }
