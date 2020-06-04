@@ -71,7 +71,7 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                         type:"newbox",
                         boxid:context.params.boxid
                     },
-                    token: context.params.boxid
+                    token: context.params.newuid
                 }
                 return admin.messaging().send(message)
 
@@ -105,7 +105,7 @@ exports.unsubscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                     type:"deletebox",
                     boxid:context.params.boxid
                 },
-                topic: context.params.boxid
+                topic: context.params.newuid
             }
             return admin.messaging().send(message);   
 

@@ -45,6 +45,8 @@ public class NotificationService extends FirebaseMessagingService {
             ReminderNotification(remoteMessage);
         }else if(remoteMessage.getData().get("type").equals("newbox")){
             newBoxNotification(remoteMessage);
+        }else if(remoteMessage.getData().get("type").equals("deletebox")){
+            newBoxNotification(remoteMessage);
         }
 
     }
@@ -87,8 +89,8 @@ public class NotificationService extends FirebaseMessagingService {
 
         Map<String,String> data = remoteMessage.getData();
 
-        String title = "New Box Added";
-        String body = "Box id:" + data.get("boxid");
+        String title = "New box has been added";
+        String body = "Box id: " + data.get("boxid");
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)
@@ -101,6 +103,25 @@ public class NotificationService extends FirebaseMessagingService {
 
         // notificationId is a unique int for each notification that you must define
         notificationManager.notify(100, builder.build());
+    }
 
+    private void boxDeletedNotification(RemoteMessage remoteMessage){
+
+        Map<String,String> data = remoteMessage.getData();
+
+        String title = "A box has been deleted";
+        String body = "Box id: " + data.get("boxid");
+
+        NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
+                .setSmallIcon(R.drawable.logo)
+                .setContentTitle(title)
+                .setContentText(body)
+                .setPriority(NotificationCompat.PRIORITY_DEFAULT)
+                .setAutoCancel(true);
+
+        NotificationManagerCompat notificationManager = NotificationManagerCompat.from(appContext);
+
+        // notificationId is a unique int for each notification that you must define
+        notificationManager.notify(100, builder.build());
     }
 }
