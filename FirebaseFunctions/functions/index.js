@@ -26,7 +26,7 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
 
         console.log("Payload:",message);
 
-        admin.messaging().send(message).then((res)=>{
+        return admin.messaging().send(message).then((res)=>{
             console.log("Message sent successfully",res);
             return null;
         }).catch((err)=>{

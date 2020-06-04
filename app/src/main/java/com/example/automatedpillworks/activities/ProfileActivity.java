@@ -75,6 +75,9 @@ public class ProfileActivity extends AppCompatActivity {
         auth = FirebaseAuth.getInstance();
         storage = FirebaseStorage.getInstance();
 
+        //Setting up Email
+        binding.email.setText(GlobalVar.userData.userInfo.userprofile.email);
+
         binding.save.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

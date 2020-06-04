@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
@@ -186,6 +187,12 @@ public class Home extends AppCompatActivity{
 
     void setUpNavbar(){
         //hellomessage.setText("Hello "+ GlobalVar.userData.userInfo.firstname +"!");
+        View header = navigationView.getHeaderView(0);
+        TextView name = header.findViewById(R.id.home_nav_name);
+        ImageView image = header.findViewById(R.id.home_nav_image);
+
+        name.setText("Hello! "+GlobalVar.userData.userInfo.userprofile.firstname);
+        image.setImageBitmap(GlobalVar.userData.userAdditional.profileImage);
     }
 
     void navigationItemSelectoin(MenuItem item){
@@ -195,8 +202,7 @@ public class Home extends AppCompatActivity{
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }else if(item.getItemId() == R.id.nav_home_prescription){
-            Intent i = new Intent(this,Prescription.class);
-            startActivity(i);
+            Toast.makeText(this, "Feature Coming Soon", Toast.LENGTH_SHORT).show();
         }else if(item.getItemId() == R.id.nav_home_boxes){
             Intent i = new Intent(this,ManageBoxActivity.class);
             startActivity(i);
@@ -343,5 +349,9 @@ public class Home extends AppCompatActivity{
         popupMenu.show();
     }
 
-
+    @Override
+    protected void onPostResume() {
+        setUpNavbar();
+        super.onPostResume();
+    }
 }

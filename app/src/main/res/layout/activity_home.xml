@@ -59,6 +59,7 @@
         android:id="@+id/home_nav_view"
         android:layout_gravity="start|left"
         app:headerLayout="@layout/navigation_header"
+
         app:menu="@menu/home_nav"/>
 
 
