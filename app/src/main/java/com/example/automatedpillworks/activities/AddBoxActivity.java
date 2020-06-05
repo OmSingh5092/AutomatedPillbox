@@ -90,6 +90,9 @@ public class AddBoxActivity extends AppCompatActivity{
             @Override
             public void onClick(View v) {
                 if(isFilled()){
+                    //Closing Keyboard
+
+
                     final String id = boxinput.getText().toString();
                     //Checking if box is previously added
                     if(GlobalVar.userData.userInfo.boxes.contains(id)){
@@ -113,8 +116,6 @@ public class AddBoxActivity extends AppCompatActivity{
                             Snackbar.make(findViewById(R.id.add_box_layout),databaseError.getMessage(),Snackbar.LENGTH_LONG).show();
                         }
                     });
-
-
                 }
             }
         });

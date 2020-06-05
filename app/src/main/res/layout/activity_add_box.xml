@@ -45,6 +45,8 @@
             android:id="@+id/add_box_boxid"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="none"
+            android:imeOptions=""
             android:hint="Enter Box Id" />
     </com.google.android.material.textfield.TextInputLayout>
 
@@ -63,6 +65,8 @@
             android:id="@+id/add_box_boxname"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:inputType="none"
+            android:imeOptions="actionDone"
             android:hint="Enter Box Name" />
     </com.google.android.material.textfield.TextInputLayout>
 
