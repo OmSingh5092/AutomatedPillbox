@@ -5,6 +5,8 @@
         <item name="colorPrimary">@color/colorPrimary</item>
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="toolbarStyle">@style/AppToolbarStyle</item>
+        <item name="expandedTitleTextAppearance">@style/ExpandedTitleAppearance</item>
+        <item name="collapsedTitleTextAppearance">@style/CollapseTitleAppearance</item>
         <item name = "textInputStyle">@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox</item>
         <item name = "materialButtonStyle">@style/AppMaterialButtonStyle</item>
         <item name="materialCardViewStyle">@style/AppMaterialCardViewStyle</item>
@@ -15,6 +17,7 @@
     <style name="AppToolbarStyle" parent="ThemeOverlay.MaterialComponents.Toolbar.Surface">
         <item name="titleTextAppearance">@style/AppTitleTextStyle</item>
         <item name="android:minHeight">?attr/actionBarSize</item>
+        <item name="titleTextColor">#ffffff</item>
     </style>
 
     <style name="AppTitleTextStyle" parent="TextAppearance.AppCompat">
@@ -42,6 +45,15 @@
     <style name="SubTitleAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">20dp</item>
+    </style>
+
+    <style name="CollapseTitleAppearance" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">#ffffff</item>
+        <item name="android:textSize">24sp</item>
+    </style>
+
+    <style name="ExpandedTitleAppearance" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
+        <item name="android:textColor">#ffffff</item>
     </style>
 
     <style name="GeneralRoundButton" parent ="Widget.AppCompat.Button">

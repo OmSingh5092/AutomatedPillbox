@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    package="com.example.automatedpillworks">
+    package="com.example.automatedpillworks" >
 
     <uses-sdk tools:overrideLibrary="com.google.zxing.client.android" />
 
@@ -17,8 +17,10 @@
         android:label="@string/app_name"
         android:roundIcon="@drawable/logo"
         android:supportsRtl="true"
-        android:theme="@style/AppMaterialTheme">
-        <activity android:name=".activities.NewBoxActivity"></activity>
+        android:theme="@style/AppMaterialTheme" >
+        <activity android:name=".activities.EditProfileActivity" >
+        </activity>
+        <activity android:name=".activities.NewBoxActivity" />
         <activity android:name=".activities.ProfileActivity" />
         <activity android:name=".activities.ManageBoxActivity" />
         <activity android:name=".activities.AddBoxActivity" />
@@ -35,7 +37,7 @@
         <activity android:name=".activities.Phone_Auth" />
         <activity android:name=".activities.Signup" />
         <activity android:name=".activities.Signup1" />
-        <activity android:name=".activities.Scanner">
+        <activity android:name=".activities.Scanner" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -47,7 +49,7 @@
             android:name="androidx.core.content.FileProvider"
             android:authorities="${applicationId}.provider"
             android:exported="false"
-            android:grantUriPermissions="true">
+            android:grantUriPermissions="true" >
             <meta-data
                 android:name="android.support.FILE_PROVIDER_PATHS"
                 android:resource="@xml/provider_paths" />
@@ -55,7 +57,7 @@
 
         <service
             android:name=".CloudMessaging.NotificationService"
-            android:exported="false">
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.google.firebase.MESSAGING_EVENT" />
             </intent-filter>
