@@ -3,9 +3,13 @@ package com.example.automatedpillworks.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
@@ -25,6 +29,7 @@ import com.example.automatedpillworks.Model.UserMetaDataModel;
 import com.example.automatedpillworks.Model.UserProfileModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.databinding.ActivityEditProfileBinding;
+import com.example.automatedpillworks.utils.BasicFunctions;
 import com.example.automatedpillworks.utils.DateFormats;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -237,6 +242,7 @@ public class EditProfileActivity extends AppCompatActivity {
                 Uri destinationUri = Uri.fromFile(file);
                 openCropActivity(sourceUri, destinationUri);
             }catch (Exception e){
+                askStoragePermissoin();
                 Toast.makeText(this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }
         }else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
@@ -279,6 +285,7 @@ public class EditProfileActivity extends AppCompatActivity {
             binding.profileImage.setImageBitmap(profileImage);
         }catch (Exception e) {
             e.printStackTrace();
+            askStoragePermissoin();
         }
     }
 
@@ -306,6 +313,21 @@ public class EditProfileActivity extends AppCompatActivity {
         });
     }
 
+    void askStoragePermissoin(){
+        int STORAGE_WRITE_REQUEST_CODE = 100;
+        int STORAGE_READ_REQUET_CODE = 100;
+
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.WRITE_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.WRITE_EXTERNAL_STORAGE}, STORAGE_WRITE_REQUEST_CODE);
+        }
+        if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                == PackageManager.PERMISSION_DENIED){
+            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.READ_EXTERNAL_STORAGE}, STORAGE_READ_REQUET_CODE);
+        }
+
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
@@ -321,6 +343,7 @@ public class EditProfileActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         saveData();
+        BasicFunctions.hideKeyboard(this);
         return super.onOptionsItemSelected(item);
     }
 }

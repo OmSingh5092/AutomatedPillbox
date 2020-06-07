@@ -185,7 +185,7 @@ public class Scanner extends AppCompatActivity{
         view = findViewById(R.id.scanner_view);
         pb = findViewById(R.id.scanner_pb);
         signup = findViewById(R.id.scanner_signup);
-        login = findViewById(R.id.scanner_login);
+        //login = findViewById(R.id.scanner_login);
         //Instancing Auth
         auth = FirebaseAuth.getInstance();
         firestore = FirebaseFirestore.getInstance();
@@ -200,25 +200,25 @@ public class Scanner extends AppCompatActivity{
             toggleView();
         }
 
-        //Asking Camera Permission
+        //Asking All Permission
         checkPermission();
 
         signup.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent i = new Intent(Scanner.this,RegisterActivity.class);
-                startActivity(i);
-            }
-        });
-
-
-        login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent i = new Intent(Scanner.this,LogInActivity.class);
                 startActivity(i);
             }
         });
+
+
+        /*login.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent i = new Intent(Scanner.this,LogInActivity.class);
+                startActivity(i);
+            }
+        });  */
 
 
         scanner.setOnClickListener(new View.OnClickListener() {

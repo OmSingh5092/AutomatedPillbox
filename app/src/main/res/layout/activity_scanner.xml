@@ -10,9 +10,10 @@
 
     <TextView
         android:id="@+id/textView10"
-        android:layout_width="248dp"
+        android:layout_width="wrap_content"
         android:layout_height="134dp"
         android:layout_marginTop="32dp"
+        android:fontFamily="@font/baloo"
         android:text="@string/app_name"
         android:textAlignment="center"
         android:textColor="#ffffff"
@@ -36,35 +37,27 @@
         tools:visibility="visible">
 
         <Button
-            android:id="@+id/scanner_login"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/login_button_message"
-            app:layout_constraintBottom_toBottomOf="@+id/scanner_signup"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@+id/scanner_signup"
-            app:layout_constraintTop_toTopOf="@+id/scanner_signup" />
-
-        <Button
             android:id="@+id/scanner_signup"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
-            android:text="@string/signup_button_message"
-            app:layout_constraintEnd_toStartOf="@+id/scanner_login"
+            android:layout_marginTop="64dp"
+            android:text="Continue As User"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/materialCardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView11" />
 
         <ImageButton
             android:id="@+id/scanner_qr"
             android:layout_width="130dp"
             android:layout_height="130dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/round_corners_ripple"
             android:src="@drawable/icon_qr_code"
-            app:layout_constraintEnd_toStartOf="@+id/materialCardView3"
-            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/materialCardView3" />
+            app:layout_constraintTop_toBottomOf="@+id/textView6" />
 
         <TextView
             android:id="@+id/textView11"
@@ -79,47 +72,18 @@
             app:layout_constraintStart_toStartOf="@+id/scanner_qr"
             app:layout_constraintTop_toBottomOf="@+id/scanner_qr" />
 
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/materialCardView3"
-            android:layout_width="140dp"
-            android:layout_height="224dp"
-            android:layout_marginEnd="32dp"
-            android:theme="@style/Theme.MaterialComponents.Light"
-            app:cardCornerRadius="5dp"
-            app:cardElevation="25dp"
+        <TextView
+            android:id="@+id/textView6"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="New User ?"
+            android:textColor="#ffffff"
+            android:textSize="36sp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="parent">
-
-            <androidx.constraintlayout.widget.ConstraintLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <TextView
-                    android:id="@+id/textView12"
-                    style="@style/SubTitleAppearance"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginTop="8dp"
-                    android:fontFamily="@font/berkshire_swash"
-                    android:text="Instructions"
-                    android:textSize="10dp"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <TextView
-                    android:id="@+id/textView6"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginEnd="32dp"
-                    android:text="@string/instructions"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/textView12" />
-            </androidx.constraintlayout.widget.ConstraintLayout>
-        </com.google.android.material.card.MaterialCardView>
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 

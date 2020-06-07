@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name">AutomatedPillBox</string>
+    <string name="app_name">Automated PillBox</string>
     <string name="title_activity_login">Login</string>
     <string name="title_activity_signup">Signup</string>
 
@@ -52,7 +52,7 @@
     <string name="qr_scanner_prompt">Scan The QR Code On The Box</string>
 
     <string name="default_box_name">New Box</string>
-    <string name="login_up_message">Username/Password</string>
+    <string name="login_up_message">Email/Password</string>
     <string name="login_successfull">Login Successfull</string>
     <string name="signup_button_message">Generate User</string>
     <string name="login_button_message">Login</string>

@@ -33,7 +33,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 public class RegisterActivity extends AppCompatActivity {
     TextInputEditText username,password;
     MaterialButton submit;
-    ImageButton google,phone;
+    ImageButton google;
     GoogleSignInClient mGoogleSignInClient;
     int RC_SIGN_IN = 100;
     String TAG = "GoogleSignInError";
@@ -52,7 +52,6 @@ public class RegisterActivity extends AppCompatActivity {
         password = findViewById(R.id.registration_password);
         submit = findViewById(R.id.registration_submit);
         google = findViewById(R.id.registration_google);
-        phone = findViewById(R.id.registration_otp);
 
         //Firebase Instance
         auth = FirebaseAuth.getInstance();

@@ -75,7 +75,6 @@ public class LogInActivity extends AppCompatActivity {
         username = findViewById(R.id.login_username);
         password = findViewById(R.id.login_password);
         google = findViewById(R.id.login_google);
-        phone = findViewById(R.id.login_phone);
         submit =findViewById(R.id.login_submit);
         //Firebase Instance
         auth = FirebaseAuth.getInstance();

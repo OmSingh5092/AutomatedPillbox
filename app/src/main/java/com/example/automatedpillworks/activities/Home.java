@@ -188,6 +188,9 @@ public class Home extends AppCompatActivity{
     }
 
     void setUpDatabaseListener(){
+        if(GlobalVar.currentBox ==null){
+            return;
+        }
         myRef.child("boxes").child(GlobalVar.currentBox).addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {

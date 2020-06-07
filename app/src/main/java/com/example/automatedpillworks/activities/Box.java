@@ -212,9 +212,6 @@ public class Box extends AppCompatActivity {
 
             if(data.containsKey(position)) {
 
-
-
-
                 Animation slideDown = AnimationUtils.loadAnimation(Box.this, R.anim.recyclerview_expanding_animation);
                 holder.detail.setVisibility(View.VISIBLE);
                 holder.detail.startAnimation(slideDown);

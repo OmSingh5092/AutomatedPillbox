@@ -53,7 +53,7 @@
                     android:id="@+id/registration_username"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:hint="UserName" />
+                    android:hint="Email" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.textfield.TextInputLayout
@@ -69,8 +69,8 @@
                     android:id="@+id/registration_password"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:inputType="textPassword"
-                    android:hint="Password" />
+                    android:hint="Password"
+                    android:inputType="textPassword" />
             </com.google.android.material.textfield.TextInputLayout>
 
             <com.google.android.material.button.MaterialButton
@@ -93,7 +93,7 @@
         android:minHeight="?attr/actionBarSize"
         app:layout_constraintTop_toTopOf="parent"
         app:navigationIcon="@drawable/back_icon"
-        app:title="Register"
+        app:title="User Login/Signup"
         tools:layout_editor_absoluteX="1dp" />
 
     <ImageButton
@@ -102,23 +102,11 @@
         android:layout_height="wrap_content"
         android:background="?attr/selectableItemBackground"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toStartOf="@+id/registration_otp"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/materialCardView5"
         app:srcCompat="@drawable/icon_google" />
-
-    <ImageButton
-        android:id="@+id/registration_otp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:background="?attr/selectableItemBackground"
-        app:layout_constraintBottom_toBottomOf="@+id/registration_google"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toEndOf="@+id/registration_google"
-        app:layout_constraintTop_toTopOf="@+id/registration_google"
-        app:srcCompat="@drawable/icon_otp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

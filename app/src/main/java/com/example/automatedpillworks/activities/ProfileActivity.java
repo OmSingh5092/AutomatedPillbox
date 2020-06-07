@@ -40,6 +40,7 @@ public class ProfileActivity extends AppCompatActivity {
     }
 
     void displayData(){
+
         //Setting General Info
         binding.infoAddress.setText(GlobalVar.userData.userInfo.userprofile.address);
         //Setting Med Info
@@ -53,8 +54,12 @@ public class ProfileActivity extends AppCompatActivity {
         //Setting Email
         binding.email.setText(GlobalVar.userData.userInfo.userprofile.email);
 
-        getSupportActionBar().setTitle(GlobalVar.userData.userInfo.userprofile.firstname+ " "
+        binding.toolbar.setTitle(GlobalVar.userData.userInfo.userprofile.firstname+ " "
                 + GlobalVar.userData.userInfo.userprofile.lastname);
+        binding.collapseBar.setTitle(GlobalVar.userData.userInfo.userprofile.firstname+ " "
+                + GlobalVar.userData.userInfo.userprofile.lastname);
+
+        setSupportActionBar(binding.toolbar);
     }
 
 
@@ -84,6 +89,8 @@ public class ProfileActivity extends AppCompatActivity {
 
     @Override
     protected void onPostResume() {
+
+
         displayData();
         super.onPostResume();
     }

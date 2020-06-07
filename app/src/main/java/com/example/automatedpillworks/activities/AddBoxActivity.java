@@ -18,6 +18,7 @@ import android.widget.Toast;
 import com.example.automatedpillworks.CloudMessaging.AsyncTaskSubscribeToTopics;
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.utils.BasicFunctions;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.android.material.button.MaterialButton;
 import com.google.android.material.snackbar.Snackbar;
@@ -89,10 +90,9 @@ public class AddBoxActivity extends AppCompatActivity{
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //Closing Keyboard
+                BasicFunctions.hideKeyboard(AddBoxActivity.this);
                 if(isFilled()){
-                    //Closing Keyboard
-
-
                     final String id = boxinput.getText().toString();
                     //Checking if box is previously added
                     if(GlobalVar.userData.userInfo.boxes.contains(id)){
