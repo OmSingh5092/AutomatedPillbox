@@ -99,7 +99,7 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
             public void onClick(View v) {
                 String email = holder.email.getText().toString();
                 if(isEmail(email)){
-                    sendRequest(holder.email.getText().toString(),holder,position);
+                    sendRequest(holder.email.getText().toString(),holder);
                 }else{
                     Toast.makeText(context, "Enter a valid Email", Toast.LENGTH_SHORT).show();
                 }
@@ -182,6 +182,9 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
                         //Making changes
                         dataIsLoaded(holder);
 
+                        //Removing users uid
+                        uids.remove(auth.getUid());
+
                         //Setting up the adapter
                         holder.uids = uids;
                         inflateChildRecyclerView(holder);
@@ -196,21 +199,26 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
 
     void inflateChildRecyclerView(ViewHolder holder){
         //Setting the size of counts in Folding cell
-        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+2);
-
+        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+1);
         holder.rv.setLayoutManager(new LinearLayoutManager(context));
         //Making Data
         Log.i("UID",holder.uids.toString());
-        holder.adapter = new ManageBoxUsers(holder.uids,context,data.get(holder.getAdapterPosition()).boxname);
+        holder.adapter = new ManageBoxUsers(holder.uids,context,data.get(holder.getAdapterPosition()).boxname,holder.foldingCell);
         holder.rv.setAdapter(holder.adapter);
     }
 
     void updateChildRecyclerView(ViewHolder holder){
-        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+2);
-        holder.adapter.notifyItemInserted(holder.uids.size()-1);
+        Log.i("FINAL UID",holder.uids.toString());
+        holder.foldingCell.initialize(1000, Color.WHITE,holder.uids.size()+1);
+
+        //Updating unfolded Content View (* Important)
+        holder.foldingCell.fold(true);
+        holder.foldingCell.unfold(true);
+
+        holder.adapter.notifyDataSetChanged();
     }
 
-    void sendRequest(final String email, final ViewHolder holder,final int position){
+    void sendRequest(final String email, final ViewHolder holder){
         firebaseFirestore.collection("usersMetadata").whereEqualTo("email",email).get()
                 .addOnSuccessListener(new OnSuccessListener<QuerySnapshot>() {
                     @Override
@@ -218,7 +226,7 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
                         if(queryDocumentSnapshots.size() ==0){
                             Toast.makeText(context, "Email Doesn't Exist", Toast.LENGTH_SHORT).show();
                         }else{
-                            addToRealtimeDatabase(queryDocumentSnapshots.getDocuments().get(0).getId(),holder,position);
+                            addToRealtimeDatabase(queryDocumentSnapshots.getDocuments().get(0).getId(),holder);
                         }
                     }
                 }).addOnFailureListener(new OnFailureListener() {
@@ -229,14 +237,18 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
         });
     }
 
-    void addToRealtimeDatabase(String uid, final ViewHolder holder,int position){
+    void addToRealtimeDatabase(String uid, final ViewHolder holder){
+        int position = holder.getAdapterPosition();
         //Checking if uid is already present
         if(holder.uids.contains(uid)){
             Toast.makeText(context, "User already added", Toast.LENGTH_SHORT).show();
             return;
         }
+
+        Log.i("I",holder.uids.toString());
         //Adding uid
         holder.uids.add(uid);
+        Log.i("F",holder.uids.toString());
 
         //Updating value on Firebase
         database.getReference("boxes").child(data.get(position).boxname).child("uid").child(uid).setValue(1).addOnSuccessListener(new OnSuccessListener<Void>() {

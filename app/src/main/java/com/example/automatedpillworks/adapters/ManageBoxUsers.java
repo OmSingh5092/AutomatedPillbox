@@ -1,6 +1,7 @@
 package com.example.automatedpillworks.adapters;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -20,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.example.automatedpillworks.databinding.RecyclerManageBoxUsersBinding;
+import com.ramotion.foldingcell.FoldingCell;
 
 import java.io.Serializable;
 import java.util.ArrayList;
@@ -37,17 +39,18 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
     private List<String> uids;
     private Context context;
     private String boxname;
-    public ManageBoxUsers(List<String> uids,Context context,String boxname){
+    private FoldingCell foldingCell;
+    public ManageBoxUsers(List<String> uids, Context context, String boxname, FoldingCell foldingCell){
         this.uids = uids;
         this.context = context;
         this.boxname = boxname;
+        this.foldingCell = foldingCell;
         //Instantiate firebase objects
         firestore = FirebaseFirestore.getInstance();
         database = FirebaseDatabase.getInstance();
         auth = FirebaseAuth.getInstance();
 
-        //Removing users uid
-        uids.remove(auth.getUid());
+
     }
     //List of User data (Could be accessed by other classes later on)
     public static List<UserMetaDataModel> data = new ArrayList<>();
@@ -66,6 +69,8 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
     public void onBindViewHolder(@NonNull final ViewHolder holder, final int position) {
         //Fetch and Bind data
         fetchAndBindData(holder,position);
+
+
 
         holder.remove.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -129,6 +134,12 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
     void updateRecyclerView(int position){
         uids.remove(position);
         data.remove(position);
-        this.notifyDataSetChanged();
+
+        foldingCell.initialize(1000, Color.WHITE,uids.size()+1);
+        //Updating unfolded Content view
+        foldingCell.fold(true);
+        foldingCell.unfold(true);
+
+        this.notifyItemRemoved(position);
     }
 }

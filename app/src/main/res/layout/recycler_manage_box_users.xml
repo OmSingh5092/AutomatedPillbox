@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content"
+    android:layout_height="@dimen/folding_card_item_height"
     tools:context=".activities.ManageBoxActivity">
 
     <com.google.android.material.card.MaterialCardView
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
                 android:layout_marginBottom="16dp"
-                android:text="omsing@gmail.com"
+                android:text="omsingh@gmail.com"
                 android:textAppearance="@style/SubTitleAppearance"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
