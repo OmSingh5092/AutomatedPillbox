@@ -16,6 +16,6 @@
         android:title="Boxes"
         android:id = "@+id/menu_boxes"
         android:icon="@drawable/icon_box"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
 
 </menu>
