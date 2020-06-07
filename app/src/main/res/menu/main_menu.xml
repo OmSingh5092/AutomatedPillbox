@@ -11,7 +11,7 @@
         android:title="Notificatoins"
         android:id = "@+id/menu_notification"
         android:icon="@drawable/icon_notif"
-        app:showAsAction="ifRoom"/>
+        app:showAsAction="always"/>
     <item
         android:title="Boxes"
         android:id = "@+id/menu_boxes"

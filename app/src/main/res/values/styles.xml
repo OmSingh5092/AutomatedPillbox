@@ -35,7 +35,6 @@
     </style>
 
     <style name="AppImageButtonStyle" parent="Widget.AppCompat.ImageButton">
-        <item name="backgroundTint">@color/colorPrimary</item>
     </style>
 
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">

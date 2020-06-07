@@ -166,6 +166,8 @@ public class Home extends AppCompatActivity{
         //Setting NavBar
         setUpNavbar();
 
+        //Making Database listener
+        setUpDatabaseListener();
 
 
         titles = getResources().getStringArray(R.array.boxes);
@@ -183,6 +185,20 @@ public class Home extends AppCompatActivity{
             }
         });
 
+    }
+
+    void setUpDatabaseListener(){
+        myRef.child("boxes").child(GlobalVar.currentBox).addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                setupRecyclerViewAndTitle();
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+
+            }
+        });
     }
 
     void setUpNavbar(){

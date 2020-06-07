@@ -26,30 +26,32 @@
                 android:textAppearance="@style/SubTitleAppearance"
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/recycler_manage_box_remove"
-                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintStart_toStartOf="@+id/recycler_manage_box_username"
                 app:layout_constraintTop_toBottomOf="@+id/recycler_manage_box_username" />
-
-            <com.google.android.material.button.MaterialButton
-                android:id="@+id/recycler_manage_box_remove"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="Remove User"
-                app:layout_constraintBottom_toBottomOf="@+id/recycler_manage_box_email"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/recycler_manage_box_username" />
 
             <TextView
                 android:id="@+id/recycler_manage_box_username"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="24dp"
                 android:layout_marginTop="16dp"
                 android:text="User Name"
                 android:textAppearance="@style/TitleTextAppearnce"
                 android:textSize="14sp"
-                app:layout_constraintEnd_toStartOf="@+id/recycler_manage_box_remove"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageButton
+                android:id="@+id/options"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
+                android:background="?attr/selectableItemBackground"
+                android:tint="#000000"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:srcCompat="@drawable/icon_more_vert" />
         </androidx.constraintlayout.widget.ConstraintLayout>
 
 

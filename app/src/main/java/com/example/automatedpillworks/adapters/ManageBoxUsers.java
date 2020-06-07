@@ -5,8 +5,11 @@ import android.graphics.Color;
 import android.text.Layout;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageButton;
+import android.widget.PopupMenu;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -70,12 +73,10 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
         //Fetch and Bind data
         fetchAndBindData(holder,position);
 
-
-
-        holder.remove.setOnClickListener(new View.OnClickListener() {
+        holder.options.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                removeUser(holder,position);
+                createPopUp(holder);
             }
         });
     }
@@ -87,13 +88,29 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
 
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView username,useremail;
-        MaterialButton remove;
+        ImageButton options;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.recycler_manage_box_username);
             useremail = itemView.findViewById(R.id.recycler_manage_box_email);
-            remove = itemView.findViewById(R.id.recycler_manage_box_remove);
+            options = binding.options;
         }
+    }
+
+
+    private void createPopUp(final ViewHolder holder){
+        PopupMenu menu = new PopupMenu(context,holder.options);
+        menu.getMenuInflater().inflate(R.menu.recycler_user_menu,menu.getMenu());
+        menu.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            @Override
+            public boolean onMenuItemClick(MenuItem item) {
+                if(item.getItemId() ==R.id.remove){
+                    removeUser(holder);
+                }
+                return false;
+            }
+        });
+        menu.show();
     }
 
     private void fetchAndBindData(final ViewHolder holder, int position){
@@ -118,7 +135,8 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
         });
     }
 
-    private void removeUser(final ViewHolder viewHolder, final int position){
+    private void removeUser(final ViewHolder viewHolder){
+        final int position = viewHolder.getAdapterPosition();
         //Removing user from data
         database.getReference("boxes").child(boxname).child("uid").child(uids.get(position))
                 .removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
