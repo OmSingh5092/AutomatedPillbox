@@ -2,18 +2,37 @@ package com.example.automatedpillworks.activities;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.widget.NestedScrollView;
+import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.Activity;
+import android.content.Intent;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.graphics.Color;
+import android.graphics.drawable.Drawable;
+import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
+import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.databinding.ActivityPrescriptionBinding;
+import com.google.android.gms.common.internal.GmsLogger;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,12 +41,17 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 //import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 
 public class Prescription extends AppCompatActivity {
     ImageButton back;
     RecyclerView rv;
     FloatingActionButton download;
+    ActivityPrescriptionBinding binding;
     String daysname[];
 
     class RecyclerAdap1 extends RecyclerView.Adapter<Prescription.RecyclerAdap1.viewHolder>{
@@ -104,7 +128,7 @@ public class Prescription extends AppCompatActivity {
         public void onBindViewHolder(@NonNull viewHolder holder, int position) {
             if(data[position] != null){
                 holder.medname.setText(data[position].medname);
-                holder.recy.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+                holder.recy.setLayoutManager(new GridLayoutManager(Prescription.this,2));
                 holder.recy.setHasFixedSize(true);
                 RecyclerAdap1 adap1 = new RecyclerAdap1(data[position].day);
                 holder.recy.setAdapter(adap1);
@@ -134,31 +158,30 @@ public class Prescription extends AppCompatActivity {
     }
 
     class Course {
-        String medname;
+        String medname = "No Name";
         ArrayList<Days> day;
     }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_prescription);
-
-        back = findViewById(R.id.prescription_back);
+        binding = ActivityPrescriptionBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        //Setting up the toolbar
+        Toolbar toolbar = findViewById(R.id.prescription_toolbar);
+        setSupportActionBar(toolbar);
         rv = findViewById(R.id.pres_rv);
-        download = findViewById(R.id.pres_download);
+
+        //Setting info
+        setInfo();
+
+
 
         daysname = getResources().getStringArray(R.array.days);
 
-        back.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Prescription.this.onBackPressed();
-            }
-        });
-
         final Course course[] = new Course[8];
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference().child(GlobalVar.currentBox);
+        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("boxes").child(GlobalVar.currentBox);
 
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -167,8 +190,10 @@ public class Prescription extends AppCompatActivity {
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     if(!snap.getKey().equals("uid")){
                         course[i] = new Course();
-                        course[i].medname = snap.child("medicine").getValue(String.class);
-                        course[i].day = new ArrayList<Days>();
+                        if(snap.child("medicine").exists()) {
+                            course[i].medname = snap.child("medicine").getValue(String.class);
+                        }
+                        course[i].day = new ArrayList<>();
                         int j=0;
                         for(DataSnapshot snap1: snap.getChildren()){
                             if(!snap1.getKey().equals("medicine")){
@@ -194,6 +219,7 @@ public class Prescription extends AppCompatActivity {
 
                 RecyclerAdap adapter = new RecyclerAdap(course,i);
                 rv.setAdapter(adapter);
+                rv.setNestedScrollingEnabled(false);
             }
 
             @Override
@@ -204,32 +230,79 @@ public class Prescription extends AppCompatActivity {
 
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+    }
+
+    void setInfo(){
+        binding.name.setText(GlobalVar.userData.userInfo.userprofile.firstname+ " "
+                + GlobalVar.userData.userInfo.userprofile.lastname);
+        binding.gender.setText(getResources().getStringArray(R.array.gender)[GlobalVar.userData.userInfo.userprofile.gender]);
+        binding.blood.setText(getResources().getStringArray(R.array.bloodgroup)[GlobalVar.userData.userInfo.userprofile.blood]);
+    }
+
+    void getBitmap(){
+        View u = binding.scrollView;
+
+        NestedScrollView z = binding.scrollView;
+        int totalHeight = z.getChildAt(0).getHeight();
+        int totalWidth = z.getChildAt(0).getWidth();
+
+        Bitmap b = getBitmapFromView(u,totalHeight,totalWidth);
+
+        //Save bitmap
+        String extr = Environment.getExternalStorageDirectory()+"/report.jpg";
+        File myPath = new File(extr);
+        FileOutputStream fos = null;
+        try {
+            fos = new FileOutputStream(myPath);
+            b.compress(Bitmap.CompressFormat.JPEG, 100, fos);
+            fos.flush();
+            fos.close();
+            MediaStore.Images.Media.insertImage(this.getContentResolver(), b, "Screen", "screen");
+        }catch (FileNotFoundException e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        } catch (Exception e) {
+            // TODO Auto-generated catch block
+            e.printStackTrace();
+        }
+
+        Intent intent = new Intent();
+        intent.setAction(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.parse(extr), "image/*");
+        startActivity(intent);
+    }
+
+    public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
+
+        Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth,totalHeight , Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(returnedBitmap);
+        Drawable bgDrawable = view.getBackground();
+        if (bgDrawable != null)
+            bgDrawable.draw(canvas);
+        else
+            canvas.drawColor(Color.WHITE);
+        view.draw(canvas);
+        return returnedBitmap;
+    }
 
 
-        /*download.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                AbstractViewRenderer page = new AbstractViewRenderer(Prescription.this, R.layout.activity_prescription) {
-                    private String _text;
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.prescription_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
 
-                    public void setText(String text) {
-                        _text = text;
-                    }
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return super.onSupportNavigateUp();
+    }
 
-                    @Override
-                    protected void initView(View view) {
-                        TextView tv_hello = (TextView)view.findViewById(R.id.tv_hello);
-                        tv_hello.setText(_text);
-                    }
-                };
-
-            }
-        });  */
-
-
-
-
-
-
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.save){
+            getBitmap();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }

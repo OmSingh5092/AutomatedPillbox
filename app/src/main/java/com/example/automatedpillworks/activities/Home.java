@@ -35,6 +35,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.iid.FirebaseInstanceId;
+
+import java.io.IOException;
 
 public class Home extends AppCompatActivity{
 
@@ -221,7 +224,8 @@ public class Home extends AppCompatActivity{
             i.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
             startActivity(i);
         }else if(item.getItemId() == R.id.nav_home_prescription){
-            Toast.makeText(this, "Feature Coming Soon", Toast.LENGTH_SHORT).show();
+            Intent i = new Intent(this,Prescription.class);
+            startActivity(i);
         }else if(item.getItemId() == R.id.nav_home_boxes){
             Intent i = new Intent(this,ManageBoxActivity.class);
             startActivity(i);
@@ -237,6 +241,12 @@ public class Home extends AppCompatActivity{
     }
 
     private void signOut(){
+        //Delete Firebase Instance Id
+        try {
+            FirebaseInstanceId.getInstance().deleteInstanceId();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         GlobalVar.resetValues();
         auth.signOut();
         if(GoogleSignIn.getLastSignedInAccount(this) == null){

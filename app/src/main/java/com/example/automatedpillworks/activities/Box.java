@@ -382,7 +382,7 @@ public class Box extends AppCompatActivity {
     }
 
     RecyclerView rv;
-    ImageButton back,check;
+    ImageButton check;
 
     HashMap<Integer,MedData> info = new HashMap<Integer,MedData>();
 
@@ -404,8 +404,6 @@ public class Box extends AppCompatActivity {
         //Setting Toolbar
         toolbar = findViewById(R.id.box_toolbar);
         setSupportActionBar(toolbar);
-
-        back = findViewById(R.id.prescription_back);
         rv = findViewById(R.id.box_rv);
         medname = findViewById(R.id.box_medname);
         check = findViewById(R.id.box_check);

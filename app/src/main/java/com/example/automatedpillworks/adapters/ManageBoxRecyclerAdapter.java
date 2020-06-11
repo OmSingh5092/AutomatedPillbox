@@ -240,8 +240,12 @@ public class ManageBoxRecyclerAdapter extends RecyclerView.Adapter<ManageBoxRecy
     void addToRealtimeDatabase(String uid, final ViewHolder holder){
         int position = holder.getAdapterPosition();
         //Checking if uid is already present
-        if(holder.uids.contains(uid)){
+        if(holder.uids.contains(uid) ){
             Toast.makeText(context, "User already added", Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if(holder.uids.equals(auth.getUid())){
+            Toast.makeText(context, "Don't enter your email id", Toast.LENGTH_SHORT).show();
             return;
         }
 

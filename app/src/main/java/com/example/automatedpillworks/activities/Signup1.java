@@ -18,8 +18,10 @@ import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.databinding.ActivitySignup1Binding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
@@ -49,11 +51,16 @@ public class Signup1 extends AppCompatActivity  {
     FirebaseAuth auth;
     FirebaseFirestore firestore;
     StorageReference storage;
+    ActivitySignup1Binding binding;
+
+    //Snackbars
+    Snackbar loadingSnackbar;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup1);
+        binding = ActivitySignup1Binding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //Setting toolbar
         Toolbar toolbar = findViewById(R.id.signup1_toolbar);
         setSupportActionBar(toolbar);
@@ -125,13 +132,17 @@ public class Signup1 extends AppCompatActivity  {
             @Override
             public void onClick(View v) {
                 if(isFilled()){
+                    //Uploading Snack Bar
+                    loadingSnackbar = Snackbar.make(binding.getRoot(),"Uploading Data Please Wait...",Snackbar.LENGTH_INDEFINITE);
+                    loadingSnackbar.show();
                     GlobalVar.signUpTemp.userInfo.userprofile.gender = gender;
                     GlobalVar.signUpTemp.userInfo.userprofile.blood = blood;
                     GlobalVar.signUpTemp.userInfo.userprofile.weight = Long.valueOf(weightInput.getText().toString());
                     GlobalVar.signUpTemp.userInfo.userprofile.dob = dob;
                     GlobalVar.signUpTemp.userInfo.userprofile.email = auth.getCurrentUser().getEmail();
+                    uploadData();
                 }
-                uploadData();
+
             }
         });
 

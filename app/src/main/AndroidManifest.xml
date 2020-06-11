@@ -28,13 +28,11 @@
         <activity android:name=".activities.LogInActivity" />
         <activity android:name=".activities.SplashScreenActivity" />
         <activity android:name=".activities.Reminder" />
-        <activity android:name=".activities.PhoneChange" />
         <activity
             android:name=".activities.Box"
             android:windowSoftInputMode="adjustPan" />
         <activity android:name=".activities.Prescription" />
         <activity android:name=".activities.Home" />
-        <activity android:name=".activities.Phone_Auth" />
         <activity android:name=".activities.Signup" />
         <activity android:name=".activities.Signup1" />
         <activity android:name=".activities.Scanner" >

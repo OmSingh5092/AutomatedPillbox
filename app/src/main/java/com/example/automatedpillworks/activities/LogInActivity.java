@@ -13,6 +13,8 @@ import android.widget.ImageButton;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.databinding.ActivityLogInBinding;
+import com.example.automatedpillworks.utils.BasicFunctions;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
 import com.google.android.gms.auth.api.signin.GoogleSignInClient;
@@ -23,6 +25,7 @@ import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.android.material.appbar.MaterialToolbar;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
@@ -32,6 +35,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
 public class LogInActivity extends AppCompatActivity {
 
+    ActivityLogInBinding binding;
     TextInputEditText username,password;
     ImageButton google,phone;
     Button submit;
@@ -47,13 +51,10 @@ public class LogInActivity extends AppCompatActivity {
         startActivity(i);
     }
 
-
-
-    void LoginWithUsernamePassword(String user, String pass){
-        auth.signInWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+    void generateUser(String user, String pass){
+        auth.createUserWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
             @Override
             public void onSuccess(AuthResult authResult) {
-                Toast.makeText(LogInActivity.this, getResources().getText(R.string.login_successfull), Toast.LENGTH_SHORT).show();
                 switchActivity();
             }
         }).addOnFailureListener(new OnFailureListener() {
@@ -64,10 +65,33 @@ public class LogInActivity extends AppCompatActivity {
         });
     }
 
+
+
+    void LoginWithUsernamePassword(final String user, final String pass){
+        auth.signInWithEmailAndPassword(user,pass).addOnSuccessListener(new OnSuccessListener<AuthResult>() {
+            @Override
+            public void onSuccess(AuthResult authResult) {
+                if(authResult.getAdditionalUserInfo().isNewUser()){
+                    generateUser(user,pass);
+                    return;
+                }
+                Toast.makeText(LogInActivity.this, getResources().getText(R.string.login_successfull), Toast.LENGTH_SHORT).show();
+                switchActivity();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                //Generate Users
+                generateUser(user,pass);
+            }
+        });
+    }
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_log_in);
+        binding = ActivityLogInBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
         //Setting Toolbar
         MaterialToolbar toolbar = findViewById(R.id.login_toolbar);
         setSupportActionBar(toolbar);
@@ -83,6 +107,7 @@ public class LogInActivity extends AppCompatActivity {
         submit.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                BasicFunctions.hideKeyboard(LogInActivity.this);
                 if(isfilled()){
                     LoginWithUsernamePassword(username.getText().toString(), password.getText().toString());
                 }
