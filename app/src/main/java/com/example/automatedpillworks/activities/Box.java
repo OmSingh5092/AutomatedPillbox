@@ -6,11 +6,17 @@ import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.app.AlertDialog;
 import android.app.TimePickerDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
@@ -26,6 +32,7 @@ import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -84,10 +91,6 @@ public class Box extends AppCompatActivity {
 
                     MedData tempdata = data;
                     tempdata.times.remove(position);
-
-
-
-                    myRef.child(String.valueOf(day)).child(String.valueOf(tempdata.doses)).removeValue();
                     tempdata.doses--;
 
                     if(tempdata.doses.equals(Long.valueOf(0))){
@@ -97,28 +100,23 @@ public class Box extends AppCompatActivity {
                     else{
                         Collections.sort(tempdata.times);
 
-
-
                         info.put(day,tempdata);
-
-
-
-
 
                         // Reinserting the times (Sorted)
                         for(int i = 1; i<=tempdata.doses;i++){
                             myRef.child(String.valueOf(day)).child(String.valueOf(i)).setValue(tempdata.times.get(i-1));
                         }
+                        myRef.child(String.valueOf(day)).child(String.valueOf(tempdata.doses+1)).removeValue();
 
                         myRef.child(String.valueOf(day)).child("0").setValue(tempdata.doses);
-
-
-
-
 
                     }
 
                     ada.notifyItemChanged(day);
+
+
+
+
 
 
 
@@ -148,7 +146,7 @@ public class Box extends AppCompatActivity {
                             myRef.child(String.valueOf(day)).child(String.valueOf(i)).setValue(tempdata.times.get(i-1));
                         }
 
-                        ada.notifyItemChanged(day);
+                        notifyItemChanged(position);
 
                         //myRef.child(String.valueOf(day)).child(String.valueOf(position+1)).setValue(time);
 
@@ -186,6 +184,7 @@ public class Box extends AppCompatActivity {
 
     public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.viewHolder>{
 
+        RecyclerViewAdapter1 adapter;
 
         public HashMap<Integer, MedData> data;
         public RecyclerViewAdapter(HashMap<Integer, MedData> data) {
@@ -216,6 +215,8 @@ public class Box extends AppCompatActivity {
                 holder.detail.setVisibility(View.VISIBLE);
                 holder.detail.startAnimation(slideDown);
 
+                holder.status.setVisibility(View.VISIBLE);
+
                 if(data.get(position).status.equals(Long.valueOf(1))){
                     holder.status.setChecked(true);
                 }
@@ -225,7 +226,7 @@ public class Box extends AppCompatActivity {
                 MedData tempdata = data.get(position);
                 Collections.sort(tempdata.times);
                 data.put(position,tempdata);
-                RecyclerViewAdapter1 adapter = new RecyclerViewAdapter1(data.get(position), position);
+                adapter= new RecyclerViewAdapter1(data.get(position), position);
                 holder.detail.setAdapter(adapter);
 
 
@@ -242,8 +243,6 @@ public class Box extends AppCompatActivity {
             holder.add.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
-
-                    Date date = new Date(System.currentTimeMillis());
                     Calendar calendar= Calendar.getInstance();
                 TimePickerDialog dialog = new TimePickerDialog(Box.this, new TimePickerDialog.OnTimeSetListener() {
                     @Override
@@ -272,26 +271,41 @@ public class Box extends AppCompatActivity {
 
                         // Reinserting the times (Sorted)
                         for(int i = 1; i<=tempdata.doses ;i++){
-                            myRef.child(String.valueOf(position)).child(String.valueOf(i)).setValue(tempdata.times.get(i-1));
+                            myRef.child(String.valueOf(position)).child(String.valueOf(i)).setValue(tempdata.times.get(i-1)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                @Override
+                                public void onSuccess(Void aVoid) {
+                                    Log.i("Key", String.valueOf(position));
+                                }
+                            });
                         }
 
 
-                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(1));
-
-
+                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(1)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("Check","Request Sent for "+ position);
+                            }
+                        });
 
 
                         data.put(position,tempdata);
 
 
-                        myRef.child(String.valueOf(Integer.valueOf(position))).child("0").setValue(data.get(position).doses);
-                        notifyItemChanged(position);
+                        myRef.child(String.valueOf(Integer.valueOf(position))).child("0").setValue(data.get(position).doses).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("Key",String.valueOf(Integer.valueOf(position)));
+                            }
+                        });
+
 
                         if(!holder.detail.isShown()){
                             Animation slideDown = AnimationUtils.loadAnimation(Box.this, R.anim.recyclerview_expanding_animation);
                             holder.detail.setVisibility(View.VISIBLE);
                             holder.detail.startAnimation(slideDown);
                         }
+
+                        notifyItemChanged(position);
 
 
                     }
@@ -307,6 +321,10 @@ public class Box extends AppCompatActivity {
                 @Override
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
 
+                    if(!data.containsKey(position)){
+                        Log.i("Triggered","Wrong Request");
+                        return;
+                    }
                     if(isChecked){
 
                         if(!holder.detail.isShown()){
@@ -314,7 +332,12 @@ public class Box extends AppCompatActivity {
                             holder.detail.setVisibility(View.VISIBLE);
                             holder.detail.startAnimation(slideDown);
                         }
-                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(1));
+                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(1)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("Key status", String.valueOf(position));
+                            }
+                        });
 
                     }
                     else{
@@ -322,7 +345,12 @@ public class Box extends AppCompatActivity {
                         if(holder.detail.isShown()){
                             holder.detail.setVisibility(View.GONE);
                         }
-                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(0));
+                        myRef.child(String.valueOf(position)).child("status").setValue(Long.valueOf(0)).addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void aVoid) {
+                                Log.i("Key Status ", String.valueOf(position));
+                            }
+                        });
                     }
                     //notifyItemChanged(position);
 
@@ -394,6 +422,8 @@ public class Box extends AppCompatActivity {
     RecyclerViewAdapter ada ;
     ProgressBar pb;
 
+    String box;
+
 
 
 
@@ -410,7 +440,7 @@ public class Box extends AppCompatActivity {
         pb = findViewById(R.id.box_progressbar);
 
         final RecyclerViewAdapter[] Adapter = {new RecyclerViewAdapter(info)};
-        String box = getIntent().getStringExtra("box");
+        box = getIntent().getStringExtra("box");
         Toast.makeText(this, box, Toast.LENGTH_SHORT).show();
         // Setting up the name of the box
         toolbar.setTitle(box);
@@ -419,22 +449,23 @@ public class Box extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-
                 for(int i = 0; i<=6; i++){
-
                     DataSnapshot snap =  dataSnapshot.child(String.valueOf(i));
-
 
                     if(snap.exists()){
                         MedData data = new MedData();
                         data.day = i;
-                        data.status = Long.valueOf(0);
                         data.doses = snap.child("0").getValue(Long.class);
                         data.status = snap.child("status").getValue(Long.class);
-                        for(int j = 1; j<=data.doses; j++){
-                            Long time = snap.child(String.valueOf(j)).getValue(Long.class);
-                            data.times.add(time);
+                        if(data.doses !=null){
+                            for(int j = 1; j<=data.doses; j++){
+                                Long time = snap.child(String.valueOf(j)).getValue(Long.class);
+                                data.times.add(time);
+                            }
+                        }else{
+                            data.doses = Long.valueOf(0);
                         }
+
                         info.put(Integer.valueOf(i),data);
                     }
 
@@ -488,6 +519,9 @@ public class Box extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 String string = medname.getText().toString();
+                if(!isFilled(string)){
+                    return;
+                }
                 myRef.child("medicine").setValue(string);
                 check.setVisibility(View.GONE);
                 Toast.makeText(getApplicationContext(),"Name added successfully",Toast.LENGTH_SHORT).show();
@@ -500,9 +534,59 @@ public class Box extends AppCompatActivity {
 
 
     }
+
+    void deleteBox(){
+        AlertDialog.Builder alert = new AlertDialog.Builder(this);
+        alert.setTitle("Are you sure that you want to delete this box.");
+        alert.setPositiveButton("OK", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                myRef.removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Toast.makeText(Box.this, box+" Successfully Deleted", Toast.LENGTH_SHORT).show();
+                        finish();
+                    }
+                });
+            }
+        });
+
+        alert.setNegativeButton("Cancle", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+
+        alert.show();
+    }
+
     @Override
     public boolean onSupportNavigateUp() {
         finish();
         return super.onSupportNavigateUp();
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.box_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId()== R.id.delete){
+            deleteBox();
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private boolean isFilled(String string){
+
+        if(string.length() ==0){
+            Toast.makeText(this, "Enter a name", Toast.LENGTH_SHORT).show();
+            return false;
+        }
+        return true;
     }
 }

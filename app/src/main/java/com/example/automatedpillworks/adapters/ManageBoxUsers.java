@@ -10,6 +10,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 import android.widget.PopupMenu;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -89,11 +90,13 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
     public class ViewHolder extends RecyclerView.ViewHolder {
         TextView username,useremail;
         ImageButton options;
+        ProgressBar progressBar;
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             username = itemView.findViewById(R.id.recycler_manage_box_username);
             useremail = itemView.findViewById(R.id.recycler_manage_box_email);
             options = binding.options;
+            progressBar = binding.progressBar;
         }
     }
 
@@ -122,7 +125,7 @@ public class ManageBoxUsers extends RecyclerView.Adapter<ManageBoxUsers.ViewHold
                     //Adding data to List
                     data.add(temp);
                     //Setting up View
-
+                    holder.progressBar.setVisibility(View.GONE);
                     holder.useremail.setText(temp.email);
                     holder.username.setText(temp.name);
 

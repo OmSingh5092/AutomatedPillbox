@@ -1,6 +1,7 @@
 package com.example.automatedpillworks.activities;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.drawerlayout.widget.DrawerLayout;
@@ -22,6 +23,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.UserInfoModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.adapters.NewBoxAdapter;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -35,6 +37,10 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.google.firebase.firestore.DocumentSnapshot;
+import com.google.firebase.firestore.EventListener;
+import com.google.firebase.firestore.FirebaseFirestore;
+import com.google.firebase.firestore.FirebaseFirestoreException;
 import com.google.firebase.iid.FirebaseInstanceId;
 
 import java.io.IOException;
@@ -119,6 +125,7 @@ public class Home extends AppCompatActivity{
 
     DatabaseReference myRef;
     FirebaseAuth auth;
+    FirebaseFirestore firestore;
 
     RecyclerView rv;
     RecyclerViewAdapter adapter;
@@ -130,6 +137,7 @@ public class Home extends AppCompatActivity{
     String[] titles;
     MaterialToolbar toolbar;
     TextView hellomessage;
+
 
 
 
@@ -162,6 +170,7 @@ public class Home extends AppCompatActivity{
         //Refrencing FirebaseDatabase
         myRef = FirebaseDatabase.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        firestore= FirebaseFirestore.getInstance();
 
         //Setting Current Box
         setCurrentBox();
@@ -191,6 +200,23 @@ public class Home extends AppCompatActivity{
     }
 
     void setUpDatabaseListener(){
+        //New Box Listener
+        firestore.collection("users").document(auth.getUid()).addSnapshotListener(new EventListener<DocumentSnapshot>() {
+            @Override
+            public void onEvent(@Nullable DocumentSnapshot documentSnapshot, @Nullable FirebaseFirestoreException e) {
+                if (e != null) {
+                    System.err.println("Listen failed: " + e);
+                    return;
+                }
+                if (documentSnapshot != null && documentSnapshot.exists()) {
+                    GlobalVar.userData.userInfo = documentSnapshot.toObject(UserInfoModel.class);
+                } else {
+                    System.out.print("Current data: null");
+                }
+            }
+        });
+
+
         if(GlobalVar.currentBox ==null){
             return;
         }

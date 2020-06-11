@@ -7,7 +7,9 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import android.os.Bundle;
 import android.view.LayoutInflater;
+import android.view.View;
 
+import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.adapters.NewBoxAdapter;
 import com.example.automatedpillworks.databinding.ActivityNewBoxBinding;
@@ -23,8 +25,10 @@ public class NewBoxActivity extends AppCompatActivity {
         setSupportActionBar(binding.toolbar);
 
         //Inflating Recycler View
-        inflateRecyclerView();
-
+        if(GlobalVar.userData.userInfo.newboxes.size() != 0){
+            binding.message.setVisibility(View.GONE);
+            inflateRecyclerView();
+        }
     }
 
     void inflateRecyclerView(){

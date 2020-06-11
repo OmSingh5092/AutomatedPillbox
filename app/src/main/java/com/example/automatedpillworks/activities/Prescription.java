@@ -200,6 +200,9 @@ public class Prescription extends AppCompatActivity {
                                 ArrayList<Long> data = new ArrayList<>();
                                 int k ;
                                 Long num = snap1.child("0").getValue(Long.class) ;
+                                if(num == null){
+                                    num = Long.valueOf(0);
+                                }
                                 for(k = 1; k<=num; k++){
                                     data.add(snap1.child(String.valueOf(k)).getValue(Long.class));
                                 }

@@ -40,26 +40,31 @@
                 android:layout_gravity="center"
                 android:layout_margin="10dp"
                 android:layout_weight="1"
-                android:text="Patient's Name" />
+                android:text="Patient's Name"
+                android:textAppearance="@style/TitleTextAppearnce" />
 
             <TextView
                 android:id="@+id/name"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:textSize="24sp"
+                android:textAppearance="@style/SubTitleAppearance"
+                android:textSize="18sp"
                 tools:text="Om Singh" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Medical Info"/>
+                android:text="Medical Info"
+                android:layout_marginTop="15dp"
+                android:textAppearance="@style/TitleTextAppearnce" />
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_margin="10dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                app:cardBackgroundColor="@color/primary_light"
                 android:layout_gravity="center">
                 <LinearLayout
                     android:layout_margin="10dp"
@@ -70,40 +75,58 @@
                         android:layout_margin="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Gender"/>
+                            android:text="Gender"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/gender"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_margin="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="BloodGroup"/>
+                            android:text="BloodGroup"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/blood"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
                     </LinearLayout>
                     <LinearLayout
                         android:layout_margin="10dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content">
+
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Weight"/>
+                            android:text="Weight"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
+
                         <TextView
                             android:id="@+id/weight"
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"/>
+                            android:layout_height="wrap_content"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="12sp" />
                     </LinearLayout>
                 </LinearLayout>
             </com.google.android.material.card.MaterialCardView>

@@ -13,9 +13,9 @@
         android:background="?attr/colorPrimary"
         android:minHeight="?attr/actionBarSize"
         android:theme="?attr/actionBarTheme"
-        app:title="Manage New Boxes"
-        app:navigationIcon="@drawable/back_icon"
         app:layout_constraintTop_toTopOf="parent"
+        app:navigationIcon="@drawable/back_icon"
+        app:title="Manage New Boxes"
         tools:layout_editor_absoluteX="1dp" />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -30,4 +30,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar" />
+
+    <TextView
+        android:id="@+id/message"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="No new boxes"
+        android:textSize="24sp"
+        app:layout_constraintBottom_toTopOf="@+id/recycler_view"
+        app:layout_constraintEnd_toStartOf="@+id/recycler_view"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/recycler_view"
+        app:layout_constraintTop_toBottomOf="@+id/recycler_view" />
 </androidx.constraintlayout.widget.ConstraintLayout>
