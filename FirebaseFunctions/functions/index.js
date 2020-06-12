@@ -11,6 +11,8 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
 
         console.log("BoxId", context.params.boxid);
 
+        var boxTopic = "/boxes/"+context.params.boxid;
+
 
         //Generating Title
 
@@ -21,7 +23,7 @@ exports.reminderTrigger = functions.database.ref('boxes/{boxid}/reminders/{rem}'
                 name:data.name,
                 time:data.time
             },
-            topic : context.params.boxid
+            topic : boxTopic
         };
 
         console.log("Payload:",message);
@@ -61,7 +63,9 @@ exports.subscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
                 var tokens = doc.data().tokens;
                 console.log("Tokens",tokens);
                 clienttokens = tokens;
-                return admin.messaging().subscribeToTopic(tokens,context.params.boxid);
+                
+                var boxTopic = "/boxes/"+context.params.boxid;
+                return admin.messaging().subscribeToTopic(tokens,boxTopic);
                 
             }).then((response)=>{
                 console.log("Subscibed to the topics!");
@@ -100,12 +104,14 @@ exports.unsubscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
 
         }).then((response)=>{
             console.log("Box deleted!");
+
+            var userTopic= "/users/"+context.params.newuid;
             var message = {
                 data:{
                     type:"deletebox",
                     boxid:context.params.boxid
                 },
-                topic: context.params.newuid
+                topic: userTopic
             }
             return admin.messaging().send(message);   
 
@@ -116,9 +122,12 @@ exports.unsubscribeUsers = functions.database.ref('boxes/{boxid}/uid/{newuid}')
         }).then((doc)=>{
             var tokens = doc.data().tokens;
             console.log("Tokens",tokens);
+
+            var boxTopic = "/boxes/"+context.params.boxid;
+            console.log("Topic", boxTopic);
             
             
-            return admin.messaging().unsubscribeFromTopic(tokens,context.params.boxid);
+            return admin.messaging().unsubscribeFromTopic(tokens,boxTopic);
             
         }).then(()=>{
             console.log("Unsubscribed Successfully");

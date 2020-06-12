@@ -46,7 +46,7 @@ public class NotificationService extends FirebaseMessagingService {
         }else if(remoteMessage.getData().get("type").equals("newbox")){
             newBoxNotification(remoteMessage);
         }else if(remoteMessage.getData().get("type").equals("deletebox")){
-            newBoxNotification(remoteMessage);
+            boxDeletedNotification(remoteMessage);
         }
 
     }

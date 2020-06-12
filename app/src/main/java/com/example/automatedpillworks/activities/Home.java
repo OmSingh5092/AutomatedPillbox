@@ -22,6 +22,7 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.automatedpillworks.CloudMessaging.HandleTopics;
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.Model.UserInfoModel;
 import com.example.automatedpillworks.R;
@@ -268,11 +269,8 @@ public class Home extends AppCompatActivity{
 
     private void signOut(){
         //Delete Firebase Instance Id
-        try {
-            FirebaseInstanceId.getInstance().deleteInstanceId();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        HandleTopics.unsubscribeFromAllTopics(this);
+
         GlobalVar.resetValues();
         auth.signOut();
         if(GoogleSignIn.getLastSignedInAccount(this) == null){
