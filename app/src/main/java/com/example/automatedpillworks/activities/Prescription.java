@@ -31,6 +31,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.PatientInfoModel;
 import com.example.automatedpillworks.R;
 import com.example.automatedpillworks.databinding.ActivityPrescriptionBinding;
 import com.google.android.gms.common.internal.GmsLogger;
@@ -65,6 +66,12 @@ public class Prescription extends AppCompatActivity {
     FloatingActionButton download;
     ActivityPrescriptionBinding binding;
     String daysname[];
+
+    //Data
+    PatientInfoModel data;
+
+    //Firebase objects
+    FirebaseDatabase database;
 
     class RecyclerAdap1 extends RecyclerView.Adapter<Prescription.RecyclerAdap1.viewHolder>{
 
@@ -187,6 +194,8 @@ public class Prescription extends AppCompatActivity {
         setSupportActionBar(toolbar);
         rv = findViewById(R.id.pres_rv);
 
+        database = FirebaseDatabase.getInstance();
+
         //Setup Recycler View
         setUpRecyclerView();
 
@@ -195,9 +204,16 @@ public class Prescription extends AppCompatActivity {
         daysname = getResources().getStringArray(R.array.days);
 
 
+    }
 
 
 
+    void showInfo(){
+        binding.patientName.setText(data.getPatientName());
+        binding.doctorName.setText(data.getDoctorName());
+        binding.gender.setText(getResources().getStringArray(R.array.gender)[data.getGender()]);
+        binding.blood.setText(getResources().getStringArray(R.array.bloodgroup)[data.getBloodGroup()]);
+        binding.weight.setText(String.valueOf(data.getWeight()));
     }
 
     void setUpRecyclerView(){
@@ -209,6 +225,13 @@ public class Prescription extends AppCompatActivity {
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                //Getting patient Data
+                data = dataSnapshot.child("info").getValue(PatientInfoModel.class);
+                if(data == null){
+                    Toast.makeText(Prescription.this, "Please enter patient's data", Toast.LENGTH_SHORT).show();
+                }else{
+                    showInfo();
+                }
                 int i=0;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
                     if(!(snap.getKey().equals("uid") || snap.getKey().equals("info"))){

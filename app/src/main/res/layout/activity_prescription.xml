@@ -58,9 +58,30 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="left"
+                android:layout_marginTop="10dp"
+                android:layout_marginLeft="20dp"
+                android:layout_weight="1"
+                android:text="Doctor's Name"
+                android:textAppearance="@style/TitleTextAppearnce" />
+
+            <TextView
+                android:id="@+id/doctor_name"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
+                android:layout_marginLeft="20dp"
+                android:layout_marginTop="5dp"
+                android:textAppearance="@style/SubTitleAppearance"
+                android:textSize="18sp"
+                tools:text="Om Singh" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="left"
                 android:layout_marginLeft="20dp"
                 android:text="Medical Info"
-                android:layout_marginTop="20dp"
+                android:layout_marginTop="10dp"
                 android:textAppearance="@style/TitleTextAppearnce" />
 
             <LinearLayout
@@ -82,6 +103,7 @@
 
                     <TextView
                         android:id="@+id/gender"
+                        android:paddingLeft="20dp"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:textAppearance="@style/SubTitleAppearance"
@@ -100,6 +122,7 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:paddingLeft="20dp"
                         android:id="@+id/blood"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -119,6 +142,7 @@
                         android:textSize="18sp" />
 
                     <TextView
+                        android:paddingLeft="20dp"
                         android:id="@+id/weight"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
