@@ -127,12 +127,15 @@
             <com.google.android.material.textfield.TextInputLayout
                 android:layout_marginVertical="10dp"
                 android:layout_width="match_parent"
+                app:startIconDrawable="@drawable/icon_weight"
                 android:layout_height="match_parent">
 
                 <com.google.android.material.textfield.TextInputEditText
                     android:id="@+id/weight"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:inputType="number"
+                    android:maxLength="3"
                     android:hint="Weight" />
             </com.google.android.material.textfield.TextInputLayout>
 

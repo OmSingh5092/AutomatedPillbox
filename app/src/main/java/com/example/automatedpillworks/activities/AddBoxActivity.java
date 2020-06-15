@@ -51,7 +51,7 @@ public class AddBoxActivity extends AppCompatActivity{
     FirebaseDatabase database;
 
     //Selectable Data
-    Integer bloodGroup,gender;
+    Integer bloodGroup,gender,weight;
     Long dob;
 
 
@@ -108,7 +108,7 @@ public class AddBoxActivity extends AppCompatActivity{
                     }
                 },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
 
-                dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                dialog.getDatePicker().setMaxDate(calendar.getTimeInMillis());
                 dialog.show();
             }
         });
@@ -171,7 +171,7 @@ public class AddBoxActivity extends AppCompatActivity{
 
     void pushInfo(String boxId){
         PatientInfoModel model = new PatientInfoModel(binding.patientName.getText().toString(),
-                binding.doctorName.getText().toString(),dob,gender,bloodGroup);
+                binding.doctorName.getText().toString(),dob,gender,bloodGroup,weight);
         database.getReference("boxes").child(boxId).child("info").setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
             @Override
             public void onSuccess(Void aVoid) {

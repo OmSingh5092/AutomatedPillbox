@@ -262,6 +262,9 @@ public class Home extends AppCompatActivity{
         }else if(item.getItemId() == R.id.nav_home_newbox){
             Intent i = new Intent(this, NewBoxActivity.class);
             startActivity(i);
+        }else if(item.getItemId() == R.id.nav_home_patient_info){
+            Intent i = new Intent(this,PatientInfoActivity.class);
+            startActivity(i);
         }
 
 
