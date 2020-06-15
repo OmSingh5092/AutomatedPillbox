@@ -4,6 +4,7 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 import androidx.constraintlayout.widget.ConstraintLayout;
+import androidx.core.content.FileProvider;
 import androidx.core.widget.NestedScrollView;
 import androidx.recyclerview.widget.GridLayoutManager;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -25,9 +26,9 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.HorizontalScrollView;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.R;
@@ -39,12 +40,23 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
+import com.itextpdf.io.image.ImageData;
+import com.itextpdf.io.image.ImageDataFactory;
+import com.itextpdf.kernel.geom.PageSize;
+import com.itextpdf.kernel.geom.Rectangle;
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Image;
+import com.itextpdf.layout.element.Paragraph;
 //import com.hendrix.pdfmyxml.viewRenderer.AbstractViewRenderer;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.Inet4Address;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 public class Prescription extends AppCompatActivity {
@@ -215,9 +227,7 @@ public class Prescription extends AppCompatActivity {
 
                         }
                         i++;
-
                     }
-
                 }
 
                 RecyclerAdap adapter = new RecyclerAdap(course,i);
@@ -252,7 +262,7 @@ public class Prescription extends AppCompatActivity {
         Bitmap b = getBitmapFromView(u,totalHeight,totalWidth);
 
         //Save bitmap
-        String extr = Environment.getExternalStorageDirectory()+"/report.jpg";
+        String extr = Environment.getExternalStorageDirectory()+"/report.png";
         File myPath = new File(extr);
         FileOutputStream fos = null;
         try {
@@ -269,10 +279,42 @@ public class Prescription extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        Intent intent = new Intent();
-        intent.setAction(Intent.ACTION_VIEW);
-        intent.setDataAndType(Uri.parse(extr), "image/*");
-        startActivity(intent);
+        convertBitmapToPDF(myPath,totalHeight,totalWidth);
+    }
+
+    private void convertBitmapToPDF(File imagePath,int height,int width){
+        //Making Directory if not present
+        File file = new File(Environment.getExternalStorageDirectory(),"pillbox");
+        if(!file.exists()){
+            file.mkdir();
+        }
+        File pdfFile = new File(file,"prescription.pdf");
+
+        PdfDocument pdf = null;
+        try {
+            FileOutputStream outputStream = new FileOutputStream(pdfFile);
+            pdf = new PdfDocument(new PdfWriter(outputStream));
+            PageSize pageSize = new PageSize(width,height);
+            Document document = new Document(pdf,pageSize);
+            ImageData imageData = ImageDataFactory.create(imagePath.getAbsolutePath());
+            Image image = new Image(imageData);
+            document.add(image);
+            document.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
+
+        //Opening Pdf
+        //Getting content uri to share
+        Uri contentUri = FileProvider.getUriForFile(this,"com.example.automatedpillworks.provider",pdfFile);
+        Intent i = new Intent();
+        i.setAction(Intent.ACTION_VIEW);
+        i.setDataAndType(contentUri,"application/pdf");
+        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        startActivity(i);
+
     }
 
     public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
