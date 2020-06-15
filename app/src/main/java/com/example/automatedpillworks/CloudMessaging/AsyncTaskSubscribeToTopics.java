@@ -41,7 +41,7 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
         try {
             FirebaseMessaging messaging = FirebaseMessaging.getInstance();
             for (String topic : topics) {
-                messaging.subscribeToTopic("/boxes/"+topic).addOnFailureListener(new OnFailureListener() {
+                messaging.subscribeToTopic(topic).addOnFailureListener(new OnFailureListener() {
                     @Override
                     public void onFailure(@NonNull Exception e) {
                         Log.e("Subscription Failure",e.getMessage());
@@ -49,12 +49,12 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
                 }).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
-                        Log.i("Success","Subscription Successfull");
+                        Log.i("Success","Subscription Successful");
                     }
                 });
             }
             //Subscribing to client group (Topic = UID)
-            messaging.subscribeToTopic("/users/"+auth.getUid());
+            messaging.subscribeToTopic(auth.getUid());
 
             FirebaseInstanceId.getInstance().getInstanceId().addOnCompleteListener(new OnCompleteListener<InstanceIdResult>() {
                 @Override

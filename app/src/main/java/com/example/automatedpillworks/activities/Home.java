@@ -20,13 +20,11 @@ import android.widget.ImageView;
 import android.widget.PopupMenu;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.automatedpillworks.CloudMessaging.HandleTopics;
 import com.example.automatedpillworks.GlobalVar;
 import com.example.automatedpillworks.Model.UserInfoModel;
 import com.example.automatedpillworks.R;
-import com.example.automatedpillworks.adapters.NewBoxAdapter;
+import com.example.automatedpillworks.utils.UserHandler;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.appbar.MaterialToolbar;
@@ -42,9 +40,6 @@ import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.EventListener;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreException;
-import com.google.firebase.iid.FirebaseInstanceId;
-
-import java.io.IOException;
 
 public class Home extends AppCompatActivity{
 
@@ -271,14 +266,10 @@ public class Home extends AppCompatActivity{
     }
 
     private void signOut(){
-        //Delete Firebase Instance Id
-        HandleTopics.unsubscribeFromAllTopics(this);
 
-        GlobalVar.resetValues();
-        auth.signOut();
-        if(GoogleSignIn.getLastSignedInAccount(this) == null){
+        new UserHandler(this).logOutUser();
 
-        }
+
     }
 
     void setupRecyclerViewAndTitle(){

@@ -11,6 +11,7 @@
         <item name = "materialButtonStyle">@style/AppMaterialButtonStyle</item>
         <item name="materialCardViewStyle">@style/AppMaterialCardViewStyle</item>
         <item name = "imageButtonStyle">@style/AppImageButtonStyle</item>
+        <item name="navigationViewStyle">@style/AppNavigationViewStyle</item>
     </style>
 
 
@@ -37,10 +38,16 @@
     <style name="AppImageButtonStyle" parent="Widget.AppCompat.ImageButton">
     </style>
 
+    <style name="AppNavigationViewStyle" parent="Widget.Design.NavigationView">
+        <item name="itemTextAppearance">@style/NavigationViewText</item>
+    </style>
+
+    <!-- Text Appearances -->
     <style name="TitleTextAppearnce" parent="TextAppearance.AppCompat">
         <item name="android:textSize">20dp</item>
         <item name="android:textStyle">bold</item>
     </style>
+
     <style name="SubTitleAppearance" parent="TextAppearance.AppCompat">
         <item name="android:textColor">@color/primary_text</item>
         <item name="android:textSize">20dp</item>
@@ -53,6 +60,11 @@
 
     <style name="ExpandedTitleAppearance" parent="TextAppearance.Design.CollapsingToolbar.Expanded">
         <item name="android:textColor">#ffffff</item>
+    </style>
+
+    <style name="NavigationViewText" parent="TextAppearance.AppCompat">
+        <item name="android:textColor">@color/primary_text</item>
+        <item name="fontFamily">@font/baloo</item>
     </style>
 
     <style name="GeneralRoundButton" parent ="Widget.AppCompat.Button">

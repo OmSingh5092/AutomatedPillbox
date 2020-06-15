@@ -64,7 +64,6 @@ public class Signup extends AppCompatActivity {
     UserAdditional userAdditional;
     UserData userData;
 
-
     //Firebase Objects
     StorageReference storage;
     FirebaseAuth auth;
@@ -82,8 +81,6 @@ public class Signup extends AppCompatActivity {
                 .withAspectRatio(5f, 5f)
                 .start(this);
     }
-
-
 
     private File getImageFile() throws IOException {
         String currentPhotoPath = "";
@@ -115,9 +112,6 @@ public class Signup extends AppCompatActivity {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
-
-
         }
         else if (requestCode == UCrop.REQUEST_CROP && resultCode == RESULT_OK) {
             imageUri = UCrop.getOutput(data);
@@ -125,17 +119,13 @@ public class Signup extends AppCompatActivity {
             try {
                 InputStream inputStream = new FileInputStream(file);
                 profileImage = BitmapFactory.decodeStream(inputStream);
-                BitmapDrawable ob = new BitmapDrawable(getResources(), profileImage);
+                imageButton.setImageBitmap(profileImage);
                 uploadImage();
-                imageButton.setBackground(ob);
             }catch (Exception e) {
                 e.printStackTrace();
             }
         }
-
-
     }
-
 
     void askStoragePermissoin(){
 
@@ -185,7 +175,6 @@ public class Signup extends AppCompatActivity {
                 startActivityForResult(Intent.createChooser(pictureIntent,"Select Picture"), PICK_IMAGE);  // 4
             }
         });
-
 
         next.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -288,8 +277,6 @@ public class Signup extends AppCompatActivity {
             }
         });
     }
-
-
 
     @Override
     protected void onStart() {

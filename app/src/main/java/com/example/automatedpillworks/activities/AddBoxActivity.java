@@ -51,8 +51,8 @@ public class AddBoxActivity extends AppCompatActivity{
     FirebaseDatabase database;
 
     //Selectable Data
-    Integer bloodGroup,gender,weight;
-    Long dob;
+    int bloodGroup,gender,weight;
+    long dob;
 
 
     @Override
