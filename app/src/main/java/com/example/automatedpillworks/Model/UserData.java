@@ -18,4 +18,11 @@ public class UserData {
     public UserData(){
 
     }
+
+    public void setUserInfo(UserInfoModel userInfo){
+        this.userInfo = userInfo;
+    }
+    public void setUserAdditional(UserAdditional userAdditional){
+        this.userAdditional = userAdditional;
+    }
 }

@@ -65,9 +65,6 @@ public class EditProfileActivity extends AppCompatActivity {
         //Setting up toolbar
         setSupportActionBar(binding.toolbar);
 
-        //Setting up Radio groups
-        initRadioGroups();
-
         //Loading Data
         loadData();
 
@@ -78,29 +75,6 @@ public class EditProfileActivity extends AppCompatActivity {
 
         //Setting up Email
         binding.email.setText(GlobalVar.userData.userInfo.userprofile.email);
-
-
-        binding.dobButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                initDatePickerDialog();
-            }
-        });
-
-        binding.radiogroupBlood.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                model.blood = binding.radiogroupBlood.indexOfChild(findViewById(checkedId));
-            }
-        });
-
-        binding.radiogroupGender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
-            @Override
-            public void onCheckedChanged(RadioGroup group, int checkedId) {
-                model.gender = binding.radiogroupGender.indexOfChild(findViewById(checkedId));
-            }
-        });
-
     }
 
     void loadData(){
@@ -109,20 +83,8 @@ public class EditProfileActivity extends AppCompatActivity {
         binding.profileImage.setImageBitmap(GlobalVar.userData.userAdditional.profileImage);
         binding.firstname.setText(model.firstname);
         binding.lastname.setText(model.lastname);
-        binding.dobButton.setText(
-                DateFormats.onlyDay(model.dob)
-        );
         binding.address.setText(model.address);
-        binding.weight.setText(model.weight.toString());
-
-        binding.radiogroupGender.check(
-                binding.radiogroupGender.getChildAt(model.gender)
-                        .getId()
-        );
-        binding.radiogroupBlood.check(
-                binding.radiogroupBlood.getChildAt(model.blood)
-                        .getId()
-        );
+        binding.phone.setText(model.phone);
         binding.changeProfileImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -135,7 +97,7 @@ public class EditProfileActivity extends AppCompatActivity {
         model.firstname = binding.firstname.getText().toString();
         model.lastname = binding.lastname.getText().toString();
         model.address = binding.address.getText().toString();
-        model.weight= Long.valueOf(binding.weight.getText().toString());
+        model.phone = binding.phone.getText().toString();
 
         if(isFilled()){
             GlobalVar.userData.userInfo.userprofile = model;
@@ -176,33 +138,8 @@ public class EditProfileActivity extends AppCompatActivity {
 
 
 
-    void initRadioGroups(){
-        int i=0;
-        for(String blood: getResources().getStringArray(R.array.bloodgroup)){
-            RadioButton radioButton = new RadioButton(this);
-            radioButton.setText(blood);
-            binding.radiogroupBlood.addView(radioButton,i);
-        }
 
-    }
 
-    void initDatePickerDialog(){
-        Calendar calendar = Calendar.getInstance();
-        DatePickerDialog dialog = new DatePickerDialog(this, new DatePickerDialog.OnDateSetListener() {
-            @Override
-            public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
-                Calendar tempCalendar = Calendar.getInstance();
-                tempCalendar.set(Calendar.YEAR, year);
-                tempCalendar.set(Calendar.DAY_OF_MONTH,month);
-                tempCalendar.set(Calendar.DAY_OF_MONTH, dayOfMonth);
-                model.dob = tempCalendar.getTimeInMillis();
-
-                //Setting text on Button
-                binding.dobButton.setText(DateFormats.onlyDay(model.dob));
-            }
-        },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
-        dialog.show();
-    }
 
     boolean isFilled(){
         if(model.firstname.length() ==0){
@@ -211,10 +148,9 @@ public class EditProfileActivity extends AppCompatActivity {
         }else if(model.lastname.length() ==0){
             Toast.makeText(this, "Please enter Lastname", Toast.LENGTH_SHORT).show();
             return false;
-        }else if(binding.weight.getText().toString().length() ==0){
-            Toast.makeText(this, "Please Enter weight", Toast.LENGTH_SHORT).show();
-            return false;
-        }else if(model.address.length() ==0){
+        }else if(model.phone.length() == 0){
+            Toast.makeText(this, "Please enter Phone Number", Toast.LENGTH_SHORT).show();
+        } else if(model.address.length() ==0){
             Toast.makeText(this, "Please Enter Address", Toast.LENGTH_SHORT).show();
             return false;
         }

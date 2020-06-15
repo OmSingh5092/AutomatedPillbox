@@ -256,8 +256,7 @@ public class Scanner extends AppCompatActivity{
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 //Setting boxid
-                GlobalVar.signUpTemp.userInfo.boxes.add(result.getContents());
-                GlobalVar.signUpTemp.userInfo.boxnames.put(result.getContents(),getResources().getString(R.string.default_box_name));
+                GlobalVar.Initialisation.scannedBox = result.getContents();
                 Toast.makeText(this, "Scanned:"+result.getContents(), Toast.LENGTH_LONG).show();
                 switchActivity();
             }

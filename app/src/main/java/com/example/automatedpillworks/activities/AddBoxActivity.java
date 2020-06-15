@@ -3,26 +3,31 @@ package com.example.automatedpillworks.activities;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.constraintlayout.widget.ConstraintLayout;
 import androidx.core.app.ActivityCompat;
 import androidx.core.content.ContextCompat;
 
 import android.Manifest;
+import android.app.DatePickerDialog;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
 import android.view.View;
-import android.widget.ImageButton;
+import android.widget.DatePicker;
+import android.widget.RadioGroup;
 import android.widget.Toast;
 
 import com.example.automatedpillworks.CloudMessaging.AsyncTaskSubscribeToTopics;
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.PatientInfoModel;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.databinding.ActivityAddBoxBinding;
 import com.example.automatedpillworks.utils.BasicFunctions;
-import com.google.android.material.appbar.MaterialToolbar;
-import com.google.android.material.button.MaterialButton;
+import com.example.automatedpillworks.utils.DateFormats;
+import com.example.automatedpillworks.utils.RadioGroupItemAdder;
+import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.snackbar.Snackbar;
-import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -34,18 +39,147 @@ import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 
 public class AddBoxActivity extends AppCompatActivity{
-    ImageButton qr;
-    TextInputEditText boxinput,boxname;
-    MaterialButton submit;
+    ActivityAddBoxBinding binding;
+
+    //Firebase Objects
     FirebaseFirestore firestore;
-    FirebaseDatabase database;
     FirebaseAuth auth;
-    ConstraintLayout cl;
+    FirebaseDatabase database;
+
+    //Selectable Data
+    Integer bloodGroup,gender;
+    Long dob;
 
 
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+        super.onCreate(savedInstanceState);
+        binding = ActivityAddBoxBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
+        //Setting Toolbar
+        setSupportActionBar(binding.toolbar);
+
+        //Initialising Firebase Instances
+        firestore = FirebaseFirestore.getInstance();
+        auth = FirebaseAuth.getInstance();
+        database = FirebaseDatabase.getInstance();
+
+        //Checking Permission
+        checkPermission();
+
+        //RadioButtons
+        initRadioButtons();
+
+        //Dob
+        initDobButton();
+
+        binding.scan.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                new IntentIntegrator(AddBoxActivity.this)
+                        .setOrientationLocked(false)
+                        .setPrompt(getResources().getString(R.string.qr_scanner_prompt)).initiateScan();
+
+            }
+        });
+    }
+
+    void initDobButton(){
+        binding.dob.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                //Date Picker Dialog
+                Calendar calendar = Calendar.getInstance();
+                DatePickerDialog dialog = new DatePickerDialog(AddBoxActivity.this, new DatePickerDialog.OnDateSetListener() {
+                    @Override
+                    public void onDateSet(DatePicker view, int year, int month, int dayOfMonth) {
+                        Calendar calendar = Calendar.getInstance();
+                        calendar.set(Calendar.YEAR,year);
+                        calendar.set(Calendar.MONTH,month);
+                        calendar.set(Calendar.DAY_OF_MONTH,dayOfMonth);
+                        dob = calendar.getTimeInMillis();
+
+                        //Setting date on Button
+                        binding.dob.setText(DateFormats.onlyDay(dob));
+                    }
+                },calendar.get(Calendar.YEAR),calendar.get(Calendar.MONTH),calendar.get(Calendar.DAY_OF_MONTH));
+
+                dialog.getDatePicker().setMinDate(calendar.getTimeInMillis());
+                dialog.show();
+            }
+        });
+    }
+
+    void initRadioButtons(){
+        RadioGroupItemAdder adder = new RadioGroupItemAdder(this);
+        adder.addBloodGroups(binding.bloodGroup);
+        adder.addGenders(binding.gender);
+
+        binding.gender.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                gender = group.indexOfChild(findViewById(checkedId));
+            }
+        });
+
+        binding.bloodGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(RadioGroup group, int checkedId) {
+                bloodGroup = group.indexOfChild(findViewById(checkedId));
+            }
+        });
+
+    }
+
+    void onSubmit(){
+
+        //Closing Keyboard
+        BasicFunctions.hideKeyboard(AddBoxActivity.this);
+        if(!isFilled()){
+            return;
+        }
+
+        final String id = binding.boxid.getText().toString();
+        //Checking if box is previously added
+        if(GlobalVar.userData.userInfo.boxes.contains(id)){
+            Snackbar.make(findViewById(R.id.doctor_name),"Box already added!",Snackbar.LENGTH_SHORT).show();
+            return;
+        }
+        //Checking the permission
+        database.getReference().child("boxes").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if(dataSnapshot.exists()){
+                    addBox(id,binding.boxname.getText().toString());
+                    pushInfo(id);
+                }else{
+                    Snackbar.make(findViewById(R.id.doctor_name),"Box Not Found!", Snackbar.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                Snackbar.make(findViewById(R.id.doctor_name),databaseError.getMessage(),Snackbar.LENGTH_LONG).show();
+            }
+        });
+    }
+
+    void pushInfo(String boxId){
+        PatientInfoModel model = new PatientInfoModel(binding.patientName.getText().toString(),
+                binding.doctorName.getText().toString(),dob,gender,bloodGroup);
+        database.getReference("boxes").child(boxId).child("info").setValue(model).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Toast.makeText(AddBoxActivity.this, "Box successfully added", Toast.LENGTH_SHORT).show();
+                finish();
+            }
+        });
+    }
 
     void addBox(String id, final String name){
         //Starting Async Task to subscribe to FCM topics
@@ -64,76 +198,14 @@ public class AddBoxActivity extends AppCompatActivity{
                 .document(auth.getUid()).update("boxes",FieldValue.arrayUnion(id));
     }
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_add_box);
-        //Setting Toolbar
-        MaterialToolbar toolbar = findViewById(R.id.add_box_toolbar);
-        setSupportActionBar(toolbar);
-        //Refrencing Objects
-
-        qr = findViewById(R.id.add_box_qr);
-        boxinput = findViewById(R.id.add_box_boxid);
-        submit = findViewById(R.id.add_box_submit);
-        boxname = findViewById(R.id.add_box_boxname);
-
-        //Initialising Firebase Instances
-        firestore = FirebaseFirestore.getInstance();
-        auth = FirebaseAuth.getInstance();
-        database = FirebaseDatabase.getInstance();
-
-        //Checking Permission
-        checkPermission();
-
-
-        submit.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                //Closing Keyboard
-                BasicFunctions.hideKeyboard(AddBoxActivity.this);
-                if(isFilled()){
-                    final String id = boxinput.getText().toString();
-                    //Checking if box is previously added
-                    if(GlobalVar.userData.userInfo.boxes.contains(id)){
-                        Snackbar.make(findViewById(R.id.add_box_layout),"Box already added!",Snackbar.LENGTH_SHORT).show();
-                        return;
-                    }
-                    //Checking the permission
-                    database.getReference().child("boxes").child(id).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
-                            if(dataSnapshot.exists()){
-                                addBox(id,boxname.getText().toString());
-                            }else{
-                                Snackbar.make(findViewById(R.id.add_box_layout),"Box Not Found!", Snackbar.LENGTH_SHORT).show();
-                            }
-
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError databaseError) {
-                            Snackbar.make(findViewById(R.id.add_box_layout),databaseError.getMessage(),Snackbar.LENGTH_LONG).show();
-                        }
-                    });
-                }
-            }
-        });
-
-        qr.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-
-                new IntentIntegrator(AddBoxActivity.this)
-                        .setOrientationLocked(false)
-                        .setPrompt(getResources().getString(R.string.qr_scanner_prompt)).initiateScan();
-
-            }
-        });
-    }
-
     Boolean isFilled(){
-        if(boxinput.getText().toString().length() ==0){
+        if(binding.boxname.getText().toString().length() ==0){
+            return false;
+        }else if(binding.boxid.getText().toString().length()==0){
+            return false;
+        }else if(binding.patientName.getText().toString().length() ==0){
+            return false;
+        }else if(binding.doctorName.getText().toString().length()==0){
             return false;
         }
 
@@ -166,12 +238,26 @@ public class AddBoxActivity extends AppCompatActivity{
                 Toast.makeText(this, "Cancelled", Toast.LENGTH_LONG).show();
             } else {
                 //Setting boxid in the edit text
-                boxinput.setText(result.getContents());
+                binding.boxid.setText(result.getContents());
                 Toast.makeText(this, "Scanned: ", Toast.LENGTH_LONG).show();
             }
         } else {
             super.onActivityResult(requestCode, resultCode, data);
         }
+    }
+
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.add_box_menu,menu);
+        return super.onCreateOptionsMenu(menu);
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if(item.getItemId() == R.id.save){
+            onSubmit();
+        }
+        return super.onOptionsItemSelected(item);
     }
 }
 

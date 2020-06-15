@@ -43,10 +43,8 @@ public class ProfileActivity extends AppCompatActivity {
 
         //Setting General Info
         binding.infoAddress.setText(GlobalVar.userData.userInfo.userprofile.address);
+        binding.infoPhone.setText(GlobalVar.userData.userInfo.userprofile.phone);
         //Setting Med Info
-        binding.medInfoBlood.setText(getResources().getStringArray(R.array.bloodgroup)[GlobalVar.userData.userInfo.userprofile.blood]);
-        binding.medInfoGender.setText(getResources().getStringArray(R.array.gender)[GlobalVar.userData.userInfo.userprofile.gender]);
-        binding.medInfoWeight.setText(GlobalVar.userData.userInfo.userprofile.weight.toString());
 
         //Setting User Profile Picture
         binding.image.setImageBitmap(GlobalVar.userData.userAdditional.profileImage);

@@ -174,6 +174,9 @@ public class Prescription extends AppCompatActivity {
         ArrayList<Days> day;
     }
 
+    final Course course[] = new Course[8];
+    DatabaseReference myRef;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -184,23 +187,31 @@ public class Prescription extends AppCompatActivity {
         setSupportActionBar(toolbar);
         rv = findViewById(R.id.pres_rv);
 
-        //Setting info
-        setInfo();
+        //Setup Recycler View
+        setUpRecyclerView();
 
 
 
         daysname = getResources().getStringArray(R.array.days);
 
-        final Course course[] = new Course[8];
 
-        DatabaseReference myRef = FirebaseDatabase.getInstance().getReference("boxes").child(GlobalVar.currentBox);
 
+
+
+    }
+
+    void setUpRecyclerView(){
+        if(GlobalVar.currentBox == null){
+            Toast.makeText(this, "No box has been added", Toast.LENGTH_SHORT).show();
+            return ;
+        }
+        myRef = FirebaseDatabase.getInstance().getReference("boxes").child(GlobalVar.currentBox);
         myRef.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 int i=0;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    if(!snap.getKey().equals("uid")){
+                    if(!(snap.getKey().equals("uid") || snap.getKey().equals("info"))){
                         course[i] = new Course();
                         if(snap.child("medicine").exists()) {
                             course[i].medname = snap.child("medicine").getValue(String.class);
@@ -243,13 +254,7 @@ public class Prescription extends AppCompatActivity {
 
         rv.setHasFixedSize(true);
         rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-    }
 
-    void setInfo(){
-        binding.name.setText(GlobalVar.userData.userInfo.userprofile.firstname+ " "
-                + GlobalVar.userData.userInfo.userprofile.lastname);
-        binding.gender.setText(getResources().getStringArray(R.array.gender)[GlobalVar.userData.userInfo.userprofile.gender]);
-        binding.blood.setText(getResources().getStringArray(R.array.bloodgroup)[GlobalVar.userData.userInfo.userprofile.blood]);
     }
 
     void getBitmap(){
@@ -329,7 +334,6 @@ public class Prescription extends AppCompatActivity {
         view.draw(canvas);
         return returnedBitmap;
     }
-
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {

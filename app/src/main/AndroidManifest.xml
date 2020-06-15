@@ -34,7 +34,6 @@
         <activity android:name=".activities.Prescription" />
         <activity android:name=".activities.Home" />
         <activity android:name=".activities.Signup" />
-        <activity android:name=".activities.Signup1" />
         <activity android:name=".activities.Scanner" >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -74,7 +74,7 @@ public class NewBoxAdapter extends RecyclerView.Adapter<NewBoxAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             boxId = binding.boxid;
-            boxName = binding.name;
+            boxName = binding.patientName;
             save = binding.save;
         }
     }

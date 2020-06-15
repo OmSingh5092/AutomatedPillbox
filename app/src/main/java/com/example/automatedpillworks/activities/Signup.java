@@ -15,18 +15,26 @@ import android.graphics.drawable.BitmapDrawable;
 import android.net.Uri;
 import android.os.Bundle;
 import android.os.Environment;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.Toast;
 
 import com.example.automatedpillworks.GlobalVar;
+import com.example.automatedpillworks.Model.UserAdditional;
+import com.example.automatedpillworks.Model.UserData;
+import com.example.automatedpillworks.Model.UserInfoModel;
+import com.example.automatedpillworks.Model.UserProfileModel;
 import com.example.automatedpillworks.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.UserInfo;
+import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.OnProgressListener;
 import com.google.firebase.storage.StorageReference;
@@ -38,19 +46,29 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class Signup extends AppCompatActivity {
     ImageView imageButton;
     Button next,gallery;
     ProgressBar pb;
-    TextInputEditText firstname,lastname,address;
+    TextInputEditText firstname,lastname,address,phonenumber;
     String boxname;
     Bitmap profileImage;
+
+    UserProfileModel profileData;
+    UserInfoModel userInfo;
+    UserAdditional userAdditional;
+    UserData userData;
 
 
     //Firebase Objects
     StorageReference storage;
     FirebaseAuth auth;
+    FirebaseFirestore firestore;
 
     Boolean isPhotoUploaded = false;
 
@@ -145,24 +163,22 @@ public class Signup extends AppCompatActivity {
         firstname = findViewById(R.id.signup_firstname);
         lastname = findViewById(R.id.signup_lastname);
         address = findViewById(R.id.signup_address);
+        phonenumber = findViewById(R.id.signup_phonenumber);
 
         //Firebase Instantation
         storage = FirebaseStorage.getInstance().getReference();
         auth = FirebaseAuth.getInstance();
+        firestore = FirebaseFirestore.getInstance();
 
         //Asking Storage Permission
         askStoragePermissoin();
 
-        //Refrencing the tempSignup
-
-
-
-
+        //Filling details in fields
+        fillDetails();
 
         gallery.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 Intent pictureIntent = new Intent(Intent.ACTION_GET_CONTENT);
                 pictureIntent.setType("image/*");  // 1
                 pictureIntent.addCategory(Intent.CATEGORY_OPENABLE);
@@ -175,24 +191,36 @@ public class Signup extends AppCompatActivity {
             @Override
             public void onClick(View v) {
 
-                if(isFilled()){
-                    GlobalVar.signUpTemp.userInfo.userprofile.firstname= firstname.getText().toString();
-                    GlobalVar.signUpTemp.userInfo.userprofile.lastname = lastname.getText().toString();
-                    GlobalVar.signUpTemp.userInfo.userprofile.address = address.getText().toString();
+            if(isFilled()){
+                profileData = new UserProfileModel(firstname.getText().toString(),lastname.getText().toString(),
+                        phonenumber.getText().toString(),address.getText().toString(),auth.getCurrentUser().getEmail());
+                userAdditional = new UserAdditional(profileImage);
 
-                    //Saving the profile photo
-
-                    GlobalVar.signUpTemp.userAdditional.profileImage = profileImage;
-                    swithActivity();
+                userInfo = new UserInfoModel();
+                userInfo.setUserprofile(profileData);
+                if(GlobalVar.Initialisation.scannedBox !=null){
+                    userInfo.addNewBox(GlobalVar.Initialisation.scannedBox);
                 }
+                userData = new UserData();
+                userData.setUserInfo(userInfo);
+                userData.setUserAdditional(userAdditional);
 
+                uploadData();
+            }
 
             }
         });
     }
 
+    void fillDetails(){
+        if(auth.getCurrentUser().getPhoneNumber() !=null){
+            phonenumber.setText(auth.getCurrentUser().getPhoneNumber());
+        }
+    }
+
     void swithActivity(){
-        Intent i = new Intent(this,Signup1.class);
+        Intent i = new Intent(Signup.this,Scanner.class);
+        i.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK|Intent.FLAG_ACTIVITY_CLEAR_TOP);
         startActivity(i);
     }
 
@@ -226,6 +254,44 @@ public class Signup extends AppCompatActivity {
         });
     }
 
+    void uploadData(){
+        firestore.collection(getResources().getString(R.string.firestor_base_user_collection))
+                .document(auth.getUid())
+                .set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                Log.d("firestore", "DocumentSnapshot successfully written!");
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Log.w("firestore","Error uploading document",e);
+            }
+        }).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                makeCollectionForTokens();
+            }
+        });
+    }
+
+    void makeCollectionForTokens(){
+        Map<String, List<String>> tempdata = new HashMap<>();
+        tempdata.put(("tokens"),new ArrayList<String>());
+        firestore.collection("registrationToken").document(auth.getUid()).set(tempdata).addOnSuccessListener(new OnSuccessListener<Void>() {
+            @Override
+            public void onSuccess(Void aVoid) {
+                GlobalVar.userData = userData;
+                swithActivity();
+            }
+        }).addOnFailureListener(new OnFailureListener() {
+            @Override
+            public void onFailure(@NonNull Exception e) {
+                Toast.makeText(Signup.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
 
 
     @Override
@@ -240,7 +306,6 @@ public class Signup extends AppCompatActivity {
         }else if(!isPhotoUploaded){
             return false;
         }
-
         return true;
     }
 }

@@ -86,138 +86,70 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="10dp"
                 android:layout_gravity="center">
-
                 <LinearLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_margin="20dp">
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
 
-                    <TextView
-                        android:layout_width="wrap_content"
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
-                        android:text="Address"
-                        android:textAppearance="@style/SubTitleAppearance"
-                        android:textSize="14sp" />
+                        android:orientation="horizontal"
+                        android:layout_margin="20dp">
 
-                    <TextView
-                        android:id="@+id/info_address"
-                        android:layout_width="wrap_content"
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:text="Phone Number"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/info_phone"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="14sp"
+                            tools:text="B2/40 Tulsi Ghat" />
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginHorizontal="10dp"
-                        android:textAppearance="@style/SubTitleAppearance"
-                        android:textSize="14sp"
-                        tools:text="B2/40 Tulsi Ghat" />
+                        android:orientation="horizontal"
+                        android:layout_margin="20dp">
+
+                        <TextView
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:text="Address"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="14sp" />
+
+                        <TextView
+                            android:id="@+id/info_address"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginHorizontal="10dp"
+                            android:textAppearance="@style/SubTitleAppearance"
+                            android:textSize="14sp"
+                            tools:text="B2/40 Tulsi Ghat" />
+
+                    </LinearLayout>
 
                 </LinearLayout>
-            </com.google.android.material.card.MaterialCardView>
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_marginTop="30dp"
-                android:fontFamily="@font/baloo"
-                android:text="Medical Info"
-                android:textAppearance="@style/TitleTextAppearnce"
-                android:textSize="30sp" />
+            </com.google.android.material.card.MaterialCardView>
 
             <com.google.android.material.card.MaterialCardView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:layout_margin="20dp">
-
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical">
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:text="Gender"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/med_info_gender"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp"
-                            tools:text="O +" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:text="Blood Group"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/med_info_blood"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp"
-                            tools:text="O +" />
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_margin="20dp"
-                        android:orientation="horizontal">
-
-                        <TextView
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:text="Weight"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp" />
-
-                        <TextView
-                            android:id="@+id/med_info_weight"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginHorizontal="10dp"
-                            android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp"
-                            tools:text="O +" />
-
-                    </LinearLayout>
-
-
-
-                </LinearLayout>
-
-
-
-
-
-            </com.google.android.material.card.MaterialCardView>
+                android:layout_margin="20dp"/>
 
 
         </LinearLayout>

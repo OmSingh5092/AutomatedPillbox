@@ -118,97 +118,29 @@
           android:text="Lastname"
           android:textAlignment="center" />
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Date of Birth" />
-
-      <com.google.android.material.button.MaterialButton
-          android:id="@+id/dob_button"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"
-          tools:text="27 April 2020" />
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Gender" />
-
       <com.google.android.material.card.MaterialCardView
           android:id="@+id/materialCardView6"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
-          android:layout_marginTop="10dp">
-
-        <RadioGroup
-            android:id="@+id/radiogroup_gender"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal">
-
-          <com.google.android.material.radiobutton.MaterialRadioButton
-              android:id="@+id/radio_male"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="10dp"
-              android:text="Male" />
-
-          <com.google.android.material.radiobutton.MaterialRadioButton
-              android:id="@+id/radio_female"
-              android:layout_width="wrap_content"
-              android:layout_height="wrap_content"
-              android:layout_margin="10dp"
-              android:text="Female" />
-        </RadioGroup>
-      </com.google.android.material.card.MaterialCardView>
+          android:layout_marginTop="10dp"/>
 
       <TextView
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:layout_marginTop="20dp"
-          android:text="Blood Group" />
-
-      <com.google.android.material.card.MaterialCardView
-          android:id="@+id/materialCardView7"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp">
-
-        <RadioGroup
-            android:id="@+id/radiogroup_blood"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            android:padding="20dp"
-            tools:layout_height="100dp"
-            tools:layout_width="100dp" />
-      </com.google.android.material.card.MaterialCardView>
-
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Weight" />
+          android:text="Phone Number" />
 
       <EditText
-          android:id="@+id/weight"
+          android:id="@+id/phone"
           android:layout_width="wrap_content"
           android:layout_height="wrap_content"
           android:layout_gravity="center"
           android:layout_marginTop="10dp"
           android:ems="10"
-          android:inputType="number"
-          tools:text="67.5" />
+          android:inputType="textPersonName"
+          tools:text="Phone Number" />
 
       <TextView
           android:layout_width="wrap_content"

@@ -6,16 +6,22 @@
         android:title="Profile"
         />
     <item
-        android:id = "@+id/nav_home_prescription"
-        android:title="Prescription"
-        />
-    <item
         android:id = "@+id/nav_home_boxes"
         android:title="Manage Boxes"
         />
     <item
         android:id = "@+id/nav_home_newbox"
         android:title="New Boxes"/>
+
+    <item
+        android:id="@+id/nav_home_patient_info"
+        android:title="Patient Info"/>
+    <item
+        android:id = "@+id/nav_home_prescription"
+        android:title="Prescription"
+        />
+
+
     <item
         android:id = "@+id/nav_home_logout"
         android:title="Logout"/>
