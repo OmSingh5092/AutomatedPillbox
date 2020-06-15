@@ -1,0 +1,48 @@
+{
+  "project_info": {
+    "project_number": "781255540593",
+    "firebase_url": "https://automatedpillbox.firebaseio.com",
+    "project_id": "automatedpillbox",
+    "storage_bucket": "automatedpillbox.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:781255540593:android:ee5ca997a31a28f7c680d0",
+        "android_client_info": {
+          "package_name": "com.example.automatedpillworks"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "781255540593-11nfmt2dgklgncmuuqg11bdugbdsudp1.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.automatedpillworks",
+            "certificate_hash": "7268adab26487ffb5a5e506e2db0a30edbcb5865"
+          }
+        },
+        {
+          "client_id": "781255540593-4qpfo3ts3i8onr5sthe6fkc97rkc7fgl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBndD9wSFLcYwS3punefBms1jDDoJgHQtw"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "781255540593-4qpfo3ts3i8onr5sthe6fkc97rkc7fgl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

@@ -41,7 +41,17 @@ public class AsyncTaskSubscribeToTopics extends AsyncTask<String,String,String> 
         try {
             FirebaseMessaging messaging = FirebaseMessaging.getInstance();
             for (String topic : topics) {
-                messaging.subscribeToTopic("/boxes/"+topic);
+                messaging.subscribeToTopic("/boxes/"+topic).addOnFailureListener(new OnFailureListener() {
+                    @Override
+                    public void onFailure(@NonNull Exception e) {
+                        Log.e("Subscription Failure",e.getMessage());
+                    }
+                }).addOnSuccessListener(new OnSuccessListener<Void>() {
+                    @Override
+                    public void onSuccess(Void aVoid) {
+                        Log.i("Success","Subscription Successfull");
+                    }
+                });
             }
             //Subscribing to client group (Topic = UID)
             messaging.subscribeToTopic("/users/"+auth.getUid());
