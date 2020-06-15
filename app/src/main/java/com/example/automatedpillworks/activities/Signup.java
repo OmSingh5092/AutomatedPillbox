@@ -213,9 +213,6 @@ public class Signup extends AppCompatActivity {
     }
 
     void fillDetails(){
-        if(auth.getCurrentUser().getPhoneNumber() !=null){
-            phonenumber.setText(auth.getCurrentUser().getPhoneNumber());
-        }
     }
 
     void swithActivity(){
