@@ -312,7 +312,7 @@ public class Prescription extends AppCompatActivity {
         Intent i = new Intent();
         i.setAction(Intent.ACTION_VIEW);
         i.setDataAndType(contentUri,"application/pdf");
-        i.setFlags(Intent.FLAG_ACTIVITY_NO_HISTORY);
+        i.setFlags(Intent.FLAG_GRANT_READ_URI_PERMISSION);
         startActivity(i);
 
     }
