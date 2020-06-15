@@ -103,15 +103,17 @@
                             android:layout_marginHorizontal="10dp"
                             android:text="Phone Number"
                             android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp" />
+                            android:textSize="18sp" />
 
                         <TextView
+                            android:layout_weight="1"
+                            android:textAlignment="viewEnd"
                             android:id="@+id/info_phone"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp"
+                            android:textSize="18sp"
                             tools:text="B2/40 Tulsi Ghat" />
 
                     </LinearLayout>
@@ -128,15 +130,17 @@
                             android:layout_marginHorizontal="10dp"
                             android:text="Address"
                             android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp" />
+                            android:textSize="18sp" />
 
                         <TextView
+                            android:layout_weight="1"
+                            android:textAlignment="viewEnd"
                             android:id="@+id/info_address"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_marginHorizontal="10dp"
                             android:textAppearance="@style/SubTitleAppearance"
-                            android:textSize="14sp"
+                            android:textSize="18sp"
                             tools:text="B2/40 Tulsi Ghat" />
 
                     </LinearLayout>

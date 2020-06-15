@@ -78,86 +78,60 @@
       app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
     <LinearLayout
+        android:layout_marginHorizontal="20dp"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:text="First Name" />
+      <com.google.android.material.textfield.TextInputLayout
+          android:layout_marginVertical="10dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
-      <EditText
-          android:id="@+id/firstname"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"
-          android:ems="10"
-          android:inputType="textPersonName"
-          android:text="Firstname"
-          android:textAlignment="center" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/firstname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="FirstName" />
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Last Name" />
+      <com.google.android.material.textfield.TextInputLayout
+          android:layout_marginVertical="10dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
-      <EditText
-          android:id="@+id/lastname"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"
-          android:ems="10"
-          android:inputType="textPersonName"
-          android:text="Lastname"
-          android:textAlignment="center" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/lastname"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="LastName" />
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <com.google.android.material.card.MaterialCardView
-          android:id="@+id/materialCardView6"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"/>
+      <com.google.android.material.textfield.TextInputLayout
+          android:layout_marginVertical="10dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Phone Number" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/phone"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Phone" />
+      </com.google.android.material.textfield.TextInputLayout>
 
-      <EditText
-          android:id="@+id/phone"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"
-          android:ems="10"
-          android:inputType="textPersonName"
-          tools:text="Phone Number" />
+      <com.google.android.material.textfield.TextInputLayout
 
-      <TextView
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="20dp"
-          android:text="Address" />
+          android:layout_marginVertical="10dp"
+          android:layout_width="match_parent"
+          android:layout_height="match_parent">
 
-      <EditText
-          android:id="@+id/address"
-          android:layout_width="wrap_content"
-          android:layout_height="wrap_content"
-          android:layout_gravity="center"
-          android:layout_marginTop="10dp"
-          android:ems="10"
-          android:inputType="textPersonName"
-          tools:text="Address" />
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/address"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="Address" />
+      </com.google.android.material.textfield.TextInputLayout>
 
     </LinearLayout>
 
