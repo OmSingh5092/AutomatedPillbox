@@ -74,12 +74,12 @@ public class NewBoxAdapter extends RecyclerView.Adapter<NewBoxAdapter.ViewHolder
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
             boxId = binding.boxid;
-            boxName = binding.patientName;
+            boxName = binding.boxName;
             save = binding.save;
         }
     }
 
-    void saveBox(ViewHolder holder){
+    void saveBox(final ViewHolder holder){
         int position = holder.getAdapterPosition();
         if(!isFilled(holder)){
             return ;
@@ -87,10 +87,9 @@ public class NewBoxAdapter extends RecyclerView.Adapter<NewBoxAdapter.ViewHolder
 
         final String boxid = GlobalVar.userData.userInfo.newboxes.get(position);
 
-        //Adding boxname
-        GlobalVar.userData.userInfo.boxnames.put(
-                boxid,holder.boxName.getText().toString()
-        );
+
+
+        Toast.makeText(context, GlobalVar.userData.userInfo.boxnames.toString(), Toast.LENGTH_SHORT).show();
 
         //Pushing Changes to Firestore
         firestore.collection("users").document(auth.getUid()).update("newboxes", FieldValue.arrayRemove(boxid)).addOnSuccessListener(new OnSuccessListener<Void>() {
@@ -100,6 +99,10 @@ public class NewBoxAdapter extends RecyclerView.Adapter<NewBoxAdapter.ViewHolder
                         FieldValue.arrayUnion(boxid)).addOnSuccessListener(new OnSuccessListener<Void>() {
                     @Override
                     public void onSuccess(Void aVoid) {
+                        //Updating Box Nam
+                        GlobalVar.userData.userInfo.boxnames.put(
+                                boxid,holder.boxName.getText().toString()
+                        );
                         firestore.collection("users").document(auth.getUid()).update("boxnames",
                                 GlobalVar.userData.userInfo.boxnames).addOnSuccessListener(new OnSuccessListener<Void>() {
                             @Override
@@ -113,12 +116,6 @@ public class NewBoxAdapter extends RecyclerView.Adapter<NewBoxAdapter.ViewHolder
                 });
             }
         });
-
-        //Making Local Changes
-        GlobalVar.userData.userInfo.boxes.add(
-                GlobalVar.userData.userInfo.newboxes.get(position)
-        );
-        GlobalVar.userData.userInfo.newboxes.remove(position);
 
 
     }

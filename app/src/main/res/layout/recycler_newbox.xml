@@ -41,7 +41,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/boxid">
 
                 <com.google.android.material.textfield.TextInputEditText
-                    android:id="@+id/patient_name"
+                    android:id="@+id/box_name"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:hint="Box Name" />
@@ -58,6 +58,8 @@
                 android:textSize="10sp"
                 app:layout_constraintBottom_toBottomOf="@+id/textInputLayout13"
                 app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/textInputLayout13"
                 app:layout_constraintTop_toTopOf="@+id/textInputLayout13" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </com.google.android.material.card.MaterialCardView>

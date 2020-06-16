@@ -43,8 +43,6 @@ import com.google.firebase.firestore.FirebaseFirestoreException;
 
 public class Home extends AppCompatActivity{
 
-
-
     class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerViewAdapter.ViewHolder> {
 
         public RecyclerViewAdapter(String[] medname) {
@@ -54,8 +52,6 @@ public class Home extends AppCompatActivity{
         String medname[];
 
         @NonNull
-
-
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
@@ -74,15 +70,12 @@ public class Home extends AppCompatActivity{
             else{
                 holder.name.setText("Empty");
             }
-
-
         }
 
         @Override
         public int getItemCount() {
             return titles.length;
         }
-
 
         public class ViewHolder extends RecyclerView.ViewHolder{
 
@@ -92,8 +85,6 @@ public class Home extends AppCompatActivity{
                 super(itemView);
                 title = itemView.findViewById(R.id.home_recycler_box);
                 name = itemView.findViewById(R.id.home_recycler_name);
-
-
 
                 itemView.setOnClickListener(new View.OnClickListener() {
                     @Override
@@ -105,18 +96,10 @@ public class Home extends AppCompatActivity{
                         i.putExtra("box",box);
                         i.putExtra("medicine",medname[getAdapterPosition()]);
                         startActivity(i);
-
-
                     }
                 });
-
-
-
             }
         }
-
-
-
     }
 
     DatabaseReference myRef;
@@ -133,13 +116,6 @@ public class Home extends AppCompatActivity{
     String[] titles;
     MaterialToolbar toolbar;
     TextView hellomessage;
-
-
-
-
-
-
-
 
     void setCurrentBox(){
         if(GlobalVar.userData.userInfo.boxes.size() !=0){
@@ -177,13 +153,10 @@ public class Home extends AppCompatActivity{
         //Making Database listener
         setUpDatabaseListener();
 
-
         titles = getResources().getStringArray(R.array.boxes);
-
 
         //Populating RecyclerView
         setupRecyclerViewAndTitle();
-
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -211,7 +184,6 @@ public class Home extends AppCompatActivity{
                 }
             }
         });
-
 
         if(GlobalVar.currentBox ==null){
             return;
@@ -261,14 +233,11 @@ public class Home extends AppCompatActivity{
             Intent i = new Intent(this,PatientInfoActivity.class);
             startActivity(i);
         }
-
-
     }
 
     private void signOut(){
-
         new UserHandler(this).logOutUser();
-
+        finish();
 
     }
 

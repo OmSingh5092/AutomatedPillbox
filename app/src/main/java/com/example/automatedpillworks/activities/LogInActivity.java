@@ -173,7 +173,7 @@ public class LogInActivity extends AppCompatActivity {
                             //Signing out of google account
                             // Sign in success, update UI with the signed-in user's information
                             if(task.getResult().getAdditionalUserInfo().isNewUser()){
-                                isNewuser();
+                                isNewUser();
                             }
                             Log.d(TAG, "signInWithCredential:success");
                             FirebaseUser user = auth.getCurrentUser();
@@ -189,11 +189,8 @@ public class LogInActivity extends AppCompatActivity {
                 });
     }
 
-    void isNewuser(){
-        if(auth.getCurrentUser() !=null){
-            auth.signOut();
-        }
-        Intent i = new Intent(this,RegisterActivity.class);
+    void isNewUser(){
+        Intent i = new Intent(this,Signup.class);
         startActivity(i);
     }
 

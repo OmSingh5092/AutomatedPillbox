@@ -29,8 +29,10 @@ import com.example.automatedpillworks.Model.UserData;
 import com.example.automatedpillworks.Model.UserInfoModel;
 import com.example.automatedpillworks.Model.UserProfileModel;
 import com.example.automatedpillworks.R;
+import com.example.automatedpillworks.databinding.ActivitySignupBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.material.snackbar.Snackbar;
 import com.google.android.material.textfield.TextInputEditText;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.UserInfo;
@@ -58,6 +60,9 @@ public class Signup extends AppCompatActivity {
     TextInputEditText firstname,lastname,address,phonenumber;
     String boxname;
     Bitmap profileImage;
+
+    //Binding
+    ActivitySignupBinding binding;
 
     UserProfileModel profileData;
     UserInfoModel userInfo;
@@ -143,7 +148,8 @@ public class Signup extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_signup);
+        binding = ActivitySignupBinding.inflate(getLayoutInflater());
+        setContentView(binding.getRoot());
 
         //Refrencing Views
         next = findViewById(R.id.signup_next);
@@ -202,6 +208,18 @@ public class Signup extends AppCompatActivity {
     }
 
     void fillDetails(){
+        if(auth.getCurrentUser()!=null){
+            String displayName = auth.getCurrentUser().getDisplayName();
+            String part[] = displayName.split(" ");
+            firstname.setText(part[0]);
+            lastname.setText(part[1]);
+        }
+
+        if(auth.getCurrentUser().getPhoneNumber() !=null){
+            phonenumber.setText(auth.getCurrentUser().getPhoneNumber());
+        }
+
+
     }
 
     void swithActivity(){
@@ -211,6 +229,9 @@ public class Signup extends AppCompatActivity {
     }
 
     void uploadImage(){
+        final Snackbar snackbar = Snackbar.make(binding.getRoot(),"Uploading Image...",Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
+
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         profileImage.compress(Bitmap.CompressFormat.JPEG, 100, baos);
         byte[] data = baos.toByteArray();
@@ -222,12 +243,16 @@ public class Signup extends AppCompatActivity {
         uploadTask.addOnFailureListener(new OnFailureListener() {
             @Override
             public void onFailure(@NonNull Exception exception) {
+                snackbar.dismiss();
+                Toast.makeText(Signup.this, exception.getMessage(), Toast.LENGTH_SHORT).show();
                 // Handle unsuccessful uploads
             }
         }).addOnSuccessListener(new OnSuccessListener<UploadTask.TaskSnapshot>() {
             @Override
             public void onSuccess(UploadTask.TaskSnapshot taskSnapshot) {
                 isPhotoUploaded= true;
+                snackbar.dismiss();
+                Toast.makeText(Signup.this, "Upload Successful", Toast.LENGTH_SHORT).show();
                 // taskSnapshot.getMetadata() contains file metadata such as size, content-type, etc.
                 // ...
             }
@@ -286,8 +311,19 @@ public class Signup extends AppCompatActivity {
 
     Boolean isFilled(){
         if(firstname.getText().toString().length()==0){
+            Toast.makeText(this, "Please enter first name", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(lastname.getText().toString().length()==0){
+            Toast.makeText(this, "Please enter last name", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(address.getText().toString().length() ==0){
+            Toast.makeText(this, "Please enter address", Toast.LENGTH_SHORT).show();
+            return false;
+        }else if(phonenumber.getText().toString().length()==0){
+            Toast.makeText(this, "Please enter phone number", Toast.LENGTH_SHORT).show();
             return false;
         }else if(!isPhotoUploaded){
+            Toast.makeText(this, "Upload Profile Photo", Toast.LENGTH_SHORT).show();
             return false;
         }
         return true;

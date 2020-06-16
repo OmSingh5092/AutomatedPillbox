@@ -39,7 +39,7 @@ public class Box extends AppCompatActivity {
     RecyclerView rv;
     ImageButton check;
 
-    HashMap<Integer, MedData> info = new HashMap<Integer,MedData>();
+
 
     ArrayList<MedData> days = new ArrayList<>();
     DatabaseReference myRef;
@@ -71,10 +71,14 @@ public class Box extends AppCompatActivity {
         // Setting up the name of the box
         toolbar.setTitle(box);
 
+        rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
+        rv.setHasFixedSize(true);
+
         myRef = FirebaseDatabase.getInstance().getReference().child("boxes").child(GlobalVar.currentBox).child(box);
-        myRef.addListenerForSingleValueEvent(new ValueEventListener() {
+        myRef.addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                HashMap<Integer, MedData> info = new HashMap<Integer,MedData>();
                 for(int i = 0; i<=6; i++){
                     DataSnapshot snap =  dataSnapshot.child(String.valueOf(i));
 
@@ -98,8 +102,7 @@ public class Box extends AppCompatActivity {
 
                 }
 
-                rv.setLayoutManager(new LinearLayoutManager(getApplicationContext()));
-                rv.setHasFixedSize(true);
+
                 adapter = new BoxDayAdapter(info,myRef,Box.this);
                 //ada.notifyDataSetChanged();
                 rv.setAdapter(adapter);

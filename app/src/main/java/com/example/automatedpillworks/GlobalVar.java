@@ -18,6 +18,7 @@ public class GlobalVar {
     public static void resetValues(){
         currentBox = null;
         userData = new UserData();
+        currentBoxIndex = 0;
     }
 
     public static class Initialisation{

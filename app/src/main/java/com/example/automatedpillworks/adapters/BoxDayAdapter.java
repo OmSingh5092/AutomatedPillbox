@@ -70,10 +70,14 @@ public class BoxDayAdapter extends RecyclerView.Adapter<BoxDayAdapter.ViewHolder
             holder.detail.startAnimation(slideDown);
 
             holder.status.setVisibility(View.VISIBLE);
-
-            if(data.get(position).status.equals(Long.valueOf(1))){
-                holder.status.setChecked(true);
+            try{
+                if(data.get(position).status.equals(Long.valueOf(1))){
+                    holder.status.setChecked(true);
+                }
+            }catch (NullPointerException e){
+                e.printStackTrace();
             }
+
 
             holder.detail.setLayoutManager(new LinearLayoutManager(context));
             holder.detail.setHasFixedSize(true);
