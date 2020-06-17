@@ -179,6 +179,9 @@ public class Home extends AppCompatActivity{
                 }
                 if (documentSnapshot != null && documentSnapshot.exists()) {
                     GlobalVar.userData.userInfo = documentSnapshot.toObject(UserInfoModel.class);
+                    GlobalVar.currentBoxIndex = 0;
+                    setCurrentBox();
+                    setupRecyclerViewAndTitle();
                 } else {
                     System.out.print("Current data: null");
                 }

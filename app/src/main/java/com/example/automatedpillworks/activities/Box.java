@@ -39,8 +39,6 @@ public class Box extends AppCompatActivity {
     RecyclerView rv;
     ImageButton check;
 
-
-
     ArrayList<MedData> days = new ArrayList<>();
     DatabaseReference myRef;
     TextView title;
@@ -50,9 +48,6 @@ public class Box extends AppCompatActivity {
     ProgressBar pb;
 
     String box;
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
