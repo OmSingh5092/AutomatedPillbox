@@ -62,6 +62,7 @@ public class PatientInfoActivity extends AppCompatActivity {
             Toast.makeText(this, "No Box Added", Toast.LENGTH_SHORT).show();
             return;
         }
+        //setting listeners
 
         //RadioButtons
         initRadioButtons();
@@ -72,13 +73,12 @@ public class PatientInfoActivity extends AppCompatActivity {
         //Fill data
         loadData();
     }
-
     private void onDataLoaded(){
 
     }
 
     void loadData(){
-        database.getReference("boxes").child(GlobalVar.currentBox).child("info").addListenerForSingleValueEvent(new ValueEventListener() {
+        database.getReference("boxes").child(GlobalVar.currentBox).child("info").addValueEventListener(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 data= dataSnapshot.getValue(PatientInfoModel.class);

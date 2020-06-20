@@ -266,6 +266,8 @@ public class Signup extends AppCompatActivity {
     }
 
     void uploadData(){
+        final Snackbar snackbar = Snackbar.make(binding.getRoot(),"Creating Profile...",Snackbar.LENGTH_INDEFINITE);
+        snackbar.show();
         firestore.collection(getResources().getString(R.string.firestor_base_user_collection))
                 .document(auth.getUid())
                 .set(userInfo).addOnSuccessListener(new OnSuccessListener<Void>() {

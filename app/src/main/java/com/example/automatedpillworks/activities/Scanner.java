@@ -13,6 +13,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.view.animation.TranslateAnimation;
 import android.widget.Button;
@@ -195,6 +196,7 @@ public class Scanner extends AppCompatActivity{
 
         //Checking the existence of Firebase Users
         if(auth.getCurrentUser()!= null){
+            Log.i("Exists","User Exists");
             loadUserData();
         }else{
             toggleView();

@@ -68,7 +68,7 @@ public class NotificationService extends FirebaseMessagingService {
         String dateString = DateFormats.dayWithTime(Long.valueOf(data.get("time")));
 
         //Setting body as formatted date
-        String  body = "You have missed "+ data.get("name")+ "on "+dateString;
+        String  body = "You have missed "+ data.get("name")+ " on "+dateString;
 
         NotificationCompat.Builder builder = new NotificationCompat.Builder(appContext, CHANNEL_ID)
                 .setSmallIcon(R.drawable.logo)

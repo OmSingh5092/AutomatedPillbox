@@ -199,11 +199,7 @@ public class Prescription extends AppCompatActivity {
         //Setup Recycler View
         setUpRecyclerView();
 
-
-
         daysname = getResources().getStringArray(R.array.days);
-
-
     }
 
 
@@ -216,9 +212,15 @@ public class Prescription extends AppCompatActivity {
         binding.weight.setText(String.valueOf(data.getWeight()));
     }
 
+    void removeInfoView(){
+        binding.infoView.setVisibility(View.GONE);
+    }
+
     void setUpRecyclerView(){
         if(GlobalVar.currentBox == null){
             Toast.makeText(this, "No box has been added", Toast.LENGTH_SHORT).show();
+            //Removing Info View
+            removeInfoView();
             return ;
         }
         myRef = FirebaseDatabase.getInstance().getReference("boxes").child(GlobalVar.currentBox);
@@ -228,6 +230,7 @@ public class Prescription extends AppCompatActivity {
                 //Getting patient Data
                 data = dataSnapshot.child("info").getValue(PatientInfoModel.class);
                 if(data == null){
+                    removeInfoView();
                     Toast.makeText(Prescription.this, "Please enter patient's data", Toast.LENGTH_SHORT).show();
                 }else{
                     showInfo();
@@ -346,7 +349,6 @@ public class Prescription extends AppCompatActivity {
     }
 
     public Bitmap getBitmapFromView(View view, int totalHeight, int totalWidth) {
-
         Bitmap returnedBitmap = Bitmap.createBitmap(totalWidth,totalHeight , Bitmap.Config.ARGB_8888);
         Canvas canvas = new Canvas(returnedBitmap);
         Drawable bgDrawable = view.getBackground();
