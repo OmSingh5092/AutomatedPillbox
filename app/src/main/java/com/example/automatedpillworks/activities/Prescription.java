@@ -103,8 +103,6 @@ public class Prescription extends AppCompatActivity {
             }
 
             holder.courses.setText(course);
-
-
         }
 
         @Override
@@ -130,8 +128,6 @@ public class Prescription extends AppCompatActivity {
             this.data = data;
             this.count = count;
         }
-
-
 
         Course data[];
         int count;
@@ -237,7 +233,7 @@ public class Prescription extends AppCompatActivity {
                 }
                 int i=0;
                 for(DataSnapshot snap: dataSnapshot.getChildren()){
-                    if(!(snap.getKey().equals("uid") || snap.getKey().equals("info"))){
+                    if(!(snap.getKey().equals("uid") || snap.getKey().equals("info") || snap.getKey().equals("reminders"))){
                         course[i] = new Course();
                         if(snap.child("medicine").exists()) {
                             course[i].medname = snap.child("medicine").getValue(String.class);

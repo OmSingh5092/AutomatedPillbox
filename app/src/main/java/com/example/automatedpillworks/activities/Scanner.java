@@ -244,7 +244,7 @@ public class Scanner extends AppCompatActivity{
     }
 
     void switchActivity(){
-        Intent i = new Intent(this,RegisterActivity.class);
+        Intent i = new Intent(this,LogInActivity.class);
         startActivity(i);
     }
 
